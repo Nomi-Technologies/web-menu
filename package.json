@@ -17,6 +17,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build"
   },
+  "homepage": "https://nomi-technologies.github.io/web-menu/build",
   "eslintConfig": {
     "extends": "react-app"
   },
