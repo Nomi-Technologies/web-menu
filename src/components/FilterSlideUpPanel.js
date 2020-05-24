@@ -1,11 +1,11 @@
 import React from 'react';
 import './FilterSlideUpPanel.css';
 import { Button, Container, Row, Col } from 'react-bootstrap';
+import { ReactComponent as ExpandArrow } from './expand_arrow.svg';
 
 export default class FilterSlideUpPanel extends React.Component {
 
   state = {
-    expanded: false,
     selected: new Set(),
   };
 
@@ -19,9 +19,8 @@ export default class FilterSlideUpPanel extends React.Component {
   }
 
   onClearFilter() {
-    const selected = new Set();
-    this.setState({ selected: selected });
-    this.props.onApplyFilter(selected, this.state.expanded);
+    this.setState({ selected: new Set() });
+    this.props.onClearFilter();
   }
 
   genGrid() {
@@ -68,7 +67,7 @@ export default class FilterSlideUpPanel extends React.Component {
             <div id='filter-txt' className='panel-header-element'>
               Filters
             </div>
-            <div id='count' className='panel-header-element' >
+            <div className='panel-header-element' >
               <div id='counter'
                 className={this.state.selected.size > 0? 'bg-danger': ''}
               >
@@ -89,7 +88,10 @@ export default class FilterSlideUpPanel extends React.Component {
               className='panel-header-element'
               onClick={this.onExpansionChanged.bind(this)}
             >
-              Expand
+              <ExpandArrow className={
+                this.props.expanded? 
+                  'expand-arrow-more': 'expand-arrow-less'
+              }/>
             </div>
             
           </div>

@@ -69,3 +69,25 @@ body {
   bottom: 0;
   width: 100%;
 }
+
+.modal-content { /* bootstrap css class */
+  background-color: #E3EDF2;
+  border: none;
+  height: 150px;
+  line-height: 150px;
+  font-size: 22px;
+  font-weight: 500;
+  text-align: center;
+  color: #5258EC;
+}
+
+.num-wrapper {
+  display: inline-block;
+  height: 52px;
+  width: 52px;
+  line-height: 53px;
+  border-radius: 26px;
+  color: white;
+  font-weight: bold;
+  background-color: #5383EC;
+}

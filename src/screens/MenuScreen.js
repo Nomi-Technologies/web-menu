@@ -2,6 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
+import { Modal } from 'react-bootstrap';
 import '../index.css';
 
 const { apiBaseUrl } = require('../config');
@@ -12,8 +13,10 @@ class MenuScreen extends React.Component {
     error: null,
     menu: null,
     tabIndex: 0,
+    selected: new Set(),
     excludedDishes: new Set(),
     panelExpanded: false,
+    popOverShow: false,
   };
 
   componentDidMount() {
@@ -67,14 +70,24 @@ class MenuScreen extends React.Component {
     this.setState({ panelExpanded: expanded });
   }
 
-  onApplyFilter(selected, expanded) {
+  onApplyFilter(selected) {
     let excluded = new Set();
     selected.forEach(t => 
       this.state.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
     );
     this.setState({
+      selected: selected,
       excludedDishes: excluded,
-      panelExpanded: expanded
+      panelExpanded: false,
+      popOverShow: true
+    });
+    setTimeout(() => this.setState({ popOverShow: false }), 1000);
+  }
+
+  onClearFilter() {
+    this.setState({
+      selected: new Set(),
+      excludedDishes: new Set(),
     });
   }
 
@@ -119,8 +132,20 @@ class MenuScreen extends React.Component {
               expanded={this.state.panelExpanded}
               onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
               onApplyFilter={this.onApplyFilter.bind(this)}
+              onClearFilter={this.onClearFilter.bind(this)}
             />
           </div>
+          <Modal
+            show={this.state.popOverShow}
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            size='sm'
+            backdrop={false}
+          >
+            <div>
+              <div class='num-wrapper'>{this.state.selected.size}</div> Filters Applied
+            </div>
+          </Modal>
         </div>
       );
     } else {

@@ -38,11 +38,8 @@
   flex: 1 1 auto;
 }
 
-#count {
-  margin-left: 5px;
-}
-
 #counter {
+  margin-left: 5px;
   /* includes some hard-coded stuff because text is off-center smh */
   padding-right: 1px;
   display: inline-block;
@@ -64,7 +61,7 @@
 }
 
 #expand-btn {
-  margin: 0 20px;
+  margin: 0 25px;
 }
 
 .grid-container {
@@ -92,4 +89,8 @@
   width: 85%;
   height: 44px;
   border-radius: 22px;
+}
+
+.expand-arrow-less {
+  transform: rotate(180deg);
 }
