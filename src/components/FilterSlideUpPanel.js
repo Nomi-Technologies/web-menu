@@ -26,26 +26,30 @@ export default class FilterSlideUpPanel extends React.Component {
 
   genGrid() {
     const tags = this.props.tags;
+    const tag_keys = Object.keys(tags);
     let rows = [];
-    for (let i = 0; i < tags.length; i += 3) {
+    for (let i = 0; i < tag_keys.length; i += 3) {
       let cols = [];
       for (let j = 0; j < 3; ++j) {
-        if (i + j >= tags.length) { 
+        if (i + j >= tag_keys.length) { 
           cols.push(<Col key={j}></Col>);
           continue;
         }
         cols.push(<Col key={j}>
           <div 
-            className={this.state.selected.has(tags[i+j])? 'tag-selected': 'tag-unselected'}
+            className={
+              this.state.selected.has(tags[tag_keys[i+j]].id)? 
+                'tag-selected': 'tag-unselected'
+            }
             onClick={() => {
-              const tag = tags[i + j];
+              const tag = tags[tag_keys[i+j]];
               let selected = this.state.selected;
               if (selected.has(tag.id)) { selected.delete(tag.id); }
               else { selected.add(tag.id); }
               this.setState({ selected: selected });
             }}
           >
-            {tags[i+j].name}
+            {tags[tag_keys[i+j]].name}
           </div>
         </Col>);
       }

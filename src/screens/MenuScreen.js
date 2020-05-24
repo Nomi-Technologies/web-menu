@@ -70,7 +70,7 @@ class MenuScreen extends React.Component {
   onApplyFilter(selected, expanded) {
     let excluded = new Set();
     selected.forEach(t => 
-      this.state.menu.dishesByTags[t].forEach(d => excluded.add(d))
+      this.state.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
     );
     this.setState({
       excludedDishes: excluded,
@@ -82,7 +82,7 @@ class MenuScreen extends React.Component {
     const originalDishes = this.state.menu.dishesByCategory[category];
     let filtered = [];
     originalDishes.forEach(d => {
-      if (!this.state.excludedDishes.has(d.name)) {
+      if (!this.state.excludedDishes.has(d.id)) {
         filtered.push(d);
       }
     });
