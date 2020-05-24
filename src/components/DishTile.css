@@ -1,0 +1,21 @@
+.dish-tile {
+  padding: 23px 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #E3EDF2;
+  margin-bottom: 10px;
+}
+
+.dish-name {
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.description {
+  margin-top: 18px;
+  font-style: italic;
+}
+
+.separator {
+  border-top: solid 1px rgba(83, 131, 236, 0.15);
+}
