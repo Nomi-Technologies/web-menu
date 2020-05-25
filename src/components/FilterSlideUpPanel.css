@@ -41,9 +41,8 @@
 #counter {
   margin-left: 5px;
   /* includes some hard-coded stuff because text is off-center smh */
-  padding-right: 1px;
   display: inline-block;
-  line-height: 23px;
+  line-height: 22px;
   text-align: center;
   height: 22px;
   min-width: 22px;
