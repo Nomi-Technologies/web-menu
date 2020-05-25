@@ -73,15 +73,17 @@ body {
   width: 100%;
 }
 
-.modal-content { /* bootstrap css class */
-  background-color: #E3EDF2;
-  border: none;
-  height: 150px;
-  line-height: 150px;
+.apply-filter-modal {
   font-size: 22px;
   font-weight: 500;
   text-align: center;
-  color: #5258EC;
+  width: 265px;
+  height: 120px;
+  line-height: 120px;
+  margin: 0 auto;
+  background-color: #E3EDF2;
+  border-radius: 10px;
+  color: #5383EC;
 }
 
 .num-wrapper {
@@ -90,6 +92,7 @@ body {
   width: 52px;
   line-height: 52px;
   border-radius: 26px;
+  margin-right: 15px;
   color: white;
   font-weight: bold;
   background-color: #5383EC;

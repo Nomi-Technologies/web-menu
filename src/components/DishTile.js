@@ -1,14 +1,39 @@
 import React from 'react';
 import './DishTile.css';
-import Jumbotron from 'react-bootstrap/Jumbotron';
+import { Jumbotron, Modal } from 'react-bootstrap';
 
-export default class DishTile extends React.Component {
+export default function DishTile(props) {
 
-  render() {
-    return (<Jumbotron className='dish-tile'>
-      <div className='dish-name'>{this.props.dish.name}</div>
+  const [showModal, setShowModal] = React.useState(false);
+
+  return (
+    <Jumbotron className='dish-tile'>
+      <div className='dish-title'>
+        <div className='dish-name'>{props.dish.name}</div>
+        <button className='info-btn' 
+          onClick={() => setShowModal(true)}
+        >
+          i
+        </button>
+      </div>
       <div className='separator'></div>
-      <div className='description'>{this.props.dish.description}</div>
-    </Jumbotron>);
-  }
+      <div className='description'>{props.dish.description}</div>
+      <Modal
+        className='react-bootstrap-modal'
+        show={showModal}
+        aria-labelledby="contained-modal-vcenter"
+        onHide={() => setShowModal(false)}
+        centered
+      >
+        <div className='tag-list-modal'>
+          <Modal.Header>
+            Contains
+          </Modal.Header>
+          <Modal.Body>
+              {props.dish.tags.map(t => <div>{t.name}</div>)}
+          </Modal.Body>
+        </div>
+      </Modal>
+    </Jumbotron>
+  );
 }

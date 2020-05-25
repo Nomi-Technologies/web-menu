@@ -1,0 +1,11 @@
+.modal-dialog-centered { 
+  height: 100%;
+  margin: 0;
+}
+
+.modal-content {
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  border-radius: 0;
+}

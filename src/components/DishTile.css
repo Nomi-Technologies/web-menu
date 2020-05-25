@@ -6,9 +6,32 @@
   margin-bottom: 10px;
 }
 
+.dish-title {
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 12px;
+}
+
 .dish-name {
-  margin-bottom: 15px;
+  margin-top: 3px;
+  display: inline-block;
   font-weight: 500;
+  flex: 1 1 auto
+}
+
+.info-btn {
+  height: 24px;
+  width: 24px;
+  border-radius: 12px;
+  line-height: 24px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  display: inline-block;
+  flex: 0 0 auto;
+  font-weight: bold;
+  color: white;
+  background-color: #8A9DB7;
 }
 
 .description {
@@ -19,4 +42,13 @@
 
 .separator {
   border-top: solid 1px rgba(83, 131, 236, 0.15);
+}
+
+.tag-list-modal {
+  color: white;
+  border-radius: 10px;
+  background-color: #393939;
+  width: 260px;
+  max-height: 300px;
+  margin: 0 auto;
 }

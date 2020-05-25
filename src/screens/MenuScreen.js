@@ -16,7 +16,7 @@ class MenuScreen extends React.Component {
     selected: new Set(),
     excludedDishes: new Set(),
     panelExpanded: false,
-    popOverShow: false,
+    modalShow: false,
   };
 
   componentDidMount() {
@@ -79,9 +79,9 @@ class MenuScreen extends React.Component {
       selected: selected,
       excludedDishes: excluded,
       panelExpanded: false,
-      popOverShow: true
+      modalShow: true
     });
-    setTimeout(() => this.setState({ popOverShow: false }), 1000);
+    setTimeout(() => this.setState({ modalShow: false }), 1000);
   }
 
   onClearFilter() {
@@ -136,14 +136,15 @@ class MenuScreen extends React.Component {
             />
           </div>
           <Modal
-            show={this.state.popOverShow}
-            aria-labelledby="contained-modal-title-vcenter"
+            className='react-bootstrap-modal'
+            show={this.state.modalShow}
+            aria-labelledby="contained-modal-vcenter"
             centered
-            size='sm'
             backdrop={false}
           >
-            <div>
-              <div class='num-wrapper'>{this.state.selected.size}</div> Filters Applied
+            <div className='apply-filter-modal'>
+              <div className='num-wrapper'>{this.state.selected.size}</div>
+              Filters Applied
             </div>
           </Modal>
         </div>
