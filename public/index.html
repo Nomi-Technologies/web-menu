@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, height=device-height" />
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
@@ -45,4 +45,13 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script>
+    function resizeMainContent() {
+      let height = window.innerHeight;
+      console.log(height);
+      document.getElementById('root').style.height = `${height}px`;
+    }
+    window.addEventListener('resize', resizeMainContent);
+    document.addEventListener('DOMContentLoaded', resizeMainContent);
+  </script>
 </html>

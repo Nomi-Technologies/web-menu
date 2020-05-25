@@ -12,7 +12,10 @@ body {
 #root, .App {
   display: flex;
   flex-flow: column;
-  height: 100vh;
+}
+
+.App {
+  height: 100%;
 }
 
 .menu-tabs {
