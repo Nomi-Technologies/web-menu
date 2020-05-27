@@ -49,6 +49,38 @@
   border-radius: 10px;
   background-color: #393939;
   width: 260px;
-  max-height: 300px;
+  max-height: 316px;
   margin: 0 auto;
+  overflow: scroll;
+  position: relative;
+}
+
+.tag-list-modal-title {
+  padding: 0 20px;
+  height: 52px;
+  line-height: 52px;
+  background: #606060;
+  border-radius: 10px 10px 0px 0px;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+.tag-list-modal-body {
+  padding: 16px;
+  padding-bottom: 0;
+}
+
+.modal-tag-item {
+  line-height: 32px;
+  font-weight: 500;
+  height: 32px;
+  margin-bottom: 16px;
+}
+
+.tag-list-modal .tag-icon {
+  display: inline-block;
+  margin-right: 20px;
+  height: 32px;
+  width: 32px;
 }
