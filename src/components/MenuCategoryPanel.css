@@ -1,3 +1,5 @@
 .dish-list-wrapper {
-  padding: 24px 16px 200px 16px;
+  position: relative;
+  padding: 24px 16px 0px 16px;
+  z-index: 1;
 }

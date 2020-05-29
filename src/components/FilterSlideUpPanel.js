@@ -63,7 +63,7 @@ export default class FilterSlideUpPanel extends React.Component {
     return (
       <div className='slide-up-panel'>
         <div className='panel-header'>
-          <div id='header-row'>
+          <div id='header-row' onClick={this.onExpansionChanged.bind(this)}>
             <div id='filter-txt' className='panel-header-element'>
               Filters
             </div>
@@ -86,7 +86,6 @@ export default class FilterSlideUpPanel extends React.Component {
             </div>
             <div id='expand-btn' 
               className='panel-header-element'
-              onClick={this.onExpansionChanged.bind(this)}
             >
               <ExpandArrow className={
                 this.props.expanded? 

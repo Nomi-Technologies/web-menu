@@ -963,6 +963,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.9.6":
+  version "7.10.1"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.10.1.tgz#b6eb75cac279588d3100baecd1b9894ea2840822"
+  integrity sha512-nQbbCbQc9u/rpg1XCxoMYQTbSMVZjCDxErQ1ClCn9Pvcmv1lGads19ep0a2VsEiIJeHqjZley6EQGEC3Yo1xMA==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.4.0", "@babel/template@^7.8.3", "@babel/template@^7.8.6":
   version "7.8.6"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.8.6.tgz#86b22af15f828dfb086474f964dcc3e39c43ce2b"
@@ -1366,6 +1373,13 @@
     "@svgr/plugin-jsx" "^4.3.3"
     "@svgr/plugin-svgo" "^4.3.1"
     loader-utils "^1.2.3"
+
+"@tanem/svg-injector@^8.0.50":
+  version "8.0.51"
+  resolved "https://registry.yarnpkg.com/@tanem/svg-injector/-/svg-injector-8.0.51.tgz#b0a33057b4b5e9358fe8301e23f3db764d6b9a50"
+  integrity sha512-a+TnC7xheahEYgN9CG6cCi15e3ZvtVm9OcrF1u7qNAy5X1ubwD2eiEOUVon4m3n6c6LSdphr6q0XHgOu914q6g==
+  dependencies:
+    "@babel/runtime" "^7.9.6"
 
 "@testing-library/dom@^6.15.0":
   version "6.16.0"
@@ -6811,6 +6825,11 @@ mkdirp@^0.5.1, mkdirp@^0.5.3, mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+mobile-detect@^1.3.6:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/mobile-detect/-/mobile-detect-1.4.4.tgz#686c74e92d3cc06b09a9b3594b7b981494b137f6"
+  integrity sha512-vTgEjKjS89C5yHL5qWPpT6BzKuOVqABp+A3Szpbx34pIy3sngxlGaFpgHhfj6fKze1w0QKeOSDbU7SKu7wDvRQ==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -8693,6 +8712,15 @@ react-scripts@3.4.1:
   optionalDependencies:
     fsevents "2.1.2"
 
+react-svg@^11.0.23:
+  version "11.0.23"
+  resolved "https://registry.yarnpkg.com/react-svg/-/react-svg-11.0.23.tgz#95fea4626a93d9605ec9bd9a3736287a3bfa1ad8"
+  integrity sha512-elBGGJd2dPyTt/rKQy/JutIfm8ZSBlRi3GxAxl7USkidBoCIOefZO3HWIUtb09RkX3uEeh0VnGEzvuzOGwP5Gw==
+  dependencies:
+    "@babel/runtime" "^7.9.6"
+    "@tanem/svg-injector" "^8.0.50"
+    prop-types "^15.7.2"
+
 react-tabs@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-tabs/-/react-tabs-3.1.0.tgz#ecc50f034c1d6da2606fab9293055bbc861b382e"
@@ -8720,6 +8748,13 @@ react-transition-group@^4.0.0:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-useragent@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-useragent/-/react-useragent-1.1.2.tgz#7fcdaf0d0269cac9f8ffc4b728157100c17c2415"
+  integrity sha512-yJK8nb3keAeDtr4TF+seROKMDrrOW+XEMPCVkDPzxROJi211Qj8jVz23R/bqUcPwvwL3TYihfUctMt1vzh/DPw==
+  dependencies:
+    mobile-detect "^1.3.6"
 
 react@^16.13.1:
   version "16.13.1"

@@ -1,11 +1,11 @@
 import React from 'react';
 import './index.css';
-import MenuScreen from './screens/MenuScreen';
+import RestaurantScreen from './screens/RestaurantScreen';
 
 function App() {
   return (
     <div className="App">
-      <MenuScreen restaurantId={1}/>
+      <RestaurantScreen restaurantId={1}/>
     </div>
   );
 }

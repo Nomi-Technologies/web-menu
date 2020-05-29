@@ -3,7 +3,9 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
-import '../index.css';
+import { withUserAgent } from 'react-useragent';
+import { ReactComponent as NomiLogo } from '../components/nomi-withword.svg';
+import './MenuScreen.css';
 
 const { apiBaseUrl } = require('../config');
 
@@ -126,6 +128,17 @@ class MenuScreen extends React.Component {
               </TabPanel>
             })}
           </Tabs>
+          <div className='nomi-logo-bar'>
+            <div className='nomi-logo-txt'>Powered by</div>
+            <a href='https://www.dinewithnomi.com/'>
+              <NomiLogo 
+                width='70px'
+                height='16px'
+                className='nomi-logo'
+                fill='#8A9DB7'
+              />
+            </a>
+          </div>
           <div className='slide-up-panel-wrapper'>
             <FilterSlideUpPanel
               tags={menu.tags}
@@ -160,4 +173,4 @@ class MenuScreen extends React.Component {
   }
 }
 
-export default MenuScreen;
+export default withUserAgent(MenuScreen);
