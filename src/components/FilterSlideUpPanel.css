@@ -18,7 +18,7 @@
 .panel-body {
   max-height: 600px;
   width: 100%;
-  padding-bottom: 20px;
+  padding: 10px 15px 20px 15px;
 }
 
 .panel-header-element {
@@ -58,6 +58,7 @@
   font-weight: 700;
   font-size: 18px;
   border-radius: 22px;
+  z-index: 25;
 }
 
 #expand-btn {
@@ -66,6 +67,11 @@
 
 .grid-container {
   margin-bottom: 20px;
+}
+
+/* Setting the padding of the built-in grid container to zero */
+.grid-container > div {
+  padding: 0;
 }
 
 .tag-unselected, .tag-selected {
@@ -96,4 +102,13 @@
 
 .expand-arrow-less {
   transform: rotate(180deg);
+}
+
+.tag-section-subtitle {
+  margin-left: 10px;
+  margin-bottom: 5px;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8A9DB7;
 }

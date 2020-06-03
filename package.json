@@ -17,7 +17,7 @@
     "react-useragent": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=8000 react-scripts start",
     "build": "react-scripts build"
   },
   "homepage": "https://nomi-technologies.github.io/web-menu/build",

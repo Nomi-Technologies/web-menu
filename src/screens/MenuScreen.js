@@ -69,6 +69,7 @@ class MenuScreen extends React.Component {
   }
 
   onPanelExpansionChanged(expanded) {
+    console.log(expanded);
     this.setState({ panelExpanded: expanded });
   }
 
@@ -87,6 +88,7 @@ class MenuScreen extends React.Component {
   }
 
   onClearFilter() {
+    console.log(this.state.panelExpanded);
     this.setState({
       selected: new Set(),
       excludedDishes: new Set(),
