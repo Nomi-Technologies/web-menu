@@ -63,18 +63,25 @@ export default class FilterSlideUpPanel extends React.Component {
     return (
       <div className='slide-up-panel'>
         <div className='panel-header'>
-          <div id='header-row' onClick={this.onExpansionChanged.bind(this)}>
-            <div id='filter-txt' className='panel-header-element'>
+          <div id='header-row'>
+            <div 
+              id='filter-txt' 
+              className='panel-header-element'
+              onClick={this.onExpansionChanged.bind(this)}
+            >
               Filters
             </div>
-            <div className='panel-header-element' >
+            <div className='panel-header-element'>
               <div id='counter'
+                onClick={this.onExpansionChanged.bind(this)}
                 className={this.state.selected.size > 0? 'bg-danger': ''}
               >
                 {this.state.selected.size}
               </div>
             </div>
-            <div id='spacer' className='panel-header-element'></div>
+            <div id='spacer' className='panel-header-element' 
+              onClick={this.onExpansionChanged.bind(this)}
+            ></div>
             <div id='clear-btn-wrapper' className='panel-header-element'>
               <Button id='clear-btn'
                 variant='secondary'
@@ -86,6 +93,7 @@ export default class FilterSlideUpPanel extends React.Component {
             </div>
             <div id='expand-btn' 
               className='panel-header-element'
+              onClick={this.onExpansionChanged.bind(this)}
             >
               <ExpandArrow className={
                 this.props.expanded? 
@@ -97,8 +105,10 @@ export default class FilterSlideUpPanel extends React.Component {
         </div>
         {this.props.expanded?
           <div className='panel-body'>
+            <i className='tag-section-subtitle'>Exclude dishes that contain:</i>
             {this.genGrid()}
-            <Button 
+            <Button
+              disabled={this.state.selected.size === 0}
               id='save-btn'
               variant='warning'
               onClick={this.onApplyFilter.bind(this)}
