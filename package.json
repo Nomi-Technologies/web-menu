@@ -20,7 +20,8 @@
     "start": "PORT=8000 react-scripts start",
     "build": "react-scripts build"
   },
-  "homepage": "https://nomi-technologies.github.io/web-menu/build",
+  "proxy": "http://localhost:3000/app/smart-menu",
+  "homepage": ".",
   "eslintConfig": {
     "extends": "react-app"
   },
