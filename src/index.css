@@ -9,12 +9,12 @@ body {
   color: black; /* offseting bootstrap's custom color */
 }
 
-#root, .App {
-  display: flex;
-  flex-flow: column;
-  overflow: hidden;
+#root {
+  overflow: show;
 }
 
 .App {
-  height: 100%;
+  display: flex;
+  flex-flow: column;
+  overflow: hidden;
 }
