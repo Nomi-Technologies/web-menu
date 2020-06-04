@@ -18,7 +18,9 @@ function App(props) {
       });
     }
     window.addEventListener('resize', handleResize);
-  });
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // [] to trigger only on first render
 
   
   return (
