@@ -13,7 +13,11 @@ body {
   overflow: show;
 }
 
-.App {
+.app {
+  
+}
+
+.app-mobile {
   display: flex;
   flex-flow: column;
   overflow: hidden;

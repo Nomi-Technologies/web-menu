@@ -3,13 +3,12 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
-import { withUserAgent } from 'react-useragent';
 import { ReactComponent as NomiLogo } from '../components/nomi-withword.svg';
 import './MenuScreen.css';
 
 const { apiBaseUrl } = require('../config');
 
-class MenuScreen extends React.Component {
+export default class MenuScreen extends React.Component {
 
   state = {
     error: null,
@@ -174,5 +173,3 @@ class MenuScreen extends React.Component {
     
   }
 }
-
-export default withUserAgent(MenuScreen);

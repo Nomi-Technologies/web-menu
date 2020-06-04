@@ -1,8 +1,9 @@
 import React from 'react';
+import { withUserAgent } from 'react-useragent';
 import './index.css';
 import RestaurantScreen from './screens/RestaurantScreen';
 
-function App() {
+function App(props) {
 
   const [windowSize, setWindowSize] = React.useState({ 
     height: window.innerHeight,
@@ -18,9 +19,10 @@ function App() {
     }
     window.addEventListener('resize', handleResize);
   });
+
   
   return (
-    <div className="App"
+    <div className='app-mobile'/*{props.ua.mobile? 'app-mobile': 'app'}*/
       style={{
         height: `${windowSize.height}px`,
         width: `${windowSize.width}px`
@@ -28,7 +30,8 @@ function App() {
     >
       <RestaurantScreen restaurantId={1}/>
     </div>
-  );
+  )
+
 }
 
-export default App;
+export default withUserAgent(App);
