@@ -1,8 +1,12 @@
 import React from 'react';
 import { withUserAgent } from 'react-useragent';
 import './index.css';
-import RestaurantScreen from './screens/RestaurantScreen';
+import MobileRestaurantScreen from './narrow-screen/screens/RestaurantScreen';
 
+/******
+ * App is restricted to the window's size to be compatible with mobile version
+ * #root generally does not respond to the changes in size in .App
+ */
 function App(props) {
 
   const [windowSize, setWindowSize] = React.useState({ 
@@ -30,7 +34,7 @@ function App(props) {
         width: `${windowSize.width}px`
       }}
     >
-      <RestaurantScreen restaurantId={1}/>
+      <MobileRestaurantScreen restaurantId={1}/>
     </div>
   )
 

@@ -1,26 +1,27 @@
 import React from 'react';
 import './DishTile.css';
-import { Jumbotron, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import { ReactSVG } from 'react-svg';
+import SharedDishTile from '../../components/SharedDishTile';
 
-const { apiBaseUrl } = require('../config');
+const { apiBaseUrl } = require('../../config');
 
 export default function DishTile(props) {
 
   const [showModal, setShowModal] = React.useState(false);
 
   return (
-    <Jumbotron className='dish-tile'>
-      <div className='dish-title'>
-        <div className='dish-name'>{props.dish.name}</div>
-        <button className='info-btn' 
-          onClick={() => setShowModal(true)}
-        >
-          i
-        </button>
-      </div>
-      <div className='separator'></div>
-      <div className='description'>{props.dish.description}</div>
+    <div>
+      <SharedDishTile className='dish-tile'
+        dish={props.dish}
+        titleEnding={
+          <button className='info-btn' 
+            onClick={() => setShowModal(true)}
+          >
+            i
+          </button>
+        }
+      />
       <Modal
         className='react-bootstrap-modal'
         show={showModal}
@@ -44,6 +45,6 @@ export default function DishTile(props) {
           </Modal.Body>
         </div>
       </Modal>
-    </Jumbotron>
+    </div>
   );
 }
