@@ -1,4 +1,4 @@
 # Web Menu
-Customer facing app build with REACT
+Customer facing app built with REACT
 ## Deployment
-https://nomi-technologies.github.io/web-menu/build/
+https://nomi-smart-menu.netlify.app
