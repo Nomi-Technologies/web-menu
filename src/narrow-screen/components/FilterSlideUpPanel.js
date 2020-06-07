@@ -1,7 +1,8 @@
 import React from 'react';
 import './FilterSlideUpPanel.css';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import { ReactComponent as ExpandArrow } from './expand_arrow.svg';
+import { ReactComponent as ExpandArrow } from '../../components/expand_arrow.svg';
+import TagButton from '../../components/TagButton';
 
 export default class FilterSlideUpPanel extends React.Component {
 
@@ -35,11 +36,9 @@ export default class FilterSlideUpPanel extends React.Component {
           continue;
         }
         cols.push(<Col key={j}>
-          <div 
-            className={
-              this.state.selected.has(tags[tag_keys[i+j]].id)? 
-                'tag-selected': 'tag-unselected'
-            }
+          <TagButton 
+            className='tagbtn-in-grid'
+            selected={this.state.selected.has(tags[tag_keys[i+j]].id)}
             onClick={() => {
               const tag = tags[tag_keys[i+j]];
               let selected = this.state.selected;
@@ -49,7 +48,7 @@ export default class FilterSlideUpPanel extends React.Component {
             }}
           >
             {tags[tag_keys[i+j]].name}
-          </div>
+          </TagButton>
         </Col>);
       }
       rows.push(<Row noGutters={true} key={i}>{cols}</Row>);
@@ -82,7 +81,7 @@ export default class FilterSlideUpPanel extends React.Component {
             <div id='spacer' className='panel-header-element' 
               onClick={this.onExpansionChanged.bind(this)}
             ></div>
-            <div id='clear-btn-wrapper' className='panel-header-element'>
+            <div className='panel-header-element'>
               <Button id='clear-btn'
                 variant='secondary'
                 disabled={this.state.selected.size === 0}

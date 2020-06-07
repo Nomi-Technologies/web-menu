@@ -1,4 +1,19 @@
 # Web Menu
-Customer facing app build with REACT
+Customer facing app built with REACT
+
+## Project Structure
+```
+├── public
+│   ├── css *includes customization on bootstrap*
+│   ├── fonts
+│   └── js - *includes customization on bootstrap*
+└── src
+    ├── components - shared (material design) stuff, best to refactor here whenever possible during future development
+    ├── narrow-screen - mobile specific stuff
+    │   ├── components
+    │   └── screens
+    └── wide-screen - for future dev on desktops and tablets
+```
+
 ## Deployment
-https://nomi-technologies.github.io/web-menu/build/
+https://nomi-smart-menu.netlify.app

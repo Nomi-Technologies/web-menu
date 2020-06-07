@@ -3,10 +3,10 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
-import { ReactComponent as NomiLogo } from '../components/nomi-withword.svg';
+import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
 import './MenuScreen.css';
 
-const { apiBaseUrl } = require('../config');
+const { apiBaseUrl } = require('../../config');
 
 export default class MenuScreen extends React.Component {
 
