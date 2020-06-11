@@ -1,7 +1,12 @@
 import React from 'react';
+import RestaurantMenuScreen from './screens/RestaurantMenuScreen';
 import { withUserAgent } from 'react-useragent';
+import { 
+  BrowserRouter,
+  Switch,
+  Route,
+} from 'react-router-dom';
 import './index.css';
-import MobileRestaurantScreen from './narrow-screen/screens/RestaurantScreen';
 
 /******
  * App is restricted to the window's size to be compatible with mobile version
@@ -28,14 +33,25 @@ function App(props) {
 
   
   return (
-    <div className='app-mobile'/*{props.ua.mobile? 'app-mobile': 'app'}*/
-      style={{
-        height: `${windowSize.height}px`,
-        width: `${windowSize.width}px`
-      }}
-    >
-      <MobileRestaurantScreen restaurantId={1}/>
-    </div>
+    <BrowserRouter>
+      <div className='app-mobile'/*{props.ua.mobile? 'app-mobile': 'app'}*/
+        style={{
+          height: `${windowSize.height}px`,
+          width: `${windowSize.width}px`
+        }}
+      >
+        <Switch>
+          <Route path='/:restaurant_identifier'>
+            <RestaurantMenuScreen/>
+          </Route>
+          <Route path='/'>
+            <div>
+              A list of restaurants.
+            </div>
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   )
 
 }
