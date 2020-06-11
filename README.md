@@ -1,6 +1,17 @@
 # Web Menu
 Customer facing app built with REACT
 
+## Run the project
+```
+yarn install
+yarn start
+```
+or
+```
+npm install
+npm start
+```
+
 ## Project Structure
 ```
 ├── public
