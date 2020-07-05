@@ -66,7 +66,7 @@ export default class MenuScreen extends React.Component {
         menu.dishesByTags[tag.id].push(dish);
       });
     });
-    console.log(menu);
+
     return menu;
   }
 
@@ -149,9 +149,9 @@ export default class MenuScreen extends React.Component {
               </div>
             </div>
             <div className='web-list-content'>
-              {menu.categories.map(c => {
+              {menu.categories.map((c, i) => {
                 const dishes = this.getDishByCategoryWithFilter(c);
-                return <MenuList dishes={dishes} category={c}/>
+                return <MenuList dishes={dishes} category={c} key={i} />
               })}
             </div>
             <div className='nomi-logo-bar-web'>
