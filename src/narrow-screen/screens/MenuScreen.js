@@ -6,8 +6,6 @@ import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
 import './MenuScreen.css';
 
-const { apiBaseUrl } = require('../../config');
-
 export default class MenuScreen extends React.Component {
 
   state = {
@@ -21,7 +19,7 @@ export default class MenuScreen extends React.Component {
   };
 
   componentDidMount() {
-    fetch(`${apiBaseUrl[process.env.NODE_ENV]}/webApi/dishes/1`)
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/dishes/1`)
       .then(res => res.json())
       .then(data => {
         const menu = this.parseMenu(data);
