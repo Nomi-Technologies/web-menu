@@ -1,7 +1,7 @@
 import React from 'react';
 import RestaurantMenuScreen from './screens/RestaurantMenuScreen';
 import { withUserAgent } from 'react-useragent';
-import { 
+import {
   BrowserRouter,
   Switch,
   Route,
@@ -14,7 +14,7 @@ import './index.css';
  */
 function App(props) {
 
-  const [windowSize, setWindowSize] = React.useState({ 
+  const [windowSize, setWindowSize] = React.useState({
     height: window.innerHeight,
     width: window.innerWidth
   })
@@ -31,7 +31,7 @@ function App(props) {
     return () => window.removeEventListener('resize', handleResize);
   }, []); // [] to trigger only on first render
 
-  
+
   return (
     <BrowserRouter>
       <div className='app-mobile'/*{props.ua.mobile? 'app-mobile': 'app'}*/

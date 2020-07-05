@@ -1,0 +1,12 @@
+.dish-list-wrapper {
+  position: relative;
+  padding: 24px 16px 0px 16px;
+  z-index: 1;
+  display: flex;
+}
+
+.category-title {
+  width: 100%;
+  padding-left: 3%;
+  margin-top: 3%;
+}

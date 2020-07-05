@@ -1,9 +1,12 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import MenuCategoryPanel from '../components/MenuCategoryPanel';
+import HamburgerMenu from 'react-hamburger-menu';
+import MenuList from '../components/MenuList';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
+import { ReactComponent as NomiTopBottomLogo } from '../../components/nomi-topbottom.svg';
+import RestaurantLogo from '../../components/bacari-logo.png';
 import './MenuScreen.css';
 
 const { apiBaseUrl } = require('../../config');
@@ -17,8 +20,14 @@ export default class MenuScreen extends React.Component {
     selected: new Set(),
     excludedDishes: new Set(),
     panelExpanded: false,
-    modalShow: false,
+    hamburgerOpen: false,
   };
+
+  handleClick() {
+  	this.setState({
+  		hamburgerOpen: !this.state.hamburgerOpen
+  	});
+  }
 
   componentDidMount() {
     fetch(`${apiBaseUrl[process.env.NODE_ENV]}/webApi/dishes/1`)
@@ -33,7 +42,7 @@ export default class MenuScreen extends React.Component {
   }
 
   parseMenu(data) {
-    // *********************** menu **************************
+
     let menu = {
       categories: [],
       dishes: [],
@@ -57,6 +66,7 @@ export default class MenuScreen extends React.Component {
         menu.dishesByTags[tag.id].push(dish);
       });
     });
+    console.log(menu);
     return menu;
   }
 
@@ -81,7 +91,6 @@ export default class MenuScreen extends React.Component {
       selected: selected,
       excludedDishes: excluded,
       panelExpanded: false,
-      modalShow: true
     });
     setTimeout(() => this.setState({ modalShow: false }), 1000);
   }
@@ -109,58 +118,54 @@ export default class MenuScreen extends React.Component {
     const menu = this.state.menu;
     if (menu) {
       return (
-        <div className='menu-screen-wrapper'>
-          <Tabs
-            selectedIndex={this.state.tabIndex}
-            forceRenderTabPanel={true}
-            onSelect={this.onSelect.bind(this)}
-            selectedTabClassName='menu-tab-selected'
-            selectedTabPanelClassName='menu-panel-selected'
-          >
-            <TabList className='menu-tabs'>
-              {menu.categories.map(c =>
-                <Tab className='menu-tab' key={c}>{c}</Tab>
-              )}
-            </TabList>
-            {menu.categories.map(c => {
-              const dishes = this.getDishByCategoryWithFilter(c);
-              return <TabPanel key={c} className='menu-panel'>
-                <MenuCategoryPanel dishes={dishes}/>
-              </TabPanel>
-            })}
-          </Tabs>
-          <div className='nomi-logo-bar'>
-            <div className='nomi-logo-txt'>Powered by</div>
-            <a href='https://www.dinewithnomi.com/'>
-              <NomiLogo
-                width='70px'
-                height='16px'
-                className='nomi-logo'
-                fill='#8A9DB7'
+        <div className='menu-screen-wrapper-web'>
+          <div className="web-header">
+            <HamburgerMenu className="hamburger-icon"
+              isOpen={this.state.hamburgerOpen}
+              menuClicked={this.handleClick.bind(this)}
+              width={30}
+              height={25}
+              strokeWidth={2}
+              rotate={0}
+              color='black'
+              borderRadius={5}
+              animationDuration={0.3}
               />
-            </a>
+                <NomiTopBottomLogo
+                width='70px'
+                height='28px'
+                className='nomi-logo-top-bar'
+              />
+              <img src={RestaurantLogo} className='restaurant-logo' />
+              <div className="filter-words">Display Filtered Dishes</div>
+              <div className="filter-toggle">
+                <div className="filter-toggle-button"></div>
+              </div>
           </div>
-          <div className='slide-up-panel-wrapper'>
-            <FilterSlideUpPanel
-              tags={menu.tags}
-              expanded={this.state.panelExpanded}
-              onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
-              onApplyFilter={this.onApplyFilter.bind(this)}
-              onClearFilter={this.onClearFilter.bind(this)}
-            />
-          </div>
-          <Modal
-            className='react-bootstrap-modal'
-            show={this.state.modalShow}
-            aria-labelledby="contained-modal-vcenter"
-            centered
-            backdrop={false}
-          >
-            <div className='apply-filter-modal'>
-              <div className='num-wrapper'>{this.state.selected.size}</div>
-              Filters Applied
+          <div className="web-main-content">
+            <div className="web-banner">
+              <div className='restaurant-title'>
+              {this.props.restaurantId.toUpperCase()}
+              </div>
             </div>
-          </Modal>
+            <div className='web-list-content'>
+              {menu.categories.map(c => {
+                const dishes = this.getDishByCategoryWithFilter(c);
+                return <MenuList dishes={dishes} category={c}/>
+              })}
+            </div>
+            <div className='nomi-logo-bar-web'>
+              <div className='nomi-logo-txt'>Powered by</div>
+              <a href='https://www.dinewithnomi.com/'>
+                <NomiLogo
+                  width='70px'
+                  height='16px'
+                  className='nomi-logo'
+                  fill='#8A9DB7'
+                />
+              </a>
+            </div>
+          </div>
         </div>
       );
     } else {
