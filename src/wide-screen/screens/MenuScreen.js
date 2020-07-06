@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import HamburgerMenu from 'react-hamburger-menu';
 import MenuList from '../components/MenuList';
-import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
+import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
 import { ReactComponent as NomiTopBottomLogo } from '../../components/nomi-topbottom.svg';
@@ -142,28 +142,37 @@ export default class MenuScreen extends React.Component {
                 <div className="filter-toggle-button"></div>
               </div>
           </div>
-          <div className="web-main-content">
-            <div className="web-banner">
-              <div className='restaurant-title'>
-              {this.props.restaurantId.toUpperCase()}
+          <div className="menu-screen-content">
+            <div className='side-panel-wrapper'>
+              <HotScrollSidePanel
+                categories={menu.categories}
+                expanded={this.state.panelExpanded}
+                onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
+              />
+            </div>
+            <div className="web-main-content">
+              <div className="web-banner">
+                <div className='restaurant-title'>
+                {this.props.restaurantId.toUpperCase()}
+                </div>
               </div>
-            </div>
-            <div className='web-list-content'>
-              {menu.categories.map((c, i) => {
-                const dishes = this.getDishByCategoryWithFilter(c);
-                return <MenuList dishes={dishes} category={c} key={i} />
-              })}
-            </div>
-            <div className='nomi-logo-bar-web'>
-              <div className='nomi-logo-txt'>Powered by</div>
-              <a href='https://www.dinewithnomi.com/'>
-                <NomiLogo
-                  width='70px'
-                  height='16px'
-                  className='nomi-logo'
-                  fill='#8A9DB7'
-                />
-              </a>
+              <div className='web-list-content'>
+                {menu.categories.map((c, i) => {
+                  const dishes = this.getDishByCategoryWithFilter(c);
+                  return <MenuList dishes={dishes} category={c} key={i} />
+                })}
+              </div>
+              <div className='nomi-logo-bar-web'>
+                <div className='nomi-logo-txt'>Powered by</div>
+                <a href='https://www.dinewithnomi.com/'>
+                  <NomiLogo
+                    width='70px'
+                    height='16px'
+                    className='nomi-logo'
+                    fill='#8A9DB7'
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </div>
