@@ -21,6 +21,7 @@ export default class MenuScreen extends React.Component {
     excludedDishes: new Set(),
     panelExpanded: false,
     hamburgerOpen: false,
+    categoryToRef: {},
   };
 
   handleClick() {
@@ -34,7 +35,15 @@ export default class MenuScreen extends React.Component {
       .then(res => res.json())
       .then(data => {
         const menu = this.parseMenu(data);
+        let categoryToRef = {};
+
+        menu.categories.forEach(c => {
+          const categoryRef = React.createRef();
+          categoryToRef[c] = categoryRef;
+        });
+
         this.setState({
+          categoryToRef: categoryToRef,
           menu: menu,
         });
       })
@@ -78,7 +87,6 @@ export default class MenuScreen extends React.Component {
   }
 
   onPanelExpansionChanged(expanded) {
-    console.log(expanded);
     this.setState({ panelExpanded: expanded });
   }
 
@@ -96,7 +104,6 @@ export default class MenuScreen extends React.Component {
   }
 
   onClearFilter() {
-    console.log(this.state.panelExpanded);
     this.setState({
       selected: new Set(),
       excludedDishes: new Set(),
@@ -146,6 +153,7 @@ export default class MenuScreen extends React.Component {
             <div className='side-panel-wrapper'>
               <HotScrollSidePanel
                 categories={menu.categories}
+                categoryToRef={this.state.categoryToRef}
                 expanded={this.state.panelExpanded}
                 onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
               />
@@ -159,7 +167,7 @@ export default class MenuScreen extends React.Component {
               <div className='web-list-content'>
                 {menu.categories.map((c, i) => {
                   const dishes = this.getDishByCategoryWithFilter(c);
-                  return <MenuList dishes={dishes} category={c} key={i} />
+                  return <MenuList ref={this.state.categoryToRef[c]} dishes={dishes} category={c} key={i} />;
                 })}
               </div>
               <div className='nomi-logo-bar-web'>

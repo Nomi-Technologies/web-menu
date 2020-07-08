@@ -41,7 +41,7 @@
 .side-panel-wrapper {
   height: 100%;
   width: 20%;
-  padding: 74px 16px;
+  padding: 96px 16px;
 }
 
 .menu-screen-content {
@@ -52,7 +52,7 @@
 
 .web-header {
   position: fixed;
-  height: 5%;
+  height: 6%;
   width: 100%;
   left: 0%;
   right: 0%;
@@ -147,7 +147,7 @@
   justify-content: center;
   left: 0px;
   top: 0px;
-  margin: 74px 16px 0px 16px;
+  margin: 96px 16px 0px 16px;
   background: url("../../components/web_menu_banner.jpg");
   background-size: cover;
   background-color: none;
