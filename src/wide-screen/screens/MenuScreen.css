@@ -17,11 +17,6 @@
 }
 
 .hot-scroll-side-panel {
-  left: 0%;
-  right: 0%;
-  top: 0%;
-  bottom: 72.21%;
-
   /* White */
 
   background: #FFFFFF;
@@ -41,7 +36,7 @@
 .side-panel-wrapper {
   height: 100%;
   width: 20%;
-  padding: 96px 16px;
+  padding: 1px 16px;
 }
 
 .menu-screen-content {
@@ -261,6 +256,7 @@
   width: 60%;
   height: 100%;
   overflow: scroll;
+  scroll-behavior: smooth;
 }
 
 .nomi-logo-bar-web {
