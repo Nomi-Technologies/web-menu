@@ -45,9 +45,11 @@
 }
 
 .menu-screen-content {
+  margin-top: 150px;
   height: 100%;
   width: 100%;
   display: flex;
+  flex: 1 1 auto;
 }
 
 .web-header {
@@ -147,7 +149,7 @@
   justify-content: center;
   left: 0px;
   top: 0px;
-  margin: 96px 16px 0px 16px;
+  margin: 0 16px 0px 16px;
   background: url("../../components/web_menu_banner.jpg");
   background-size: cover;
   background-color: none;
@@ -185,6 +187,7 @@
 
 .web-list-content {
   display: block;
+  padding-bottom: 100px;
 }
 
 .menu-tabs {
@@ -244,12 +247,12 @@
 }
 
 .menu-screen-wrapper-web {
-  position: relative;
-  display: flex;
-  flex: 1 1 auto;
+  position: fixed;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  display: flex;
+  flex-flow: column;
   width: 100%;
   height: 100%;
 }
@@ -257,6 +260,7 @@
 .web-main-content {
   width: 60%;
   height: 100%;
+  overflow: scroll;
 }
 
 .nomi-logo-bar-web {

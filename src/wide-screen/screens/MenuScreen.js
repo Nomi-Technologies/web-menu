@@ -167,19 +167,19 @@ export default class MenuScreen extends React.Component {
               <div className='web-list-content'>
                 {menu.categories.map((c, i) => {
                   const dishes = this.getDishByCategoryWithFilter(c);
-                  return <MenuList ref={this.state.categoryToRef[c]} dishes={dishes} category={c} key={i} />;
+                  return <MenuList reactRef={this.state.categoryToRef[c]} dishes={dishes} category={c} key={i} />;
                 })}
-              </div>
-              <div className='nomi-logo-bar-web'>
-                <div className='nomi-logo-txt'>Powered by</div>
-                <a href='https://www.dinewithnomi.com/'>
-                  <NomiLogo
-                    width='70px'
-                    height='16px'
-                    className='nomi-logo'
-                    fill='#8A9DB7'
-                  />
-                </a>
+                <div className='nomi-logo-bar-web'>
+                  <div className='nomi-logo-txt'>Powered by</div>
+                  <a href='https://www.dinewithnomi.com/'>
+                    <NomiLogo
+                      width='70px'
+                      height='16px'
+                      className='nomi-logo'
+                      fill='#8A9DB7'
+                    />
+                  </a>
+                </div>
               </div>
             </div>
           </div>

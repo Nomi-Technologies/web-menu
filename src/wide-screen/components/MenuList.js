@@ -4,7 +4,7 @@ import './MenuList.css';
 
 export default class MenuList extends React.Component {
   render() {
-    return (<div>
+    return (<div ref={this.props.reactRef}>
       <div className='category-title'>{this.props.category}</div>
       <div className='dish-list-wrapper-web'>
         <div className='col-md-6'>

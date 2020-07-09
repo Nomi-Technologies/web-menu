@@ -10,8 +10,8 @@ export default class HotScrollSidePanel extends React.Component {
   };
 
   scrollToCategory(categoryRef) {
-    console.log(this.props.categoryRef);
-    window.scrollTo(0, categoryRef.offsetTop);
+    categoryRef.current.scrollIntoView();
+    console.log(categoryRef.current.scrollTop);
   }
 
   onExpansionChanged() {
@@ -36,7 +36,7 @@ export default class HotScrollSidePanel extends React.Component {
               onClick={this.onExpansionChanged.bind(this)}
             >
               <ExpandArrow className={
-                this.props.expanded?
+                !this.props.expanded?
                   'expand-arrow-more': 'expand-arrow-less'
               }/>
             </div>
