@@ -1,9 +1,6 @@
 import React from 'react';
 import MenuScreen from './MenuScreen';
-import { ReactSVG } from 'react-svg';
 import './MenuScreen.css';
-
-const { apiBaseUrl } = require('../../config');
 
 export default function RestaurantScreen(props) {
 

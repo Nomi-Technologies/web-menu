@@ -1,6 +1,6 @@
 import React from 'react';
 import './HotScrollSidePanel.css';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+// import { Button, Container, Row, Col } from 'react-bootstrap';
 import { ReactComponent as ExpandArrow } from '../../components/expand_arrow.svg';
 
 export default class HotScrollSidePanel extends React.Component {

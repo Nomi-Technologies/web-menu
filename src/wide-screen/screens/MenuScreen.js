@@ -1,9 +1,9 @@
 import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import HamburgerMenu from 'react-hamburger-menu';
 import MenuList from '../components/MenuList';
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
-import { Modal } from 'react-bootstrap';
+// import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
 import { ReactComponent as NomiTopBottomLogo } from '../../components/nomi-topbottom.svg';
 import RestaurantLogo from '../../components/bacari-logo.png';
