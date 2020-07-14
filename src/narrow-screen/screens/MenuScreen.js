@@ -19,7 +19,7 @@ export default class MenuScreen extends React.Component {
   };
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/dishes/1`)
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/dishes/${this.props.restaurantId}`)
       .then(res => res.json())
       .then(data => {
         const menu = this.parseMenu(data);
@@ -163,6 +163,7 @@ export default class MenuScreen extends React.Component {
       );
     } else {
       if (this.state.error) {
+        console.log(this.state.error);
         return <div>{this.state.error}</div>;
       } else {
         return <div>Loading...</div>;
