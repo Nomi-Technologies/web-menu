@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "PORT=8000 react-scripts start",
-    "build": "react-scripts build"
+    "build": "CI=false react-scripts build"
   },
   "homepage": ".",
   "eslintConfig": {
