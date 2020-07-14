@@ -62,6 +62,7 @@
 
 .menu-screen-wrapper {
   position: relative;
+  flex-flow: column;
   flex: 1 1 auto;
   background-color: #F2F3F5;
 }

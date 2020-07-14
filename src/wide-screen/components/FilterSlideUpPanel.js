@@ -31,12 +31,12 @@ export default class FilterSlideUpPanel extends React.Component {
     for (let i = 0; i < tag_keys.length; i += 3) {
       let cols = [];
       for (let j = 0; j < 3; ++j) {
-        if (i + j >= tag_keys.length) {
+        if (i + j >= tag_keys.length) { 
           cols.push(<Col key={j}></Col>);
           continue;
         }
         cols.push(<Col key={j}>
-          <TagButton
+          <TagButton 
             className='tagbtn-in-grid'
             selected={this.state.selected.has(tags[tag_keys[i+j]].id)}
             onClick={() => {
@@ -57,14 +57,14 @@ export default class FilterSlideUpPanel extends React.Component {
       <div className='grid-container'><Container>{rows}</Container></div>
     );
   }
-
+  
   render() {
     return (
       <div className='slide-up-panel'>
         <div className='panel-header'>
           <div id='header-row'>
-            <div
-              id='filter-txt'
+            <div 
+              id='filter-txt' 
               className='panel-header-element'
               onClick={this.onExpansionChanged.bind(this)}
             >
@@ -78,7 +78,7 @@ export default class FilterSlideUpPanel extends React.Component {
                 {this.state.selected.size}
               </div>
             </div>
-            <div id='spacer' className='panel-header-element'
+            <div id='spacer' className='panel-header-element' 
               onClick={this.onExpansionChanged.bind(this)}
             ></div>
             <div className='panel-header-element'>
@@ -90,16 +90,16 @@ export default class FilterSlideUpPanel extends React.Component {
                 Clear
               </Button>
             </div>
-            <div id='expand-btn'
+            <div id='expand-btn' 
               className='panel-header-element'
               onClick={this.onExpansionChanged.bind(this)}
             >
               <ExpandArrow className={
-                this.props.expanded?
+                this.props.expanded? 
                   'expand-arrow-more': 'expand-arrow-less'
               }/>
             </div>
-
+            
           </div>
         </div>
         {this.props.expanded?

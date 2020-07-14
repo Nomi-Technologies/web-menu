@@ -23,7 +23,7 @@ export default class MenuScreen extends React.Component {
       .then(res => res.json())
       .then(data => {
         const menu = this.parseMenu(data);
-        this.setState({ 
+        this.setState({
           menu: menu,
         });
       })
@@ -72,7 +72,7 @@ export default class MenuScreen extends React.Component {
 
   onApplyFilter(selected) {
     let excluded = new Set();
-    selected.forEach(t => 
+    selected.forEach(t =>
       this.state.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
     );
     this.setState({
@@ -130,7 +130,7 @@ export default class MenuScreen extends React.Component {
           <div className='nomi-logo-bar'>
             <div className='nomi-logo-txt'>Powered by</div>
             <a href='https://www.dinewithnomi.com/'>
-              <NomiLogo 
+              <NomiLogo
                 width='70px'
                 height='16px'
                 className='nomi-logo'
@@ -168,6 +168,6 @@ export default class MenuScreen extends React.Component {
         return <div>Loading...</div>;
       }
     }
-    
+
   }
 }

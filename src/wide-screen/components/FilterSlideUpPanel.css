@@ -1,0 +1,103 @@
+.slide-up-panel {
+  position: relative;
+  z-index: 11;
+  background-color: white;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 -5px 10px #E3EDF2;
+}
+
+.panel-header {
+  height: 80px;
+  width: 100%;
+  position: relative;
+  line-height: 80px; /* vertically center stuff */
+}
+
+.panel-body {
+  max-height: 600px;
+  width: 100%;
+  padding: 10px 15px 20px 15px;
+}
+
+.panel-header-element {
+  display: inline-block;
+  font-weight: 700;
+}
+
+.tagbtn-in-grid {
+  margin: 10px;
+}
+
+#filter-txt {
+  margin-left: 38px;
+}
+
+#header-row {
+  display: flex;
+  flex-direction: row;
+}
+
+#spacer {
+  flex: 1 1 auto;
+}
+
+#counter {
+  margin-left: 5px;
+  /* includes some hard-coded stuff because text is off-center smh */
+  display: inline-block;
+  line-height: 23px;
+  text-align: center;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 11px;
+  background-color: #8A9DB7;
+  color: white;
+}
+
+#clear-btn {
+  width: 96px;
+  height: 44px;
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 22px;
+  z-index: 25;
+}
+
+#expand-btn {
+  margin: 0 25px;
+}
+
+.grid-container {
+  margin-bottom: 20px;
+}
+
+/* Setting the padding of the built-in grid container to zero */
+.grid-container > div {
+  padding: 0;
+}
+
+#save-btn {
+  background-color: #F3A35C;
+  color: white;
+  font-weight: bold;
+  margin: 10px auto 0 auto;
+  display: block;
+  width: 85%;
+  height: 44px;
+  border-radius: 22px;
+}
+
+.expand-arrow-less {
+  transform: rotate(180deg);
+}
+
+.tag-section-subtitle {
+  margin-left: 10px;
+  margin-bottom: 5px;
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8A9DB7;
+}

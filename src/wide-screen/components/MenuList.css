@@ -1,0 +1,22 @@
+.dish-list-wrapper-web {
+  position: relative;
+  padding: 24px 16px 0px 16px;
+  z-index: 1;
+  display: flex;
+}
+
+.category-title {
+  height: 22px;
+
+  width: 100%;
+  padding-left: 3%;
+  margin-top: 3%;
+
+  font-family: HK Grotesk;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: 0.02em;
+  color: #000000;
+}
