@@ -3,6 +3,7 @@ import React from 'react';
 import HamburgerMenu from 'react-hamburger-menu';
 import MenuList from '../components/MenuList';
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
+import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
 // import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
 import { ReactComponent as NomiTopBottomLogo } from '../../components/nomi-topbottom.svg';
@@ -19,7 +20,8 @@ export default class MenuScreen extends React.Component {
     tabIndex: 0,
     selected: new Set(),
     excludedDishes: new Set(),
-    panelExpanded: false,
+    hotScrollPanelExpanded: false,
+    allergenFiltersPanelExpanded: false,
     hamburgerOpen: false,
     categoryToRef: {},
   };
@@ -86,8 +88,12 @@ export default class MenuScreen extends React.Component {
     this.setState({ tabIndex: index });
   }
 
-  onPanelExpansionChanged(expanded) {
-    this.setState({ panelExpanded: expanded });
+  onHotScrollPanelExpansionChanged(expanded) {
+    this.setState({ hotScrollPanelExpanded: expanded });
+  }
+
+  onAllergenFiltersPanelExpansionChanged(expanded) {
+    this.setState({ allergenFiltersPanelExpanded: expanded });
   }
 
   onApplyFilter(selected) {
@@ -154,8 +160,15 @@ export default class MenuScreen extends React.Component {
               <HotScrollSidePanel
                 categories={menu.categories}
                 categoryToRef={this.state.categoryToRef}
-                expanded={this.state.panelExpanded}
-                onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
+                expanded={this.state.hotScrollPanelExpanded}
+                onExpansionChanged={this.onHotScrollPanelExpansionChanged.bind(this)}
+              />
+              <AllergenFiltersSidePanel
+                tags={menu.tags}
+                expanded={this.state.allergenFiltersPanelExpanded}
+                onExpansionChanged={this.onAllergenFiltersPanelExpansionChanged.bind(this)}
+                onApplyFilter={this.onApplyFilter.bind(this)}
+                onClearFilter={this.onClearFilter.bind(this)}
               />
             </div>
             <div className="web-main-content">

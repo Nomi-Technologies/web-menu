@@ -3,6 +3,10 @@ import DishTile from './DishTile';
 import './MenuList.css';
 
 export default class MenuList extends React.Component {
+
+  state = {  
+  }
+
   render() {
     return (<div ref={this.props.reactRef}>
       <div className='category-title'>{this.props.category}</div>
