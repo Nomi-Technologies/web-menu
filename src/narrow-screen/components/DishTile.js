@@ -4,8 +4,6 @@ import { Modal } from 'react-bootstrap';
 import { ReactSVG } from 'react-svg';
 import SharedDishTile from '../../components/SharedDishTile';
 
-const { apiBaseUrl } = require('../../config');
-
 export default function DishTile(props) {
 
   const [showModal, setShowModal] = React.useState(false);
@@ -38,7 +36,7 @@ export default function DishTile(props) {
               <ReactSVG
                 wrapper='span'
                 beforeInjection={svg => svg.classList.add('tag-icon')}
-                src={`${apiBaseUrl[process.env.NODE_ENV]}/api/assets/tag_icons/${t.name}.svg`}
+                src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/tag_icons/${t.name}.svg`}
               />
               {t.name}
             </div>)}

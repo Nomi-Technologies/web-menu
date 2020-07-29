@@ -3,8 +3,6 @@ import MenuScreen from './MenuScreen';
 import { ReactSVG } from 'react-svg';
 import './MenuScreen.css';
 
-const { apiBaseUrl } = require('../../config');
-
 export default function RestaurantScreen(props) {
 
   return (
@@ -13,7 +11,7 @@ export default function RestaurantScreen(props) {
         className='restaurant-logo-bar'>
         <ReactSVG 
           wrapper='span'
-          src={`${apiBaseUrl[process.env.NODE_ENV]}/api/assets/restaurant_logos/bacari.svg`}
+          src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
         />
       </a>
       <MenuScreen restaurantId={props.restaurantId}/>

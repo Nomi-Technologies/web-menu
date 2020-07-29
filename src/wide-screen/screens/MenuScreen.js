@@ -10,8 +10,6 @@ import { ReactComponent as NomiTopBottomLogo } from '../../components/nomi-topbo
 import RestaurantLogo from '../../components/bacari-logo.png';
 import './MenuScreen.css';
 
-const { apiBaseUrl } = require('../../config');
-
 export default class MenuScreen extends React.Component {
 
   state = {
@@ -33,7 +31,7 @@ export default class MenuScreen extends React.Component {
   }
 
   componentDidMount() {
-    fetch(`${apiBaseUrl[process.env.NODE_ENV]}/webApi/dishes/1`)
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/dishes/${this.props.restaurantId}`)
       .then(res => res.json())
       .then(data => {
         const menu = this.parseMenu(data);
@@ -200,6 +198,7 @@ export default class MenuScreen extends React.Component {
       );
     } else {
       if (this.state.error) {
+        console.log(this.state.error);
         return <div>{this.state.error}</div>;
       } else {
         return <div>Loading...</div>;
