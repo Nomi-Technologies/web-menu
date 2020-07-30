@@ -256,7 +256,6 @@
   width: 60%;
   height: 100%;
   overflow: scroll;
-  scroll-behavior: smooth;
 }
 
 .nomi-logo-bar-web {
