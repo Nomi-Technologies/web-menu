@@ -1,27 +1,51 @@
 import React from 'react';
 import DishTile from './DishTile';
-import './MenuList.css';
+import styled from 'styled-components';
+import { Container, Col } from 'react-bootstrap';
 
-export default class MenuList extends React.Component {
+const Title = styled.div`
+  height: 22px;
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #000000;
+`;
 
-  state = {  
-  }
+const DishGrid = styled(Container)`
+  position: relative;
+  z-index: 1;
+  padding: 24px 0 0 0;
+  display: flex;
+  `;
+
+const Column = styled(Col)`
+  padding: 0;
+`;
+
+const ColumnSeparator = styled(Column)`
+  max-width: 15px;
+`;
+
+export default class extends React.Component {
 
   render() {
-    return (<div ref={this.props.reactRef}>
-      <div className='category-title'>{this.props.category}</div>
-      <div className='dish-list-wrapper-web'>
-        <div className='col-md-6'>
-          {this.props.dishes.slice(0,Math.floor(this.props.dishes.length / 2)).map(dish =>
-            <DishTile key={dish.name} dish={dish}/>
-          )}
-        </div>
-        <div className='col-md-6'>
-          {this.props.dishes.slice(Math.floor(this.props.dishes.length / 2)).map(dish =>
-            <DishTile key={dish.name} dish={dish}/>
-          )}
-        </div>
+    return (
+      <div ref={this.props.reactRef}>
+        <Title>{this.props.category}</Title>
+        <DishGrid>
+          <Column>
+            {this.props.dishes.slice(0,Math.ceil(this.props.dishes.length / 2)).map(dish =>
+              <DishTile key={dish.name} dish={dish}/>
+            )}
+          </Column>
+          <ColumnSeparator/>
+          <Column>
+            {this.props.dishes.slice(Math.ceil(this.props.dishes.length / 2)).map(dish =>
+              <DishTile key={dish.name} dish={dish}/>
+            )}
+          </Column>
+        </DishGrid>
       </div>
-    </div>);
+    );
   }
 }

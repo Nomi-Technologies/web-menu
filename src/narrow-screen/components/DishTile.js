@@ -4,6 +4,11 @@ import { ReactSVG } from 'react-svg';
 import SharedDishTile from '../../components/SharedDishTile';
 import styled from "styled-components";
 
+const DishTile = styled(SharedDishTile)`
+  margin-bottom: 10px;
+  box-shadow: 0 0 20px #E3EDF2;
+`;
+
 const AllergenInfoButton = styled.button`
   height: 24px;
   width: 24px;
@@ -68,7 +73,7 @@ export default function(props) {
 
   return (
     <>
-      <SharedDishTile
+      <DishTile
         dish={props.dish}
         titleTrailing={
           <AllergenInfoButton className='info-btn' 

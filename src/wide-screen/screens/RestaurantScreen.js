@@ -10,7 +10,7 @@ const RestaurantScreen = styled.div`
   display: flex;
   flex-flow: column;
   flex: 1 1 auto;
-  background-color: #A9C1F5;
+  background-color: #d8e2f8;
 `;
 
 const Header = styled.div`

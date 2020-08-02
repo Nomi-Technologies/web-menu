@@ -1,21 +1,18 @@
 import React from 'react';
-// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import MenuList from '../components/MenuList';
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
-// import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
 import styled from 'styled-components';
 import BannerImage from '../../components/web_menu_banner.jpg';
 
-const CommonTopPadding = styled.div`
-  padding-top: 20px;
+const ColumnPadding = styled.div`
+  padding: 20px 16px;
 `;
 
-const LeftPanelWrapper = styled(CommonTopPadding)`
+const LeftPanelWrapper = styled(ColumnPadding)`
   height: 100%;
   width: 20%;
-  padding: auto 16px;
   overflow: scroll;
 `;
 
@@ -43,15 +40,13 @@ const RightPanelWrapper = styled.div`
   width: 20%;
 `;
 
-function RightPanel(props) {
+function RightPanel() {
   return (
-    <RightPanelWrapper>
-
-    </RightPanelWrapper>
-  )
+    <RightPanelWrapper/>
+  );
 }
 
-const MainContentWrapper = styled(CommonTopPadding)`
+const MainContentWrapper = styled(ColumnPadding)`
   width: 60%;
   height: 100%;
   overflow: scroll;
@@ -64,7 +59,6 @@ const Banner = styled.div`
   justify-content: center;
   left: 0px;
   top: 0px;
-  margin: 0 16px 0px 16px;
   background: url(${BannerImage});
   background-size: cover;
   background-color: none;
