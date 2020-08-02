@@ -3,7 +3,7 @@ import MenuScreen from './MenuScreen';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
 
-const RestaurantScreenWrapper = styled.div`
+const RestaurantScreen = styled.div`
   height: 100%;
   display: flex;
   flex-flow: column;
@@ -21,10 +21,10 @@ const RestaurantLogoBar = styled.a`
   }
 `;
 
-export default function RestaurantScreen(props) {
+export default function(props) {
 
   return (
-    <RestaurantScreenWrapper>
+    <RestaurantScreen>
       <RestaurantLogoBar href='https://www.bacariwadams.com/'>
         <ReactSVG 
           wrapper='span'
@@ -32,6 +32,6 @@ export default function RestaurantScreen(props) {
         />
       </RestaurantLogoBar>
       <MenuScreen restaurantId={props.restaurantId}/>
-    </RestaurantScreenWrapper>
+    </RestaurantScreen>
   );
 }

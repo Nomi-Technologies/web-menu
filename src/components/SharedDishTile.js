@@ -2,7 +2,7 @@ import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 import styled from "styled-components";
 
-const Tile = styled(Jumbotron)`
+const DishTile = styled(Jumbotron)`
   padding: 23px 20px;
   background-color: white;
   border-radius: 10px;
@@ -44,9 +44,9 @@ const Description = styled.div`
 `;
 
 
-export default function DishTile(props) {
+export default function (props) {
   return (
-    <Tile className={props.className}>
+    <DishTile className={props.className}>
       <TileTitle>
         <Name>{props.dish.name}</Name>
         <TrailingBox>{props.titleTrailing}</TrailingBox>
@@ -56,6 +56,6 @@ export default function DishTile(props) {
         <Description>{props.dish.description}</Description>
         <TrailingBox>{props.subtitleTrailing}</TrailingBox>
       </TileSubtitle>
-    </Tile>
+    </DishTile>
   )
 }

@@ -6,11 +6,11 @@ import { withUserAgent } from 'react-useragent';
 
 function RestaurantMenuScreen(props) {
   let { restaurant_identifier } = useParams();
-  if (window.innerWidth < 1440) {
-    return <MobileRestaurantScreen restaurantId={restaurant_identifier}/>
-  } else {
+  // if (window.innerWidth < 1440) {
+  //   return <MobileRestaurantScreen restaurantId={restaurant_identifier}/>
+  // } else {
     return <WebRestuarantScreen restaurantId={restaurant_identifier}/>
-  }
+  // }
 }
 
 export default withUserAgent(RestaurantMenuScreen);

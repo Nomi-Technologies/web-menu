@@ -185,7 +185,7 @@ function SlideUpPanelBody(props) {
   )
 }
 
-export default class FilterSlideUpPanel extends React.Component {
+export default class extends React.Component {
 
   state = {
     selected: new Set(),

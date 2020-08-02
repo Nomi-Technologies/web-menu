@@ -62,7 +62,7 @@ const ModalTagIcon = styled.span`
   }
 `;
 
-export default function DishTile(props) {
+export default function(props) {
 
   const [showModal, setShowModal] = React.useState(false);
 
