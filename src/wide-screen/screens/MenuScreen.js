@@ -16,22 +16,88 @@ const LeftPanelWrapper = styled(ColumnPadding)`
   overflow: scroll;
 `;
 
+const Panel = styled.div`
+  /* Menu Sections */
+  left: 0%;
+  right: 0%;
+  top: 0%;
+  bottom: 72.21%;
+
+  /* White */
+
+  background: #FFFFFF;
+  /* card-shadow-3 */
+
+  box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
+  border-radius: 6px;
+
+  /* Inside Auto Layout */
+
+  flex: none;
+  order: 0;
+  align-self: center;
+  margin: 15px 15px;
+`;
+
+const HeaderStyle = styled.div`
+  height: 40px;
+  width: 100%;
+  position: relative;
+  line-height: 40px; /* vertically center stuff */
+  display: flex;
+  flex-direction: row;
+  display: inline-block;
+  font-weight: bold;
+  padding-left: 20px;
+
+  & div {
+    display: inline-block;
+    font-weight: 700;
+  }
+`;
+
+const ExpandArrowStyle = styled.div`
+  margin: 0 25px;
+  float: right;
+  position: absolute;
+  right: 0;
+
+  & svg {
+    transform: ${props => props.expanded ? 'rotate(180deg)' : 0};
+  }
+`;
+
+const PanelBodyStyle = styled.div`
+  width: 100%;
+  padding: 10px 15px 20px 15px;
+`;
+
 function LeftPanel(props) {
   return (
     <LeftPanelWrapper>
-      <HotScrollSidePanel
-        categories={props.menu.categories}
-        categoryToRef={props.categoryToRef}
-        expanded={props.hotScrollPanelExpanded}
-        onExpansionChanged={props.onHotScrollPanelExpansionChanged}
-      />
-      <AllergenFiltersSidePanel
-        tags={props.menu.tags}
-        expanded={props.allergenFiltersPanelExpanded}
-        onExpansionChanged={props.onAllergenFiltersPanelExpansionChanged}
-        onApplyFilter={props.onApplyFilter}
-        onClearFilter={props.onClearFilter}
-      />
+      <Panel>
+        <HotScrollSidePanel
+          StyledHeader={HeaderStyle}
+          StyledExpandArrow={ExpandArrowStyle}
+          StyledBody={PanelBodyStyle}
+          categories={props.menu.categories}
+          categoryToRef={props.categoryToRef}
+          expanded={props.hotScrollPanelExpanded}
+          onExpansionChanged={props.onHotScrollPanelExpansionChanged}
+        />
+      </Panel>
+      <Panel>
+        <AllergenFiltersSidePanel
+          StyledHeader={HeaderStyle}
+          StyledExpandArrow={ExpandArrowStyle}
+          StyledBody={PanelBodyStyle}
+          tags={props.menu.tags}
+          expanded={props.allergenFiltersPanelExpanded}
+          onExpansionChanged={props.onAllergenFiltersPanelExpansionChanged}
+          onApplyFilter={props.onApplyFilter}
+          onClearFilter={props.onClearFilter}
+        />
+      </Panel>
     </LeftPanelWrapper>
   );
 }
