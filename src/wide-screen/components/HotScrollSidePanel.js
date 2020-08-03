@@ -1,5 +1,4 @@
 import React from 'react';
-import { ReactComponent as ExpandArrow } from '../../components/expand_arrow.svg';
 import styled from 'styled-components';
 
 const CategoryTitle = styled.div`
@@ -22,7 +21,6 @@ export default class extends React.Component {
 
   scrollToCategory(categoryRef) {
     categoryRef.current.scrollIntoView();
-    console.log(categoryRef.current.scrollTop);
   }
 
   onExpansionChanged() {
@@ -40,11 +38,9 @@ export default class extends React.Component {
             Menu Sections
           </div>
           <this.props.StyledExpandArrow
-            expanded={this.props.expanded}
+            pointingUp={this.props.expanded}
             onClick={this.onExpansionChanged.bind(this)}
-          >
-            <ExpandArrow/>
-          </this.props.StyledExpandArrow>
+          />
         </this.props.StyledHeader>
         {this.props.expanded?
           <this.props.StyledBody>

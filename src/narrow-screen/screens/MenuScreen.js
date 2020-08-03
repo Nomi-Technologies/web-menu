@@ -218,7 +218,6 @@ export default class extends React.Component {
   }
 
   onClearFilter() {
-    console.log(this.state.panelExpanded);
     this.setState({
       selected: new Set(),
       excludedDishes: new Set(),

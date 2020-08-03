@@ -1,6 +1,7 @@
 .modal-dialog-centered { 
   height: 100%;
   margin: 0 auto;
+  max-width: 260px;
 }
 
 .modal-content {

@@ -2,6 +2,8 @@ import React from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { ReactComponent as ExpandArrow } from '../../components/expand_arrow.svg';
 import TagButton from '../../components/TagButton';
+import Counter from '../../components/Counter';
+import ExpansionArrow from '../../components/ExpansionArrow';
 import styled from 'styled-components';
 
 const SlideUpPanel = styled.div`
@@ -32,19 +34,6 @@ const FilterLabel = styled(PanelHeaderElement)`
   margin-left: 38px;
 `;
 
-const Counter = styled.div`
-  margin-left: 5px;
-  /* includes some hard-coded stuff because text is off-center smh */
-  display: inline-block;
-  line-height: 23px;
-  text-align: center;
-  height: 22px;
-  min-width: 22px;
-  border-radius: 11px;
-  background-color: ${props => props.active ? '#E9003E' : '#8A9DB7'};
-  color: white;
-`;
-
 const Spacer = styled(PanelHeaderElement)`
   flex: 1 1 auto;
 `;
@@ -56,14 +45,6 @@ const ClearButton = styled(Button)`
   font-size: 18px;
   border-radius: 22px;
   z-index: 25;
-`;
-
-const ExpandButton = styled(PanelHeaderElement)`
-  margin: 0 25px;
-`;
-
-const Arrow = styled(ExpandArrow)`
-  transform: ${props => props.expanded ? '0' : 'rotate(180deg)'};
 `;
 
 function SlideUpPanelHeader(props) {
@@ -90,12 +71,12 @@ function SlideUpPanelHeader(props) {
           Clear
         </ClearButton>
       </PanelHeaderElement>
-      <ExpandButton
-        onClick={props.onExpansionChanged}
-      >
-        {/* The following silences a warning caused by DOM passing "true" as a string */}
-        <Arrow expanded={props.expanded ? 1 : 0}/>
-      </ExpandButton>
+      <PanelHeaderElement>
+        <ExpansionArrow
+          onClick={props.onExpansionChanged}
+          pointingUp={!props.expanded ? 1 : 0}
+        />
+      </PanelHeaderElement>
     </PanelHeader>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import { ReactComponent as ExpandArrow } from '../../components/expand_arrow.svg';
 import TagButton from '../../components/TagButton';
+import Counter from '../../components/Counter';
 import styled from 'styled-components';
 
 const GridTagButton = styled(TagButton)`
@@ -46,19 +46,6 @@ function TagGrid(props) {
     <Grid>{rows}</Grid>
   );
 }
-
-const Counter = styled.div`
-  margin-left: 5px;
-  /* includes some hard-coded stuff because text is off-center smh */
-  display: inline-block;
-  line-height: 23px;
-  text-align: center;
-  height: 22px;
-  min-width: 22px;
-  border-radius: 11px;
-  background-color: ${props => props.active ? '#E9003E' : '#8A9DB7'};
-  color: white;
-`;
 
 const SaveButton = styled(Button)`
   background-color: #F3A35C;
@@ -111,10 +98,9 @@ export default class AllergenFiltersSidePanel extends React.Component {
             </Counter>
           </div>
           <this.props.StyledExpandArrow
+            pointingUp={this.props.expanded}
             onClick={this.onExpansionChanged.bind(this)}
-          >
-            <ExpandArrow/>
-          </this.props.StyledExpandArrow>
+          />
         </this.props.StyledHeader>
         {this.props.expanded?
           <this.props.StyledBody>

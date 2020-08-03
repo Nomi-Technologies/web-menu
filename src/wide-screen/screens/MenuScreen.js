@@ -1,5 +1,6 @@
 import React from 'react';
 import MenuList from '../components/MenuList';
+import ExpansionArrow from '../../components/ExpansionArrow';
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
@@ -56,15 +57,9 @@ const HeaderStyle = styled.div`
   }
 `;
 
-const ExpandArrowStyle = styled.div`
-  margin: 0 25px;
-  float: right;
+const ExpandArrowStyle = styled(ExpansionArrow)`
   position: absolute;
   right: 0;
-
-  & svg {
-    transform: ${props => props.expanded ? 'rotate(180deg)' : 0};
-  }
 `;
 
 const PanelBodyStyle = styled.div`
