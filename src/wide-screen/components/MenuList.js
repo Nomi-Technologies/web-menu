@@ -3,9 +3,12 @@ import DishTile from './DishTile';
 import styled from 'styled-components';
 import { Container, Col } from 'react-bootstrap';
 
+const CategorySection = styled.div`
+  padding-top: 30px;
+`;
+
 const Title = styled.div`
   height: 22px;
-  margin-top: 30px;
   font-weight: bold;
   font-size: 18px;
   color: #000000;
@@ -30,7 +33,7 @@ export default class extends React.Component {
 
   render() {
     return (
-      <div ref={this.props.reactRef}>
+      <CategorySection ref={this.props.reactRef}>
         <Title>{this.props.category}</Title>
         <DishGrid>
           <Column>
@@ -45,7 +48,7 @@ export default class extends React.Component {
             )}
           </Column>
         </DishGrid>
-      </div>
+      </CategorySection>
     );
   }
 }
