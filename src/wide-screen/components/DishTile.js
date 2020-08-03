@@ -1,25 +1,12 @@
 import React from 'react';
 import SharedDishTile from '../../components/SharedDishTile';
 import AllergenModal from '../../components/AllergenModal';
+import InfoButton from '../../components/InfoButton';
 import styled from "styled-components";
 
 const DishTile = styled(SharedDishTile)`
   margin-bottom: 15px;
   box-shadow: 0 0 5px #E3EDF2;
-`;
-
-const AllergenInfoButton = styled.button`
-  height: 24px;
-  width: 24px;
-  border-radius: 12px;
-  line-height: 24px;
-  margin: 0;
-  border: 0;
-  padding: 0;
-  display: inline-block;
-  font-weight: bold;
-  color: white;
-  background-color: #8A9DB7;
 `;
 
 export default function(props) {
@@ -30,13 +17,7 @@ export default function(props) {
     <>
       <DishTile
         dish={props.dish}
-        titleTrailing={
-          <AllergenInfoButton className='info-btn' 
-            onClick={() => setShowModal(true)}
-          >
-            i
-          </AllergenInfoButton>
-        }
+        titleTrailing={<InfoButton onClick={() => setShowModal(true)}/>}
       />
       <AllergenModal
         dish={props.dish}

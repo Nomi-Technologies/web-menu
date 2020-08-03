@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import { ReactComponent as ExpandArrow } from '../../components/expand_arrow.svg';
 import TagButton from '../../components/TagButton';
 import Counter from '../../components/Counter';
 import ExpansionArrow from '../../components/ExpansionArrow';
