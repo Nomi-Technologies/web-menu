@@ -6,13 +6,6 @@ import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
 import styled from 'styled-components';
 
-const MenuScreenWrapper = styled.div`
-  position: relative;
-  flex-flow: column;
-  flex: 1 1 auto;
-  background-color: #F2F3F5;
-`;
-
 const CategoryTab = styled(Tab)`
   height: 30px;
   display: inline-block;
@@ -85,6 +78,13 @@ function MenuTabView(props) {
   );
 }
 
+const MenuScreen = styled.div`
+  position: relative;
+  flex-flow: column;
+  flex: 1 1 auto;
+  background-color: #F2F3F5;
+`;
+
 const NomiLogoBar = styled.div`
   height: 22px;
   position: absolute;
@@ -141,7 +141,7 @@ const ActiveFilterCount = styled.div`
   background-color: #5383EC;
 `;
 
-export default class MenuScreen extends React.Component {
+export default class extends React.Component {
 
   state = {
     error: null,
@@ -166,7 +166,6 @@ export default class MenuScreen extends React.Component {
   }
 
   parseMenu(data) {
-    // *********************** menu **************************
     let menu = {
       categories: [],
       dishes: [],
@@ -219,7 +218,6 @@ export default class MenuScreen extends React.Component {
   }
 
   onClearFilter() {
-    console.log(this.state.panelExpanded);
     this.setState({
       selected: new Set(),
       excludedDishes: new Set(),
@@ -240,7 +238,7 @@ export default class MenuScreen extends React.Component {
   render() {
     if (this.state.menu) {
       return (
-        <MenuScreenWrapper>
+        <MenuScreen>
           <MenuTabView
             {...this.state}
             onSelectTab={this.onSelectTab.bind(this)}
@@ -277,7 +275,7 @@ export default class MenuScreen extends React.Component {
               Filters Applied
             </ApplyFilterModalBody>
           </Modal>
-        </MenuScreenWrapper>
+        </MenuScreen>
       );
     } else {
       if (this.state.error) {

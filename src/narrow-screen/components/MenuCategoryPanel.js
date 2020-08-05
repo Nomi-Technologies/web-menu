@@ -8,7 +8,7 @@ const DishList = styled.div`
   z-index: 1;
 `;
 
-export default function MenuCategoryPanel(props) {
+export default function(props) {
   return (
     <DishList>
       {props.dishes.map(dish => <DishTile key={dish.name} dish={dish}/>)}

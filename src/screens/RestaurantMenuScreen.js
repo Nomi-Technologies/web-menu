@@ -9,7 +9,7 @@ function RestaurantMenuScreen(props) {
   if (window.innerWidth < 1440) {
     return <MobileRestaurantScreen restaurantId={restaurant_identifier}/>
   } else {
-    return <WebRestuarantScreen restaurantId={restaurant_identifier}/>
+    return <WebRestuarantScreen restaurantId={restaurant_identifier}/>;
   }
 }
 

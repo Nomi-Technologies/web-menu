@@ -1,15 +1,26 @@
 import React from 'react';
-import './HotScrollSidePanel.css';
-import { ReactComponent as ExpandArrow } from '../../components/expand_arrow.svg';
+import styled from 'styled-components';
 
-export default class HotScrollSidePanel extends React.Component {
+const CategoryTitle = styled.div`
+  line-height: 200%;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
+  color: #8A9DB7;
 
-  state = {
-  };
+  &:hover {
+    color: #000000;
+    text-decoration: underline #5383EC;
+  }
+`;
+
+export default class extends React.Component {
 
   scrollToCategory(categoryRef) {
     categoryRef.current.scrollIntoView();
-    console.log(categoryRef.current.scrollTop);
   }
 
   onExpansionChanged() {
@@ -19,43 +30,33 @@ export default class HotScrollSidePanel extends React.Component {
 
   render() {
     return (
-      <div className='slide-down-panel'>
-        <div className='panel-header'>
-          <div id='header-row'>
-            <div
-              id='filter-txt'
-              className='panel-header-element'
-              onClick={this.onExpansionChanged.bind(this)}
-            >
-              Menu Sections
-            </div>
-            <div id='expand-btn'
-              className='panel-header-element'
-              onClick={this.onExpansionChanged.bind(this)}
-            >
-              <ExpandArrow className={
-                !this.props.expanded?
-                  'expand-arrow-more': 'expand-arrow-less'
-              }/>
-            </div>
+      <>
+        <this.props.StyledHeader>
+          <div
+            onClick={this.onExpansionChanged.bind(this)}
+          >
+            Menu Sections
           </div>
-        </div>
+          <this.props.StyledExpandArrow
+            pointingUp={this.props.expanded}
+            onClick={this.onExpansionChanged.bind(this)}
+          />
+        </this.props.StyledHeader>
         {this.props.expanded?
-          <div className='panel-body'>
+          <this.props.StyledBody>
             {this.props.categories.map((category, i) =>
-              <div
-                className='hot-scroll-panel-category'
+              <CategoryTitle
                 onClick={() => this.scrollToCategory(this.props.categoryToRef[category])}
                 key={i}
               >
                 {category}
-              </div>
+              </CategoryTitle>
             )}
-          </div>
+          </this.props.StyledBody>
           :
-          <div></div>
+          <></>
         }
-      </div>
+      </>
     );
   }
 }
