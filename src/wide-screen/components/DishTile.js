@@ -7,7 +7,6 @@ import SharedDishTile from '../../components/SharedDishTile';
 export default function DishTile(props) {
 
   const [showModal, setShowModal] = React.useState(false);
-
   return (
     <div>
       <SharedDishTile className='dish-tile'
@@ -32,7 +31,7 @@ export default function DishTile(props) {
             Contains:
           </Modal.Header>
           <Modal.Body bsPrefix='tag-list-modal-body'>
-            {props.dish.tags.map(t => <div key={t.name} className='modal-tag-item'>
+            {props.dish.Tags.map(t => <div key={t.name} className='modal-tag-item'>
               <ReactSVG
                 wrapper='span'
                 beforeInjection={svg => svg.classList.add('tag-icon')}

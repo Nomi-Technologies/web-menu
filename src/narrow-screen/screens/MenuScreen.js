@@ -19,13 +19,25 @@ export default class MenuScreen extends React.Component {
   };
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/dishes/${this.props.restaurantId}`)
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}`)
       .then(res => res.json())
-      .then(data => {
-        const menu = this.parseMenu(data);
-        this.setState({
-          menu: menu,
-        });
+      .then(menus => {
+        // if no menus show up - just ignore
+        if(menus.length == 0) {
+          return
+        }
+
+        let firstMenuId = menus[0].id
+        console.log(menus)
+
+        fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}/${firstMenuId}`).then(res => res.json()).then(data => {
+          console.log(data)
+          const menu = this.parseMenu(data);
+          
+          this.setState({
+            menu: menu,
+          });
+        }).catch(err => this.setState({ error: err }));
       })
       .catch(err => this.setState({ error: err }));
   }
@@ -42,12 +54,12 @@ export default class MenuScreen extends React.Component {
 
     data.forEach(dish => {
       menu.dishes[dish.id] = dish;
-      if (!menu.categories.includes(dish.category.name)) {
-        menu.categories.push(dish.category.name);
-        menu.dishesByCategory[dish.category.name] = [];
+      if (!menu.categories.includes(dish.Category.name)) {
+        menu.categories.push(dish.Category.name);
+        menu.dishesByCategory[dish.Category.name] = [];
       }
-      menu.dishesByCategory[dish.category.name].push(dish);
-      dish.tags.forEach(tag => {
+      menu.dishesByCategory[dish.Category.name].push(dish);
+      dish.Tags.forEach(tag => {
         if (!(tag.id in menu.tags)) {
           menu.tags[tag.id] = tag;
           menu.dishesByTags[tag.id] = [];
