@@ -4,7 +4,7 @@ import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
-import { parseMenu, getMenus } from 'utils';
+import { parseMenu } from 'utils';
 import styled from 'styled-components';
 
 const CategoryTab = styled(Tab)`
@@ -166,7 +166,7 @@ export default class extends React.Component {
         let firstMenuId = menus[0].id
 
         fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}/${firstMenuId}`).then(res => res.json()).then(data => {
-          const menu = this.parseMenu(data);
+          const menu = parseMenu(data);
           
           this.setState({
             menu: menu,
@@ -174,33 +174,6 @@ export default class extends React.Component {
         }).catch(err => this.setState({ error: err }));
       })
       .catch(err => this.setState({ error: err }));
-  }
-
-  parseMenu(data) {
-    let menu = {
-      categories: [],
-      dishes: [],
-      dishesByCategory: {},
-      dishesByTags: {},
-      tags: {},
-    };
-
-    data.forEach(dish => {
-      menu.dishes[dish.id] = dish;
-      if (!menu.categories.includes(dish.Category.name)) {
-        menu.categories.push(dish.Category.name);
-        menu.dishesByCategory[dish.Category.name] = [];
-      }
-      menu.dishesByCategory[dish.Category.name].push(dish);
-      dish.Tags.forEach(tag => {
-        if (!(tag.id in menu.tags)) {
-          menu.tags[tag.id] = tag;
-          menu.dishesByTags[tag.id] = [];
-        }
-        menu.dishesByTags[tag.id].push(dish);
-      });
-    });
-    return menu;
   }
 
   onSelectTab(index, lastIndex) {
