@@ -1,6 +1,6 @@
 import React from 'react';
-import MobileRestaurantScreen from '../narrow-screen/screens/RestaurantScreen';
-import WebRestuarantScreen from '../wide-screen/screens/RestaurantScreen';
+import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
+import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
 import { useParams } from 'react-router-dom';
 import { withUserAgent } from 'react-useragent';
 

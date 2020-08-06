@@ -1,11 +1,12 @@
 import React from 'react';
 import MenuList from '../components/MenuList';
-import ExpansionArrow from '../../components/ExpansionArrow';
+import ExpansionArrow from 'components/ExpansionArrow';
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
-import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
+import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
-import BannerImage from '../../components/web_menu_banner.jpg';
+import BannerImage from 'components/web_menu_banner.jpg';
+import { parseMenu } from 'utils';
 
 const ColumnPadding = styled.div`
   padding: 20px 16px;

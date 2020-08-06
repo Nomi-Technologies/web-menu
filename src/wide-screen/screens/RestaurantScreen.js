@@ -1,8 +1,8 @@
 import React from 'react';
 import MenuScreen from './MenuScreen';
 import HamburgerMenu from 'react-hamburger-menu';
-import RestaurantLogo from '../../components/bacari-logo.png';
-import { ReactComponent as NomiTopBottomLogo } from '../../components/nomi-topbottom.svg';
+import RestaurantLogo from 'components/bacari-logo.png';
+import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 
 const RestaurantScreen = styled.div`

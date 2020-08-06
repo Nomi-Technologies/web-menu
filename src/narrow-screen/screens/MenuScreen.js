@@ -3,7 +3,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
-import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
+import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
+import { parseMenu, getMenus } from 'utils';
 import styled from 'styled-components';
 
 const CategoryTab = styled(Tab)`
