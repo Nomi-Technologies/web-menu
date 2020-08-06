@@ -12,7 +12,6 @@ const DishTile = styled(SharedDishTile)`
 export default function(props) {
 
   const [showModal, setShowModal] = React.useState(false);
-
   return (
     <>
       <DishTile

@@ -62,7 +62,7 @@ export default function(props) {
           Contains:
         </ModalHeader>
         <ModalBody>
-          {props.dish.tags.map(t => <ModalTagItem key={t.name}>
+          {props.dish.Tags.map(t => <ModalTagItem key={t.name}>
             <ModalTagIcon>
               <ReactSVG
                 wrapper='span'
