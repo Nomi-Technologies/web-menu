@@ -4,9 +4,144 @@ import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
-import './MenuScreen.css';
+import styled from 'styled-components';
 
-export default class MenuScreen extends React.Component {
+const CategoryTab = styled(Tab)`
+  height: 30px;
+  display: inline-block;
+  margin: 20px 15px 0 15px;
+  padding-bottom: 10px;
+  color: rgba(0, 0, 0, 0.25);
+
+  &.is-selected {
+    color: black;
+    padding-bottom: 6px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom: solid 4px #5383EC;
+  }
+`;
+
+const CategoryTabList = styled(TabList)`
+  list-style-type: none;
+  margin: 0;
+  padding: 0 5px;
+  overflow: auto;
+  white-space: nowrap;
+  position: sticky;
+  background-color: white;
+  z-index: 10;
+  box-shadow: 0 5px 5px #E3EDF2;
+`;
+
+const CategoryDishPanel = styled(TabPanel)`
+  width: 100%;
+  display: none;
+  
+  &.is-selected {
+    display: block;
+    position: absolute;
+    /* 50px for header; 80px for expansion strip + 70px for nomi logo */
+    padding: 50px 0 150px 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    overflow: auto;
+  }
+`;
+
+function MenuTabView(props) {
+  return (
+    <Tabs
+      selectedIndex={props.tabIndex}
+      forceRenderTabPanel={true}
+      onSelect={props.onSelectTab.bind(this)}
+      selectedTabClassName='is-selected'
+      selectedTabPanelClassName='is-selected'
+    >
+      <CategoryTabList>
+        {props.menu.categories.map(c =>
+          <CategoryTab key={c}>{c}</CategoryTab>
+        )}
+      </CategoryTabList>
+      {props.menu.categories.map(c => {
+        const dishes = props.getDishByCategoryWithFilter(c);
+        return (
+          <CategoryDishPanel 
+            key={c} 
+          >
+            <MenuCategoryPanel dishes={dishes}/>
+          </CategoryDishPanel>
+        );
+      })}
+    </Tabs>
+  );
+}
+
+const MenuScreen = styled.div`
+  position: relative;
+  flex-flow: column;
+  flex: 1 1 auto;
+  background-color: #F2F3F5;
+`;
+
+const NomiLogoBar = styled.div`
+  height: 22px;
+  position: absolute;
+  display: block;
+  bottom: 105px; /* 25px from the bottom slide up panel */
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #C4CEDB;
+  font-weight: 500;
+  z-index: 0;
+`;
+
+const NomiLogoText = styled.div`
+  display: inline-block;
+  margin-right: 5px;
+`;
+
+const NomiLogoSVG = styled(NomiLogo)`
+  position: relative;
+  bottom: 4px;
+  display: inline-block;
+  filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg) brightness(78%) contrast(78%);
+`;
+
+const SlideUpPanelWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+`;
+
+const ApplyFilterModalBody = styled.div`
+  font-size: 22px;
+  font-weight: 500;
+  text-align: center;
+  width: 265px;
+  height: 120px;
+  line-height: 120px;
+  margin: 0 auto;
+  background-color: #E3EDF2;
+  border-radius: 10px;
+  color: #5383EC;
+`;
+
+const ActiveFilterCount = styled.div`
+  display: inline-block;
+  height: 52px;
+  width: 52px;
+  line-height: 52px;
+  border-radius: 26px;
+  margin-right: 15px;
+  color: white;
+  font-weight: bold;
+  background-color: #5383EC;
+`;
+
+export default class extends React.Component {
 
   state = {
     error: null,
@@ -23,15 +158,13 @@ export default class MenuScreen extends React.Component {
       .then(res => res.json())
       .then(menus => {
         // if no menus show up - just ignore
-        if(menus.length == 0) {
+        if(menus.length === 0) {
           return
         }
 
         let firstMenuId = menus[0].id
-        console.log(menus)
 
         fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}/${firstMenuId}`).then(res => res.json()).then(data => {
-          console.log(data)
           const menu = this.parseMenu(data);
           
           this.setState({
@@ -43,7 +176,6 @@ export default class MenuScreen extends React.Component {
   }
 
   parseMenu(data) {
-    // *********************** menu **************************
     let menu = {
       categories: [],
       dishes: [],
@@ -70,7 +202,7 @@ export default class MenuScreen extends React.Component {
     return menu;
   }
 
-  onSelect(index, lastIndex) {
+  onSelectTab(index, lastIndex) {
     if (lastIndex === index) {
       return;
     }
@@ -78,7 +210,6 @@ export default class MenuScreen extends React.Component {
   }
 
   onPanelExpansionChanged(expanded) {
-    console.log(expanded);
     this.setState({ panelExpanded: expanded });
   }
 
@@ -97,7 +228,6 @@ export default class MenuScreen extends React.Component {
   }
 
   onClearFilter() {
-    console.log(this.state.panelExpanded);
     this.setState({
       selected: new Set(),
       excludedDishes: new Set(),
@@ -116,49 +246,33 @@ export default class MenuScreen extends React.Component {
   }
 
   render() {
-    const menu = this.state.menu;
-    if (menu) {
+    if (this.state.menu) {
       return (
-        <div className='menu-screen-wrapper'>
-          <Tabs
-            selectedIndex={this.state.tabIndex}
-            forceRenderTabPanel={true}
-            onSelect={this.onSelect.bind(this)}
-            selectedTabClassName='menu-tab-selected'
-            selectedTabPanelClassName='menu-panel-selected'
-          >
-            <TabList className='menu-tabs'>
-              {menu.categories.map(c =>
-                <Tab className='menu-tab' key={c}>{c}</Tab>
-              )}
-            </TabList>
-            {menu.categories.map(c => {
-              const dishes = this.getDishByCategoryWithFilter(c);
-              return <TabPanel key={c} className='menu-panel'>
-                <MenuCategoryPanel dishes={dishes}/>
-              </TabPanel>
-            })}
-          </Tabs>
-          <div className='nomi-logo-bar'>
-            <div className='nomi-logo-txt'>Powered by</div>
+        <MenuScreen>
+          <MenuTabView
+            {...this.state}
+            onSelectTab={this.onSelectTab.bind(this)}
+            getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
+          />
+          <NomiLogoBar>
+            <NomiLogoText>Powered by</NomiLogoText>
             <a href='https://www.dinewithnomi.com/'>
-              <NomiLogo
+              <NomiLogoSVG
                 width='70px'
                 height='16px'
-                className='nomi-logo'
                 fill='#8A9DB7'
               />
             </a>
-          </div>
-          <div className='slide-up-panel-wrapper'>
+          </NomiLogoBar>
+          <SlideUpPanelWrapper>
             <FilterSlideUpPanel
-              tags={menu.tags}
+              tags={this.state.menu.tags}
               expanded={this.state.panelExpanded}
               onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
               onApplyFilter={this.onApplyFilter.bind(this)}
               onClearFilter={this.onClearFilter.bind(this)}
             />
-          </div>
+          </SlideUpPanelWrapper>
           <Modal
             className='react-bootstrap-modal'
             show={this.state.modalShow}
@@ -166,12 +280,12 @@ export default class MenuScreen extends React.Component {
             centered
             backdrop={false}
           >
-            <div className='apply-filter-modal'>
-              <div className='num-wrapper'>{this.state.selected.size}</div>
+            <ApplyFilterModalBody>
+              <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
               Filters Applied
-            </div>
+            </ApplyFilterModalBody>
           </Modal>
-        </div>
+        </MenuScreen>
       );
     } else {
       if (this.state.error) {

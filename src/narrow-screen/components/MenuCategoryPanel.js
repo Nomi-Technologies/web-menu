@@ -1,11 +1,17 @@
 import React from 'react';
 import DishTile from './DishTile';
-import './MenuCategoryPanel.css';
+import styled from 'styled-components';
 
-export default function MenuCategoryPanel(props) {
-  return (<div className='dish-list-wrapper'>
-    {props.dishes.map(dish => 
-      <DishTile key={dish.name} dish={dish}/>
-    )}
-  </div>);
+const DishList = styled.div`
+  position: relative;
+  padding: 24px 16px 0px 16px;
+  z-index: 1;
+`;
+
+export default function(props) {
+  return (
+    <DishList>
+      {props.dishes.map(dish => <DishTile key={dish.name} dish={dish}/>)}
+    </DishList>
+  );
 }

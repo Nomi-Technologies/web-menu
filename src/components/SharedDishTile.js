@@ -1,25 +1,54 @@
 import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
-import './SharedDishTile.css';
-import classNames from 'classnames';
+import styled from "styled-components";
 
-export default function DishTile(props) {
+const DishTile = styled(Jumbotron)`
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  margin: 0;
+`;
+
+const TileTitle = styled.div`
+  height: 24px;
+  line-height: 24px;
+  display: flex;
+  flex-flow: row;
+  margin-bottom: 12px;
+`;
+
+const Name = styled.div`
+  display: inline-block;
+  font-weight: bold;
+  flex: 1 1 auto;
+`;
+
+const TrailingBox = styled.div`
+  flex: 0 0 auto;
+`;
+
+const TileSubtitle = styled.div`
+  display: flex;
+  flex-flow: row;
+  margin-top: 18px;
+`;
+
+const Description = styled.div`
+  flex: 1 1 auto;
+`;
+
+
+export default function (props) {
   return (
-    <Jumbotron
-      className={classNames({
-        [props.className]: true,
-        'shared-dish-tile': true,
-      })}
-    >
-      <div className='dish-title'>
-        <div className='dish-name'>{props.dish.name}</div>
-        <div className='title-ending'>{props.titleEnding}</div>
-      </div>
-      <div className='separator'></div>
-      <div className='dish-subtitle'>
-        <div className='description'>{props.dish.description}</div>
-        <div className='subtitle-ending'>{props.subtitleEnding}</div>
-      </div>
-    </Jumbotron>
+    <DishTile className={props.className}>
+      <TileTitle>
+        <Name>{props.dish.name}</Name>
+        <TrailingBox>{props.titleTrailing}</TrailingBox>
+      </TileTitle>
+      <TileSubtitle>
+        <Description>{props.dish.description}</Description>
+        <TrailingBox>{props.subtitleTrailing}</TrailingBox>
+      </TileSubtitle>
+    </DishTile>
   )
 }
