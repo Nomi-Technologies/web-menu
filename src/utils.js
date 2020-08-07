@@ -1,4 +1,4 @@
-module.exports.parseMenu = data => {
+export const parseMenu = data => {
   let menu = {
     categories: [],
     dishes: [],
@@ -25,10 +25,10 @@ module.exports.parseMenu = data => {
   return menu;
 }
 
-module.exports.getMenus = async restaurantId => {
+export const getMenus = async restaurantId => {
   const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}`);
   return res.json();
 }
 
-module.exports.getDishesOfMenu = async (restaurantId, menuName) => {
+export const getDishesOfMenu = async (restaurantId, menuName) => {
 }
