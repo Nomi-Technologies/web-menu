@@ -1,12 +1,12 @@
 import React from 'react';
-import RestaurantMenuScreen from './screens/RestaurantMenuScreen';
+import RestaurantMenuScreen from 'screens/RestaurantMenuScreen';
 import { withUserAgent } from 'react-useragent';
 import {
   BrowserRouter,
   Switch,
   Route,
 } from 'react-router-dom';
-import './index.css';
+import 'index.css';
 
 /******
  * App is restricted to the window's size to be compatible with mobile version

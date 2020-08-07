@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import TagButton from '../../components/TagButton';
-import Counter from '../../components/Counter';
+import TagButton from 'components/TagButton';
+import Counter from 'components/Counter';
 import styled from 'styled-components';
 
 const GridTagButton = styled(TagButton)`

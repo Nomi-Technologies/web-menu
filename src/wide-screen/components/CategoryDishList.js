@@ -38,13 +38,13 @@ export default class extends React.Component {
         <DishGrid>
           <Column>
             {this.props.dishes.slice(0,Math.ceil(this.props.dishes.length / 2)).map(dish =>
-              <DishTile key={dish.name} dish={dish}/>
+              <DishTile key={dish.id} dish={dish}/>
             )}
           </Column>
           <ColumnSeparator/>
           <Column>
             {this.props.dishes.slice(Math.ceil(this.props.dishes.length / 2)).map(dish =>
-              <DishTile key={dish.name} dish={dish}/>
+              <DishTile key={dish.id} dish={dish}/>
             )}
           </Column>
         </DishGrid>
