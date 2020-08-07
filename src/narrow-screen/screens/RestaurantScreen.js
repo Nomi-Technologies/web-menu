@@ -1,20 +1,37 @@
 import React from 'react';
 import MenuScreen from './MenuScreen';
 import { ReactSVG } from 'react-svg';
-import './MenuScreen.css';
+import styled from 'styled-components';
 
-export default function RestaurantScreen(props) {
+const RestaurantScreen = styled.div`
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+`;
+
+const RestaurantLogoBar = styled.a`
+  position: relative;
+  flex: 0 0 auto;
+
+  & svg {
+    height: 50px;
+    display: block;
+    margin: 5px auto;
+  }
+`;
+
+export default function(props) {
 
   return (
-    <div className='restaurant-screen'>
-      <a href='https://www.bacariwadams.com/'
-        className='restaurant-logo-bar'>
+    <RestaurantScreen>
+      <RestaurantLogoBar href='https://www.bacariwadams.com/'>
         <ReactSVG 
           wrapper='span'
           src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
         />
-      </a>
+      </RestaurantLogoBar>
       <MenuScreen restaurantId={props.restaurantId}/>
-    </div>
+    </RestaurantScreen>
   );
 }

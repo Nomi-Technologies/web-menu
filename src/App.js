@@ -34,7 +34,7 @@ function App(props) {
 
   return (
     <BrowserRouter>
-      <div className='app-mobile'/*{props.ua.mobile? 'app-mobile': 'app'}*/
+      <div className='app'
         style={{
           height: `${windowSize.height}px`,
           width: `${windowSize.width}px`
