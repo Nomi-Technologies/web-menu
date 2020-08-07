@@ -11,7 +11,7 @@ const DishList = styled.div`
 export default function(props) {
   return (
     <DishList>
-      {props.dishes.map(dish => <DishTile key={dish.name} dish={dish}/>)}
+      {props.dishes.map(dish => <DishTile key={dish.id} dish={dish}/>)}
     </DishList>
   );
 }

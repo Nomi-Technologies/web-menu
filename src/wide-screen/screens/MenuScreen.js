@@ -1,5 +1,5 @@
 import React from 'react';
-import MenuList from '../components/MenuList';
+import MenuList from '../components/CategoryDishList';
 import ExpansionArrow from 'components/ExpansionArrow';
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
@@ -7,15 +7,16 @@ import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import BannerImage from 'components/web_menu_banner.jpg';
 import { parseMenu } from 'utils';
+import QRCode from 'qrcode.react';
 
-const ColumnPadding = styled.div`
+const ColumnStyle = styled.div`
+  height: 100%;
   padding: 20px 16px;
+  overflow: scroll;
 `;
 
-const LeftPanelWrapper = styled(ColumnPadding)`
-  height: 100%;
+const LeftPanelWrapper = styled(ColumnStyle)`
   width: 20%;
-  overflow: scroll;
 `;
 
 const Panel = styled.div`
@@ -98,20 +99,28 @@ function LeftPanel(props) {
   );
 }
 
-const RightPanelWrapper = styled.div`
+const RightPanelWrapper = styled(ColumnStyle)`
   width: 20%;
+`;
+
+const RestaruantLinkQRCode = styled(QRCode)`
+  display: block;
+  margin: 0 auto;
 `;
 
 function RightPanel() {
   return (
-    <RightPanelWrapper/>
+    <RightPanelWrapper>
+      <RestaruantLinkQRCode 
+        value={window.location.href}
+        renderAs={'svg'}
+      />
+    </RightPanelWrapper>
   );
 }
 
-const MainContentWrapper = styled(ColumnPadding)`
+const MainContentWrapper = styled(ColumnStyle)`
   width: 60%;
-  height: 100%;
-  overflow: scroll;
 `;
 
 const Banner = styled.div`
