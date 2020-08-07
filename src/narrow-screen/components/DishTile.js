@@ -32,7 +32,7 @@ export default function DishTile(props) {
             Contains:
           </Modal.Header>
           <Modal.Body bsPrefix='tag-list-modal-body'>
-            {props.dish.tags.map(t => <div key={t.name} className='modal-tag-item'>
+            {props.dish.Tags.map(t => <div key={t.name} className='modal-tag-item'>
               <ReactSVG
                 wrapper='span'
                 beforeInjection={svg => svg.classList.add('tag-icon')}
