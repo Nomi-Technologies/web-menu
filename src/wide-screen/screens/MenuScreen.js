@@ -295,7 +295,7 @@ export default class extends React.Component {
   // TODO(tony): use restaurant name instead of slug field
   render() {
     return (
-      <MenuScreen>
+      <MenuScreen {...this.props}>
         <LeftPanel
           menu={this.props.menu}
           {...this.state}

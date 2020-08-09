@@ -5,47 +5,7 @@ import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
-import { Button } from 'react-bootstrap';
-
-const SideNav = styled.div`
-  padding: 80px 40px;
-  background: #F2F3F5;
-  transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(-100%)'};
-  height: 100%;
-  z-index: 16;
-  text-align: left;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: transform 0.3s ease-in-out;
-
-  @media (max-width: 576px) {
-    width: 100%;
-  }
-`
-
-const MenuTile = styled(Button)`
-  height: 35px;
-  display: block;
-  width: 100%;
-  font-weight: bold;
-  margin-bottom: 20px;
-`;
-
-function MenuListSideNav(props) {
-  return (
-    <SideNav open={props.hamburgerOpen}>
-      {props.menus.map((menu, i) =>
-        <MenuTile
-          key={menu.id}
-          variant={props.selectedMenuIndex === i ? 'info': 'outline-info'}
-          onClick={() => props.onSelectMenu(i)}
-        >
-          {menu.name}
-        </MenuTile>)}
-    </SideNav>
-  )
-}
+import MenuListNav from 'components/MenuListNav';
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -56,6 +16,7 @@ const RestaurantScreen = styled.div`
 `;
 
 const Header = styled.div`
+  position: relative;
   flex: 0 0 auto;
   height: 50px;
   display: flex;
@@ -147,7 +108,7 @@ const FilterToggleSwitch = styled.div`
 export default class extends React.Component{
 
   state = {
-    hamburgerOpen: true,
+    hamburgerOpen: false,
     menus: [],
     selectedMenuIndex: 0,
     dishesByMenu: [],
@@ -166,7 +127,7 @@ export default class extends React.Component{
       })
       .catch(err => {
         this.setState({ error: err });
-      })
+      });
   }
 
   onClickHambergerMenu() {
@@ -202,13 +163,16 @@ export default class extends React.Component{
             <FilterToggleSwitch/>
           </FilterToggle>
         </Header>
-        <MenuListSideNav 
-          {...this.state}
+        <MenuListNav 
+          open={this.state.hamburgerOpen}
+          menus={this.state.menus}
+          selectedIndex={this.state.selectedMenuIndex}
           onSelectMenu={this.onSelectMenu.bind(this)}
         />
         {this.state.dishesByMenu.length > 0 ?
           <MenuScreen
-            restaurantName={this.props.restaurantId}
+          onClick={() => this.setState({ hamburgerOpen: false })}
+          restaurantName={this.props.restaurantId}
             menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
           />
           : 
