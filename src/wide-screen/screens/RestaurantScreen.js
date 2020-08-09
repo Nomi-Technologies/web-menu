@@ -1,11 +1,11 @@
 import React from 'react';
 import MenuScreen from './MenuScreen';
-import HamburgerMenu from 'react-hamburger-menu';
 import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
 import MenuListNav from 'components/MenuListNav';
+import { Button } from 'react-bootstrap';
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -27,11 +27,18 @@ const Header = styled.div`
   box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
 `;
 
-const HamburgerIcon = styled(HamburgerMenu)`
+const AllMenusButton = styled(Button)`
   position: relative;
-  margin-left: 1%;
+  margin-left: 20px;
   z-index: 20;
   display: block;
+  font-weight: bold;
+  color: #628DEB;
+
+  text-decoration: none;
+  &:hover, &:focus {
+    text-decoration: none;
+  }
 `;
 
 const NomiLogo = styled(NomiTopBottomLogo)`
@@ -142,17 +149,12 @@ export default class extends React.Component{
     return (
       <RestaurantScreen>
         <Header>
-          <HamburgerIcon
-            isOpen={this.state.hamburgerOpen}
-            menuClicked={this.onClickHambergerMenu.bind(this)}
-            width={30}
-            height={25}
-            strokeWidth={2}
-            rotate={0}
-            color='black'
-            borderRadius={5}
-            animationDuration={0.3}
-          />
+          <AllMenusButton
+            variant='link'
+            onClick={this.onClickHambergerMenu.bind(this)}
+          >
+            ALL MENUS
+          </AllMenusButton>
           <NomiLogo
             width='70px'
             height='28px'

@@ -2,9 +2,10 @@ import React from 'react';
 import MenuScreen from './MenuScreen';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-import HamburgerMenu from 'react-hamburger-menu';
+// import HamburgerMenu from 'react-hamburger-menu'; TODO(tony): remove from deps
 import MenuListNav from 'components/MenuListNav';
 import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
+import { Button } from 'react-bootstrap';
 
 const RestaurantScreen = styled.div`
   position: relative;
@@ -20,6 +21,7 @@ const Header = styled.div`
   flex: 0 0 auto;
   background-color: white;
   text-align: center;
+  height: 60px; /* LOGO's 50px + 5px*2 */
 `;
 
 const RestaurantLogo = styled.a`
@@ -31,11 +33,18 @@ const RestaurantLogo = styled.a`
   }
 `;
 
-const HamburgerIcon = styled(HamburgerMenu)`
+const AllMenusButton = styled(Button)`
   position: absolute !important;
   top: 0%; left: 20px; bottom: 0;
   margin: auto 0;
   z-index: 20;
+  font-weight: bold;
+  color: #628DEB;
+
+  text-decoration: none;
+  &:hover, &:focus {
+    text-decoration: none;
+  }
 `;
 
 
@@ -77,17 +86,12 @@ export default class extends React.Component {
     return (
       <RestaurantScreen>
         <Header>
-          <HamburgerIcon
-            isOpen={this.state.hamburgerOpen}
-            menuClicked={this.onClickHambergerMenu.bind(this)}
-            width={30}
-            height={25}
-            strokeWidth={2}
-            rotate={0}
-            color='black'
-            borderRadius={5}
-            animationDuration={0.3}
-          />
+          <AllMenusButton
+            variant='link'
+            onClick={this.onClickHambergerMenu.bind(this)}
+          >
+            ALL MENUS
+          </AllMenusButton>
           <RestaurantLogo href='https://www.bacariwadams.com/'>
             <ReactSVG 
               wrapper='span'

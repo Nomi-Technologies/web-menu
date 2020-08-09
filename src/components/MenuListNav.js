@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
 const SideNav = styled.div`
+  min-width: 250px;
   padding: 80px 40px;
   background: #F2F3F5;
   transform: ${props => props.open ? 'translateX(0)' : 'translateX(-100%)'};
