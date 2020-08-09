@@ -6,7 +6,6 @@ import styled from "styled-components";
 
 const DishTile = styled(SharedDishTile)`
   margin-bottom: 15px;
-  box-shadow: 0 0 5px #E3EDF2;
 `;
 
 export default function(props) {
