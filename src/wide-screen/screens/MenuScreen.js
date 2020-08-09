@@ -228,8 +228,8 @@ export default class extends React.Component {
     tabIndex: 0,
     selected: new Set(),
     excludedDishes: new Set(),
-    hotScrollPanelExpanded: false,
-    allergenFiltersPanelExpanded: false,
+    hotScrollPanelExpanded: true,
+    allergenFiltersPanelExpanded: true,
     categoryToRef: {},
   };
 
