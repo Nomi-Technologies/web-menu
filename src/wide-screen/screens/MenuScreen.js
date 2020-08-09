@@ -315,8 +315,7 @@ export default class extends React.Component {
 
   // TODO(tony): use restaurant name instead of slug field
   render() {
-    const menu = this.state.menu;
-    if (menu) {
+    if (this.state.menu) {
       return (
         <MenuScreen>
           <LeftPanel
@@ -337,7 +336,7 @@ export default class extends React.Component {
     } else {
       if (this.state.error) {
         console.log(this.state.error);
-        return <div>{this.state.error}</div>;
+        return <div>Some error has ocurred. Please try reloading the page.</div>;
       } else {
         return <div>Loading...</div>;
       }

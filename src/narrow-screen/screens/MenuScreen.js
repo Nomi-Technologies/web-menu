@@ -264,7 +264,7 @@ export default class extends React.Component {
     } else {
       if (this.state.error) {
         console.log(this.state.error);
-        return <div>{this.state.error}</div>;
+        return <div>Some error has ocurred. Please try reloading the page.</div>;
       } else {
         return <div>Loading...</div>;
       }
