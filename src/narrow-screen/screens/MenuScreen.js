@@ -32,7 +32,6 @@ const CategoryTabList = styled(TabList)`
   position: sticky;
   background-color: white;
   z-index: 10;
-  box-shadow: 0 5px 5px #E3EDF2;
 `;
 
 const CategoryDishPanel = styled(TabPanel)`
@@ -83,7 +82,7 @@ const MenuScreen = styled.div`
   position: relative;
   flex-flow: column;
   flex: 1 1 auto;
-  background-color: #F2F3F5;
+  background-color: transparent;
 `;
 
 const NomiLogoBar = styled.div`
