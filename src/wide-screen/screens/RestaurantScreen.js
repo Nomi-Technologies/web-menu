@@ -4,6 +4,44 @@ import HamburgerMenu from 'react-hamburger-menu';
 import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
+import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
+
+const SideNav = styled.div`
+  padding: 80px 40px;
+  background: #EFFFFA;
+  transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(-100%)'};
+  height: 100%;
+  z-index: 16;
+  text-align: left;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease-in-out;
+
+  @media (max-width: 576px) {
+    width: 100%;
+  }
+`
+
+const MenuTile = styled.div`
+  height: 50px;
+  background-color: ${props => props.selected ? 'red' : '#EFFFFA'};
+`;
+
+function MenuListSideNav(props) {
+  return (
+    <SideNav open={props.hamburgerOpen}>
+      {props.menus.map((menu, i) =>
+        <MenuTile 
+          key={menu.id}
+          selected={props.selectedMenuIndex === i}
+          onClick={() => props.onSelectMenu(i)}
+        >
+          {menu.name}
+        </MenuTile>)}
+    </SideNav>
+  )
+}
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -14,10 +52,8 @@ const RestaurantScreen = styled.div`
 `;
 
 const Header = styled.div`
-  position: relative;
   flex: 0 0 auto;
   height: 50px;
-  z-index: 15;
   display: flex;
   align-items: center;
   /* White */
@@ -27,7 +63,10 @@ const Header = styled.div`
 `;
 
 const HamburgerIcon = styled(HamburgerMenu)`
+  position: relative;
   margin-left: 1%;
+  z-index: 20;
+  display: block;
 `;
 
 const NomiLogo = styled(NomiTopBottomLogo)`
@@ -105,10 +144,33 @@ export default class extends React.Component{
 
   state = {
     hamburgerOpen: false,
+    menus: [],
+    selectedMenuIndex: 0,
+    dishesByMenu: [],
+    error: null,
   };
+
+  componentDidMount() {
+    getMenus(this.props.restaurantId)
+      .then(menus => {
+        this.setState({ menus: menus });
+        Promise.all(menus.map(async menu => {
+          let rawMenu = await getDishesOfMenu(this.props.restaurantId, menu.id);
+          return parseMenu(rawMenu);
+        }))
+          .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
+      })
+      .catch(err => {
+        this.setState({ error: err });
+      })
+  }
 
   onClickHambergerMenu() {
     this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
+  }
+
+  onSelectMenu(index) {
+    this.setState({ selectedMenuIndex: index });
   }
 
   render() {
@@ -136,7 +198,21 @@ export default class extends React.Component{
             <FilterToggleSwitch/>
           </FilterToggle>
         </Header>
-        <MenuScreen restaurantId={this.props.restaurantId}/>
+        <MenuListSideNav 
+          {...this.state}
+          onSelectMenu={this.onSelectMenu.bind(this)}
+        />
+        {this.state.dishesByMenu.length > 0 ?
+          <MenuScreen
+            restaurantName={this.props.restaurantId}
+            menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
+          /> : 
+          (
+            this.state.error ? 
+            <div>Some error has ocurred. Please try reloading the page.</div> :
+            <div>Loading...</div>
+          )
+        }
       </RestaurantScreen>
     );
   }

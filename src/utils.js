@@ -31,4 +31,6 @@ export const getMenus = async restaurantId => {
 }
 
 export const getDishesOfMenu = async (restaurantId, menuName) => {
+  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}/${menuName}`);
+  return res.json();
 }
