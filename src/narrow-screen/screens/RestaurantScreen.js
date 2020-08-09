@@ -22,12 +22,13 @@ const Header = styled.div`
   background-color: white;
   text-align: center;
   height: 60px; /* LOGO's 50px + 5px*2 */
+  padding: 5px 0;
 `;
 
 const RestaurantLogo = styled.a`
-  margin: 5px auto;
+  position: absolute;
   display: inline-block;
-
+  right: 30px;
   & svg {
     height: 50px;
   }
