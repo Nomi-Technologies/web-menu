@@ -85,13 +85,14 @@ export default class AllergenFiltersSidePanel extends React.Component {
   render() {
     return (
       <>
-        <this.props.StyledHeader>
-          <div onClick={this.onExpansionChanged.bind(this)}>
+        <this.props.StyledHeader
+          onClick={this.onExpansionChanged.bind(this)}
+        >
+          <div>
             Allergen Filters
           </div>
           <div>
             <Counter
-              onClick={this.onExpansionChanged.bind(this)}
               active={this.state.selected.size > 0}
             >
               {this.state.selected.size}
@@ -99,7 +100,6 @@ export default class AllergenFiltersSidePanel extends React.Component {
           </div>
           <this.props.StyledExpandArrow
             pointingUp={this.props.expanded}
-            onClick={this.onExpansionChanged.bind(this)}
           />
         </this.props.StyledHeader>
         {this.props.expanded?

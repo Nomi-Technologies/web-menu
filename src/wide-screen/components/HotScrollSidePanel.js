@@ -31,15 +31,14 @@ export default class extends React.Component {
   render() {
     return (
       <>
-        <this.props.StyledHeader>
-          <div
-            onClick={this.onExpansionChanged.bind(this)}
-          >
+        <this.props.StyledHeader
+          onClick={this.onExpansionChanged.bind(this)}
+        >
+          <div>
             Menu Sections
           </div>
           <this.props.StyledExpandArrow
             pointingUp={this.props.expanded}
-            onClick={this.onExpansionChanged.bind(this)}
           />
         </this.props.StyledHeader>
         {this.props.expanded?
