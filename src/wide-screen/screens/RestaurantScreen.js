@@ -5,10 +5,11 @@ import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
+import { Button } from 'react-bootstrap';
 
 const SideNav = styled.div`
   padding: 80px 40px;
-  background: #EFFFFA;
+  background: #F2F3F5;
   transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(-100%)'};
   height: 100%;
   z-index: 16;
@@ -23,18 +24,21 @@ const SideNav = styled.div`
   }
 `
 
-const MenuTile = styled.div`
-  height: 50px;
-  background-color: ${props => props.selected ? 'red' : '#EFFFFA'};
+const MenuTile = styled(Button)`
+  height: 35px;
+  display: block;
+  width: 100%;
+  font-weight: bold;
+  margin-bottom: 20px;
 `;
 
 function MenuListSideNav(props) {
   return (
     <SideNav open={props.hamburgerOpen}>
       {props.menus.map((menu, i) =>
-        <MenuTile 
+        <MenuTile
           key={menu.id}
-          selected={props.selectedMenuIndex === i}
+          variant={props.selectedMenuIndex === i ? 'info': 'outline-info'}
           onClick={() => props.onSelectMenu(i)}
         >
           {menu.name}
@@ -143,7 +147,7 @@ const FilterToggleSwitch = styled.div`
 export default class extends React.Component{
 
   state = {
-    hamburgerOpen: false,
+    hamburgerOpen: true,
     menus: [],
     selectedMenuIndex: 0,
     dishesByMenu: [],
@@ -206,7 +210,8 @@ export default class extends React.Component{
           <MenuScreen
             restaurantName={this.props.restaurantId}
             menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
-          /> : 
+          />
+          : 
           (
             this.state.error ? 
             <div>Some error has ocurred. Please try reloading the page.</div> :
