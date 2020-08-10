@@ -32,5 +32,9 @@ npm start
     └── wide-screen - for future dev on desktops and tablets
 ```
 
-## Deployment (branch production)
+## Deployment
+### Production (deployed from production branch)
 https://nomi-smart-menu.netlify.app
+
+### Staging (deployed from master branch)
+https://master--nomi-smart-menu.netlify.app
