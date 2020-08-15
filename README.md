@@ -29,7 +29,7 @@ npm start
     ├── narrow-screen - mobile specific stuff
     │   ├── components
     │   └── screens
-    └── wide-screen - for future dev on desktops and tablets
+    └── wide-screen - desktop specific stuff
 ```
 
 ## Deployment
