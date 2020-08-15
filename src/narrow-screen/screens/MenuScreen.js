@@ -4,7 +4,6 @@ import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
-import { parseMenu } from 'utils';
 import styled from 'styled-components';
 
 const CategoryTab = styled(Tab)`
