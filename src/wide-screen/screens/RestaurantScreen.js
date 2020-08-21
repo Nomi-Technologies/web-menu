@@ -147,8 +147,8 @@ export default class extends React.Component{
         />
         {this.props.dishesByMenu.length > 0 ?
           <MenuScreen
-          onClick={() => this.setState({ hamburgerOpen: false })}
-          restaurantName={this.props.restaurantId}
+            onClick={() => this.setState({ hamburgerOpen: false })}
+            restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
           />
           : 

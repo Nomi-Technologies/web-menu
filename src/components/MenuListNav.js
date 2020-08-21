@@ -34,7 +34,7 @@ export default function(props) {
       {props.menus.map((menu, i) =>
         <MenuTile
           key={menu.id}
-          variant={props.selectedIndex === i ? 'info': 'outline-info'}
+          variant={props.selectedMenuIndex === i ? 'info': 'outline-info'}
           onClick={() => props.onSelectMenu(i)}
         >
           {menu.name}
