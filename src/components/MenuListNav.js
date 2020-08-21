@@ -15,7 +15,7 @@ const SideNav = styled.div`
   left: 0;
   transition: transform 0.3s ease-in-out;
 
-  @media (max-width: 576px) {
+  @media (max-width: 400px) {
     width: 100%;
   }
 `
