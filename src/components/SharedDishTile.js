@@ -8,6 +8,7 @@ const DishTile = styled(Jumbotron)`
   border-radius: 10px;
   margin: 0;
   box-shadow: 0 0 5px #E3EDF2;
+  cursor: pointer;
 `;
 
 const TileTitle = styled.div`
@@ -15,7 +16,6 @@ const TileTitle = styled.div`
   line-height: 24px;
   display: flex;
   flex-flow: row;
-  margin-bottom: 12px;
 `;
 
 const Name = styled.div`
@@ -28,10 +28,14 @@ const TrailingBox = styled.div`
   flex: 0 0 auto;
 `;
 
+const TitleTrailing = styled(TrailingBox)`
+  font-weight: 500;
+`;
+
 const TileSubtitle = styled.div`
   display: flex;
   flex-flow: row;
-  margin-top: 18px;
+  margin-top: 30px;
 `;
 
 const Description = styled.div`
@@ -41,15 +45,22 @@ const Description = styled.div`
 
 export default function (props) {
   return (
-    <DishTile className={props.className}>
+    <DishTile
+      className={props.className}
+      onClick={props.onClick}
+    >
       <TileTitle>
         <Name>{props.dish.name}</Name>
-        <TrailingBox>{props.titleTrailing}</TrailingBox>
+        <TitleTrailing>{props.dish.price}</TitleTrailing>
       </TileTitle>
-      <TileSubtitle>
-        <Description>{props.dish.description}</Description>
-        <TrailingBox>{props.subtitleTrailing}</TrailingBox>
-      </TileSubtitle>
+      {
+        props.dish.description ? 
+        (
+          <TileSubtitle>
+            <Description>{props.dish.description}</Description>
+          </TileSubtitle>
+        ) : (<></>)
+      }
     </DishTile>
   )
 }

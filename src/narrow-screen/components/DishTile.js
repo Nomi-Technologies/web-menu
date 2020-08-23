@@ -16,7 +16,7 @@ export default function(props) {
     <>
       <DishTile
         dish={props.dish}
-        titleTrailing={<InfoButton onClick={() => setShowModal(true)}/>}
+        onClick={() => setShowModal(true)}
       />
       <AllergenModal
         dish={props.dish}

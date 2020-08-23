@@ -10,8 +10,13 @@ const CategorySection = styled.div`
 const Title = styled.div`
   height: 22px;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 24px;
   color: #000000;
+`;
+
+const Description = styled.div`
+  font-size: 18px;
+  padding-top: 26px;
 `;
 
 const DishGrid = styled(Container)`
@@ -32,9 +37,14 @@ const ColumnSeparator = styled(Column)`
 export default class extends React.Component {
 
   render() {
+    console.log(this.props);
     return (
       <CategorySection ref={this.props.reactRef}>
-        <Title>{this.props.category}</Title>
+        <Title>{this.props.category.name}</Title>
+        {
+          this.props.category.description ? 
+          (<Description>{this.props.category.description}</Description>) : <></>
+        }
         <DishGrid>
           <Column>
             {this.props.dishes.slice(0,Math.ceil(this.props.dishes.length / 2)).map(dish =>
