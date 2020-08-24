@@ -3,7 +3,6 @@ import MenuScreen from './MenuScreen';
 import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
-import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
 import MenuListNav from 'components/MenuListNav';
 import { Button } from 'react-bootstrap';
 
@@ -116,33 +115,10 @@ export default class extends React.Component{
 
   state = {
     hamburgerOpen: false,
-    menus: [],
-    selectedMenuIndex: 0,
-    dishesByMenu: [],
-    error: null,
   };
-
-  componentDidMount() {
-    getMenus(this.props.restaurantId)
-      .then(menus => {
-        this.setState({ menus: menus });
-        Promise.all(menus.map(async menu => {
-          let rawMenu = await getDishesOfMenu(this.props.restaurantId, menu.id);
-          return parseMenu(rawMenu);
-        }))
-          .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
-      })
-      .catch(err => {
-        this.setState({ error: err });
-      });
-  }
 
   onClickHambergerMenu() {
     this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
-  }
-
-  onSelectMenu(index) {
-    this.setState({ selectedMenuIndex: index });
   }
 
   render() {
@@ -167,19 +143,17 @@ export default class extends React.Component{
         </Header>
         <MenuListNav 
           open={this.state.hamburgerOpen}
-          menus={this.state.menus}
-          selectedIndex={this.state.selectedMenuIndex}
-          onSelectMenu={this.onSelectMenu.bind(this)}
+          {...this.props}
         />
-        {this.state.dishesByMenu.length > 0 ?
+        {this.props.dishesByMenu.length > 0 ?
           <MenuScreen
-          onClick={() => this.setState({ hamburgerOpen: false })}
-          restaurantName={this.props.restaurantId}
-            menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
+            onClick={() => this.setState({ hamburgerOpen: false })}
+            restaurantName={this.props.restaurantId}
+            menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
           />
           : 
           (
-            this.state.error ? 
+            this.props.error ? 
             <div>Some error has ocurred. Please try reloading the page.</div> :
             <div>Loading...</div>
           )
