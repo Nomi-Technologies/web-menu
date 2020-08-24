@@ -1,12 +1,11 @@
 import React from 'react';
-import SharedDishTile from '../../components/SharedDishTile';
-import AllergenModal from '../../components/AllergenModal';
-import InfoButton from '../../components/InfoButton';
+import SharedDishTile from 'components/SharedDishTile';
+import AllergenModal from 'components/AllergenModal';
+import InfoButton from 'components/InfoButton';
 import styled from "styled-components";
 
 const DishTile = styled(SharedDishTile)`
   margin-bottom: 10px;
-  box-shadow: 0 0 20px #E3EDF2;
 `;
 
 export default function(props) {

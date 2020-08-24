@@ -7,6 +7,7 @@ const DishTile = styled(Jumbotron)`
   background-color: white;
   border-radius: 10px;
   margin: 0;
+  box-shadow: 0 0 5px #E3EDF2;
 `;
 
 const TileTitle = styled.div`

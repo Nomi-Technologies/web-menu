@@ -29,8 +29,12 @@ npm start
     ├── narrow-screen - mobile specific stuff
     │   ├── components
     │   └── screens
-    └── wide-screen - for future dev on desktops and tablets
+    └── wide-screen - desktop specific stuff
 ```
 
-## Deployment (branch production)
+## Deployment
+### Production (deployed from production branch)
 https://nomi-smart-menu.netlify.app
+
+### Staging (deployed from master branch)
+https://master--nomi-smart-menu.netlify.app

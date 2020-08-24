@@ -1,20 +1,21 @@
 import React from 'react';
-import MenuList from '../components/MenuList';
-import ExpansionArrow from '../../components/ExpansionArrow';
+import MenuList from '../components/CategoryDishList';
+import ExpansionArrow from 'components/ExpansionArrow';
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
-import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
+import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
-import BannerImage from '../../components/web_menu_banner.jpg';
+import BannerImage from 'components/web_menu_banner.jpg';
+import QRCode from 'qrcode.react';
 
-const ColumnPadding = styled.div`
+const ColumnStyle = styled.div`
+  height: 100%;
   padding: 20px 16px;
+  overflow: scroll;
 `;
 
-const LeftPanelWrapper = styled(ColumnPadding)`
-  height: 100%;
+const LeftPanelWrapper = styled(ColumnStyle)`
   width: 20%;
-  overflow: scroll;
 `;
 
 const Panel = styled.div`
@@ -97,20 +98,28 @@ function LeftPanel(props) {
   );
 }
 
-const RightPanelWrapper = styled.div`
+const RightPanelWrapper = styled(ColumnStyle)`
   width: 20%;
+`;
+
+const RestaruantLinkQRCode = styled(QRCode)`
+  display: block;
+  margin: 0 auto;
 `;
 
 function RightPanel() {
   return (
-    <RightPanelWrapper/>
+    <RightPanelWrapper>
+      <RestaruantLinkQRCode 
+        value={window.location.href}
+        renderAs={'svg'}
+      />
+    </RightPanelWrapper>
   );
 }
 
-const MainContentWrapper = styled(ColumnPadding)`
+const MainContentWrapper = styled(ColumnStyle)`
   width: 60%;
-  height: 100%;
-  overflow: scroll;
 `;
 
 const Banner = styled.div`
@@ -216,72 +225,25 @@ const MenuScreen = styled.div`
 export default class extends React.Component {
 
   state = {
-    error: null,
-    menu: null,
     tabIndex: 0,
     selected: new Set(),
     excludedDishes: new Set(),
-    hotScrollPanelExpanded: false,
-    allergenFiltersPanelExpanded: false,
+    hotScrollPanelExpanded: true,
+    allergenFiltersPanelExpanded: true,
     categoryToRef: {},
   };
 
   componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}`)
-      .then(res => res.json())
-      .then(menus => {
-        // if no menus show up - just ignore
-        if(menus.length === 0) {
-          return
-        }
+    let categoryToRef = {};
 
-        let firstMenuId = menus[0].id
-
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}/${firstMenuId}`).then(res => res.json()).then(data => {
-          const menu = this.parseMenu(data);
-
-          let categoryToRef = {};
-
-          menu.categories.forEach(c => {
-            const categoryRef = React.createRef();
-            categoryToRef[c] = categoryRef;
-          });
-  
-          this.setState({
-            categoryToRef: categoryToRef,
-            menu: menu,
-          });
-          
-        }).catch(err => this.setState({ error: err }));
-      })
-      .catch(err => this.setState({ error: err }));
-  }
-
-  parseMenu(data) {
-    let menu = {
-      categories: [],
-      dishes: [],
-      dishesByCategory: {},
-      dishesByTags: {},
-      tags: {},
-    };
-
-    data.forEach(dish => {
-      menu.dishes[dish.id] = dish;
-      if (!menu.categories.includes(dish.Category.name)) {
-        menu.categories.push(dish.Category.name);
-        menu.dishesByCategory[dish.Category.name] = [];
-      }
-      menu.dishesByCategory[dish.Category.name].push(dish);
-      dish.Tags.forEach(tag => {
-        if (!(tag.id in menu.tags)) {
-          menu.tags[tag.id] = tag;
-          menu.dishesByTags[tag.id] = [];
-        }
-        menu.dishesByTags[tag.id].push(dish);
-      });
+    this.props.menu.categories.forEach(c => {
+      const categoryRef = React.createRef();
+      categoryToRef[c] = categoryRef;
     });
-    return menu;
+
+    this.setState({
+      categoryToRef: categoryToRef,
+    });
   }
 
   onSelect(index, lastIndex) {
@@ -302,7 +264,7 @@ export default class extends React.Component {
   onApplyFilter(selected) {
     let excluded = new Set();
     selected.forEach(t =>
-      this.state.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
+      this.props.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
     );
     this.setState({
       selected: selected,
@@ -320,7 +282,7 @@ export default class extends React.Component {
   }
 
   getDishByCategoryWithFilter(category) {
-    const originalDishes = this.state.menu.dishesByCategory[category];
+    const originalDishes = this.props.menu.dishesByCategory[category];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -332,33 +294,24 @@ export default class extends React.Component {
 
   // TODO(tony): use restaurant name instead of slug field
   render() {
-    const menu = this.state.menu;
-    if (menu) {
-      return (
-        <MenuScreen>
-          <LeftPanel
-            {...this.state}
-            onHotScrollPanelExpansionChanged={this.onHotScrollPanelExpansionChanged.bind(this)}
-            onAllergenFiltersPanelExpansionChanged={this.onAllergenFiltersPanelExpansionChanged.bind(this)}
-            onApplyFilter={this.onApplyFilter.bind(this)}
-            onClearFilter={this.onClearFilter.bind(this)}
-          />
-          <MainContent
-            {...this.state}
-            restaruantName={this.props.restaurantId.toUpperCase()}
-            getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
-          />
-          <RightPanel/>
-        </MenuScreen>
-      );
-    } else {
-      if (this.state.error) {
-        console.log(this.state.error);
-        return <div>{this.state.error}</div>;
-      } else {
-        return <div>Loading...</div>;
-      }
-    }
-
+    return (
+      <MenuScreen {...this.props}>
+        <LeftPanel
+          menu={this.props.menu}
+          {...this.state}
+          onHotScrollPanelExpansionChanged={this.onHotScrollPanelExpansionChanged.bind(this)}
+          onAllergenFiltersPanelExpansionChanged={this.onAllergenFiltersPanelExpansionChanged.bind(this)}
+          onApplyFilter={this.onApplyFilter.bind(this)}
+          onClearFilter={this.onClearFilter.bind(this)}
+        />
+        <MainContent
+          menu={this.props.menu}
+          {...this.state}
+          restaruantName={this.props.restaurantName.toUpperCase()}
+          getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
+        />
+        <RightPanel/>
+      </MenuScreen>
+    );
   }
 }

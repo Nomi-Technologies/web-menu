@@ -1,9 +1,11 @@
 import React from 'react';
 import MenuScreen from './MenuScreen';
-import HamburgerMenu from 'react-hamburger-menu';
-import RestaurantLogo from '../../components/bacari-logo.png';
-import { ReactComponent as NomiTopBottomLogo } from '../../components/nomi-topbottom.svg';
+import RestaurantLogo from 'components/bacari-logo.png';
+import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
+import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
+import MenuListNav from 'components/MenuListNav';
+import { Button } from 'react-bootstrap';
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -17,7 +19,6 @@ const Header = styled.div`
   position: relative;
   flex: 0 0 auto;
   height: 50px;
-  z-index: 15;
   display: flex;
   align-items: center;
   /* White */
@@ -26,8 +27,18 @@ const Header = styled.div`
   box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
 `;
 
-const HamburgerIcon = styled(HamburgerMenu)`
-  margin-left: 1%;
+const AllMenusButton = styled(Button)`
+  position: relative;
+  margin-left: 20px;
+  z-index: 20;
+  display: block;
+  font-weight: bold;
+  color: #628DEB;
+
+  text-decoration: none;
+  &:hover, &:focus {
+    text-decoration: none;
+  }
 `;
 
 const NomiLogo = styled(NomiTopBottomLogo)`
@@ -105,27 +116,45 @@ export default class extends React.Component{
 
   state = {
     hamburgerOpen: false,
+    menus: [],
+    selectedMenuIndex: 0,
+    dishesByMenu: [],
+    error: null,
   };
+
+  componentDidMount() {
+    getMenus(this.props.restaurantId)
+      .then(menus => {
+        this.setState({ menus: menus });
+        Promise.all(menus.map(async menu => {
+          let rawMenu = await getDishesOfMenu(this.props.restaurantId, menu.id);
+          return parseMenu(rawMenu);
+        }))
+          .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
+      })
+      .catch(err => {
+        this.setState({ error: err });
+      });
+  }
 
   onClickHambergerMenu() {
     this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
+  }
+
+  onSelectMenu(index) {
+    this.setState({ selectedMenuIndex: index });
   }
 
   render() {
     return (
       <RestaurantScreen>
         <Header>
-          <HamburgerIcon
-            isOpen={this.state.hamburgerOpen}
-            menuClicked={this.onClickHambergerMenu.bind(this)}
-            width={30}
-            height={25}
-            strokeWidth={2}
-            rotate={0}
-            color='black'
-            borderRadius={5}
-            animationDuration={0.3}
-          />
+          <AllMenusButton
+            variant='link'
+            onClick={this.onClickHambergerMenu.bind(this)}
+          >
+            ALL MENUS
+          </AllMenusButton>
           <NomiLogo
             width='70px'
             height='28px'
@@ -136,7 +165,25 @@ export default class extends React.Component{
             <FilterToggleSwitch/>
           </FilterToggle>
         </Header>
-        <MenuScreen restaurantId={this.props.restaurantId}/>
+        <MenuListNav 
+          open={this.state.hamburgerOpen}
+          menus={this.state.menus}
+          selectedIndex={this.state.selectedMenuIndex}
+          onSelectMenu={this.onSelectMenu.bind(this)}
+        />
+        {this.state.dishesByMenu.length > 0 ?
+          <MenuScreen
+          onClick={() => this.setState({ hamburgerOpen: false })}
+          restaurantName={this.props.restaurantId}
+            menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
+          />
+          : 
+          (
+            this.state.error ? 
+            <div>Some error has ocurred. Please try reloading the page.</div> :
+            <div>Loading...</div>
+          )
+        }
       </RestaurantScreen>
     );
   }

@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
-import { ReactComponent as NomiLogo } from '../../components/nomi-withword.svg';
+import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 
 const CategoryTab = styled(Tab)`
@@ -31,7 +31,6 @@ const CategoryTabList = styled(TabList)`
   position: sticky;
   background-color: white;
   z-index: 10;
-  box-shadow: 0 5px 5px #E3EDF2;
 `;
 
 const CategoryDishPanel = styled(TabPanel)`
@@ -82,7 +81,7 @@ const MenuScreen = styled.div`
   position: relative;
   flex-flow: column;
   flex: 1 1 auto;
-  background-color: #F2F3F5;
+  background-color: transparent;
 `;
 
 const NomiLogoBar = styled.div`
@@ -144,63 +143,12 @@ const ActiveFilterCount = styled.div`
 export default class extends React.Component {
 
   state = {
-    error: null,
-    menu: null,
     tabIndex: 0,
     selected: new Set(),
     excludedDishes: new Set(),
     panelExpanded: false,
     modalShow: false,
   };
-
-  componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}`)
-      .then(res => res.json())
-      .then(menus => {
-        // if no menus show up - just ignore
-        if(menus.length === 0) {
-          return
-        }
-
-        let firstMenuId = menus[0].id
-
-        fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${this.props.restaurantId}/${firstMenuId}`).then(res => res.json()).then(data => {
-          const menu = this.parseMenu(data);
-          
-          this.setState({
-            menu: menu,
-          });
-        }).catch(err => this.setState({ error: err }));
-      })
-      .catch(err => this.setState({ error: err }));
-  }
-
-  parseMenu(data) {
-    let menu = {
-      categories: [],
-      dishes: [],
-      dishesByCategory: {},
-      dishesByTags: {},
-      tags: {},
-    };
-
-    data.forEach(dish => {
-      menu.dishes[dish.id] = dish;
-      if (!menu.categories.includes(dish.Category.name)) {
-        menu.categories.push(dish.Category.name);
-        menu.dishesByCategory[dish.Category.name] = [];
-      }
-      menu.dishesByCategory[dish.Category.name].push(dish);
-      dish.Tags.forEach(tag => {
-        if (!(tag.id in menu.tags)) {
-          menu.tags[tag.id] = tag;
-          menu.dishesByTags[tag.id] = [];
-        }
-        menu.dishesByTags[tag.id].push(dish);
-      });
-    });
-    return menu;
-  }
 
   onSelectTab(index, lastIndex) {
     if (lastIndex === index) {
@@ -216,7 +164,7 @@ export default class extends React.Component {
   onApplyFilter(selected) {
     let excluded = new Set();
     selected.forEach(t =>
-      this.state.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
+      this.props.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
     );
     this.setState({
       selected: selected,
@@ -235,7 +183,7 @@ export default class extends React.Component {
   }
 
   getDishByCategoryWithFilter(category) {
-    const originalDishes = this.state.menu.dishesByCategory[category];
+    const originalDishes = this.props.menu.dishesByCategory[category];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -246,11 +194,12 @@ export default class extends React.Component {
   }
 
   render() {
-    if (this.state.menu) {
+    if (this.props.menu) {
       return (
-        <MenuScreen>
+        <MenuScreen {...this.props}>
           <MenuTabView
             {...this.state}
+            menu={this.props.menu}
             onSelectTab={this.onSelectTab.bind(this)}
             getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
           />
@@ -266,7 +215,7 @@ export default class extends React.Component {
           </NomiLogoBar>
           <SlideUpPanelWrapper>
             <FilterSlideUpPanel
-              tags={this.state.menu.tags}
+              tags={this.props.menu.tags}
               expanded={this.state.panelExpanded}
               onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
               onApplyFilter={this.onApplyFilter.bind(this)}
@@ -290,7 +239,7 @@ export default class extends React.Component {
     } else {
       if (this.state.error) {
         console.log(this.state.error);
-        return <div>{this.state.error}</div>;
+        return <div>Some error has ocurred. Please try reloading the page.</div>;
       } else {
         return <div>Loading...</div>;
       }
