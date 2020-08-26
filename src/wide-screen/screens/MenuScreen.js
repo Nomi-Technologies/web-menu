@@ -191,9 +191,9 @@ function MainContent(props) {
         <RestaurantName>{props.restaruantName}</RestaurantName>
       </Banner>
       <DishList>
-        {props.menu.categories.map((c, i) => {
-          const dishes = props.getDishByCategoryWithFilter(c);
-          return <MenuList reactRef={props.categoryToRef[c]} dishes={dishes} category={c} key={i} />;
+        {props.menu.categories.map((c) => {
+          const dishes = props.getDishByCategoryIdWithFilter(c.id);
+          return <MenuList reactRef={props.categoryToRef[c.id]} dishes={dishes} category={c} key={c.id} />;
         })}
       </DishList>
       <NomiBottomLogo>
@@ -238,7 +238,7 @@ export default class extends React.Component {
 
     this.props.menu.categories.forEach(c => {
       const categoryRef = React.createRef();
-      categoryToRef[c] = categoryRef;
+      categoryToRef[c.id] = categoryRef;
     });
 
     this.setState({
@@ -281,8 +281,8 @@ export default class extends React.Component {
     });
   }
 
-  getDishByCategoryWithFilter(category) {
-    const originalDishes = this.props.menu.dishesByCategory[category];
+  getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = this.props.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -308,7 +308,7 @@ export default class extends React.Component {
           menu={this.props.menu}
           {...this.state}
           restaruantName={this.props.restaurantName.toUpperCase()}
-          getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
+          getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
         />
         <RightPanel/>
       </MenuScreen>

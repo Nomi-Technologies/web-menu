@@ -43,12 +43,12 @@ export default class extends React.Component {
         </this.props.StyledHeader>
         {this.props.expanded?
           <this.props.StyledBody>
-            {this.props.categories.map((category, i) =>
+            {this.props.categories.map((category) =>
               <CategoryTitle
-                onClick={() => this.scrollToCategory(this.props.categoryToRef[category])}
-                key={i}
+                onClick={() => this.scrollToCategory(this.props.categoryToRef[category.id])}
+                key={category.id}
               >
-                {category}
+                {category.name}
               </CategoryTitle>
             )}
           </this.props.StyledBody>

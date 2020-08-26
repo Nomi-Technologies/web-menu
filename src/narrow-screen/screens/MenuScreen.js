@@ -60,14 +60,14 @@ function MenuTabView(props) {
     >
       <CategoryTabList>
         {props.menu.categories.map(c =>
-          <CategoryTab key={c}>{c}</CategoryTab>
+          <CategoryTab key={c.id}>{c.name}</CategoryTab>
         )}
       </CategoryTabList>
       {props.menu.categories.map(c => {
-        const dishes = props.getDishByCategoryWithFilter(c);
+        const dishes = props.getDishByCategoryIdWithFilter(c.id);
         return (
           <CategoryDishPanel 
-            key={c} 
+            key={c.id} 
           >
             <MenuCategoryPanel dishes={dishes}/>
           </CategoryDishPanel>
@@ -182,8 +182,8 @@ export default class extends React.Component {
     });
   }
 
-  getDishByCategoryWithFilter(category) {
-    const originalDishes = this.props.menu.dishesByCategory[category];
+  getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = this.props.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -201,7 +201,7 @@ export default class extends React.Component {
             {...this.state}
             menu={this.props.menu}
             onSelectTab={this.onSelectTab.bind(this)}
-            getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
+            getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
           />
           <NomiLogoBar>
             <NomiLogoText>Powered by</NomiLogoText>
@@ -237,8 +237,7 @@ export default class extends React.Component {
         </MenuScreen>
       );
     } else {
-      if (this.state.error) {
-        console.log(this.state.error);
+      if (this.props.error) {
         return <div>Some error has ocurred. Please try reloading the page.</div>;
       } else {
         return <div>Loading...</div>;
