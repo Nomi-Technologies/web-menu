@@ -1,7 +1,6 @@
 import React from 'react';
 import SharedDishTile from 'components/SharedDishTile';
-import AllergenModal from 'components/AllergenModal';
-import InfoButton from 'components/InfoButton';
+import DishInfoModal from 'components/DishInfoModal';
 import styled from "styled-components";
 
 const DishTile = styled(SharedDishTile)`
@@ -17,7 +16,7 @@ export default function(props) {
         dish={props.dish}
         onClick={() => setShowModal(true)}
       />
-      <AllergenModal
+      <DishInfoModal
         dish={props.dish}
         show={showModal}
         onHide={() => setShowModal(false)}
