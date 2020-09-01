@@ -1,50 +1,87 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Modal } from 'react-bootstrap';
-import { ReactSVG } from 'react-svg';
+import { ReactComponent as Exit } from 'components/exit-button.svg';
+import AllergenIcon from 'components/AllergenIconWithName';
 
 const ModalContainer = styled.div`
-  color: white;
-  border-radius: 10px;
-  background-color: #393939;
-  width: 260px;
-  max-height: 316px;
+  color: black;
+  border-radius: 6px;
+  background-color: white;
+  width: 400px;
+  max-height: 500px;
   margin: 0 auto;
   overflow: scroll;
   position: relative;
+  padding-bottom: 30px;
+
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 `;
 
 const ModalHeader = styled(Modal.Header)`
-  padding: 0 20px;
-  height: 52px;
-  line-height: 52px;
-  background: #606060;
-  border-radius: 10px 10px 0px 0px;
-  font-weight: bold;
+  padding: 0 0 0 20px;
+  height: 75px;
+  border-radius: 6px 6px 0px 0px;
+  border-bottom: 1px solid #DCE2E9;
   position: sticky;
   top: 0;
-  border-bottom: 0px;
+  display: flex;
+  flex-direction: row;
+`;
+
+const DishName = styled.div`
+  flex: 1 1 auto;
+  height: 100%;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 75px;
+`;
+
+const ExitButtonWrapper = styled.div`
+  flex: 0 0 auto;
+  height: 75px;
+  width: 75px;
+  cursor: pointer;
+`;
+
+const ExitButton = styled(Exit)`
+  height: 100%;
+  margin: 0 auto;
+  display: block;
 `;
 
 const ModalBody = styled(Modal.Body)`
-  padding: 16px;
-  padding-bottom: 0;
+  padding: 0 20px;
 `;
 
-const ModalTagItem = styled.div`
-  line-height: 32px;
+const Description = styled.div`
+  font-size: 14px;
+`;
+
+const Divider = styled.div`
+  margin: 18px 0;
+  border-top: 1px solid #DCE2E9;
+`;
+
+const SectionTitle = styled.div`
+  font-weight: bold;
+  font-size: 10px;
+`;
+
+const SectionBody = styled.div`
+  color: #8A9DB7;
+  padding-top: 18px;
   font-weight: 500;
-  height: 32px;
-  margin-bottom: 16px;
 `;
 
-const ModalTagIcon = styled.span`
-  & svg {
-    display: inline-block;
-    margin-right: 20px;
-    height: 32px;
-    width: 32px;
-  }
+const StyledAllergenIcon = styled(AllergenIcon)`
+  margin: 0 10px 10px 0;
+`;
+
+const Price = styled.span`
+  font-weight: 500;
 `;
 
 export default function(props) {
@@ -59,18 +96,42 @@ export default function(props) {
     >
       <ModalContainer>
         <ModalHeader>
-          Contains:
+          <DishName>{props.dish.name}</DishName>
+          <ExitButtonWrapper
+            onClick={props.onHide}
+          >
+            <ExitButton/>
+          </ExitButtonWrapper>
         </ModalHeader>
         <ModalBody>
-          {props.dish.Tags.map(t => <ModalTagItem key={t.name}>
-            <ModalTagIcon>
-              <ReactSVG
-                wrapper='span'
-                src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/tag_icons/${t.name}.svg`}
-              />
-            </ModalTagIcon>
-            {t.name}
-          </ModalTagItem>)}
+          <SectionBody>
+            {
+              props.dish.description.length > 0 ?
+              <>
+                <Description>{props.dish.description}</Description>
+                <Divider/>
+              </> : <></>
+            }
+          </SectionBody>
+          <SectionTitle>ALLERGENS</SectionTitle>
+          <SectionBody>
+            {
+              props.dish.Tags.length > 0 ?
+              (
+                props.dish.Tags.map(t => <StyledAllergenIcon tag={t}/>)
+              )
+              :
+              ("None")
+            }
+          </SectionBody>
+          {
+            props.dish.price.length > 0 ?
+            <>
+              <Divider/>
+              <SectionTitle>PRICE</SectionTitle>
+              <SectionBody><Price>{props.dish.price}</Price></SectionBody>
+            </> : <></>
+          }
         </ModalBody>
       </ModalContainer>
     </Modal>

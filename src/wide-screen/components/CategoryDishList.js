@@ -37,7 +37,6 @@ const ColumnSeparator = styled(Column)`
 export default class extends React.Component {
 
   render() {
-    console.log(this.props);
     return (
       <CategorySection ref={this.props.reactRef}>
         <Title>{this.props.category.name}</Title>
