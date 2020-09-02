@@ -212,55 +212,46 @@ export default class extends React.Component {
   }
 
   render() {
-    if (this.props.menu) {
-      return (
-        <MenuScreen {...this.props}>
-          <MenuTabView
-            {...this.state}
-            menu={this.props.menu}
-            onSelectTab={this.onSelectTab.bind(this)}
-            getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
-          />
-          <NomiLogoBar>
-            <NomiLogoText>Powered by</NomiLogoText>
-            <a href='https://www.dinewithnomi.com/'>
-              <NomiLogoSVG
-                width='70px'
-                height='16px'
-                fill='#8A9DB7'
-              />
-            </a>
-          </NomiLogoBar>
-          <SlideUpPanelWrapper>
-            <FilterSlideUpPanel
-              tags={this.props.menu.tags}
-              expanded={this.state.panelExpanded}
-              onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
-              onApplyFilter={this.onApplyFilter.bind(this)}
-              onClearFilter={this.onClearFilter.bind(this)}
+    return (
+      <MenuScreen {...this.props}>
+        <MenuTabView
+          {...this.state}
+          menu={this.props.menu}
+          onSelectTab={this.onSelectTab.bind(this)}
+          getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
+        />
+        <NomiLogoBar>
+          <NomiLogoText>Powered by</NomiLogoText>
+          <a href='https://www.dinewithnomi.com/'>
+            <NomiLogoSVG
+              width='70px'
+              height='16px'
+              fill='#8A9DB7'
             />
-          </SlideUpPanelWrapper>
-          <Modal
-            className='react-bootstrap-modal'
-            show={this.state.modalShow}
-            aria-labelledby="contained-modal-vcenter"
-            centered
-            backdrop={false}
-          >
-            <ApplyFilterModalBody>
-              <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
-              Filters Applied
-            </ApplyFilterModalBody>
-          </Modal>
-        </MenuScreen>
-      );
-    } else {
-      if (this.props.error) {
-        return <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError>;
-      } else {
-        return <Loading>Restaurant Menu Loading...</Loading>;
-      }
-    }
-
+          </a>
+        </NomiLogoBar>
+        <SlideUpPanelWrapper>
+          <FilterSlideUpPanel
+            tags={this.props.menu.tags}
+            expanded={this.state.panelExpanded}
+            onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
+            onApplyFilter={this.onApplyFilter.bind(this)}
+            onClearFilter={this.onClearFilter.bind(this)}
+          />
+        </SlideUpPanelWrapper>
+        <Modal
+          className='react-bootstrap-modal'
+          show={this.state.modalShow}
+          aria-labelledby="contained-modal-vcenter"
+          centered
+          backdrop={false}
+        >
+          <ApplyFilterModalBody>
+            <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
+            Filters Applied
+          </ApplyFilterModalBody>
+        </Modal>
+      </MenuScreen>
+    );
   }
 }
