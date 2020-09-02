@@ -2,9 +2,7 @@ import React from 'react';
 import MenuScreen from './MenuScreen';
 import { ReactSVG } from 'react-svg';
 import styled from 'styled-components';
-// import HamburgerMenu from 'react-hamburger-menu'; TODO(tony): remove from deps
 import MenuListNav from 'components/MenuListNav';
-import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
 import { Button } from 'react-bootstrap';
 
 const RestaurantScreen = styled.div`
@@ -58,13 +56,12 @@ const PageError = styled.div`
   font-weight: bold;
 `;
 
-const RestaurantNotFound = styled.div`
+const Loading = styled.div`
   position: relative;
   flex: 0 0 auto;
   text-align: center;
-  color: #FF726F;
   margin-top: 5%;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
 `;
 
@@ -72,33 +69,10 @@ export default class extends React.Component {
 
   state = {
     hamburgerOpen: false,
-    menus: [],
-    selectedMenuIndex: 0,
-    dishesByMenu: [],
-    error: null,
   };
-
-  componentDidMount() {
-    getMenus(this.props.restaurantId)
-      .then(menus => {
-        this.setState({ menus: menus });
-        Promise.all(menus.map(async menu => {
-          let rawMenu = await getDishesOfMenu(this.props.restaurantId, menu.id);
-          return parseMenu(rawMenu);
-        }))
-          .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
-      })
-      .catch(err => {
-        this.setState({ error: err });
-      });
-  }
 
   onClickHambergerMenu() {
     this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
-  }
-
-  onSelectMenu(index) {
-    this.setState({ selectedMenuIndex: index });
   }
 
   render () {
@@ -121,21 +95,19 @@ export default class extends React.Component {
         </Header>
         <MenuListNav
           open={this.state.hamburgerOpen}
-          menus={this.state.menus}
-          selectedIndex={this.state.selectedMenuIndex}
-          onSelectMenu={this.onSelectMenu.bind(this)}
+          {...this.props}
         />
-        {this.state.dishesByMenu.length > 0 ?
+        {this.props.dishesByMenu.length > 0 ?
           <MenuScreen
             onClick={() => this.setState({ hamburgerOpen: false })}
             restaurantName={this.props.restaurantId}
-            menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
+            menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
           />
           :
           (
             this.state.error ?
             <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
-            <RestaurantNotFound>Restaurant Not Found - Please navigate to a different restaurant.</RestaurantNotFound>
+            <Loading>Restaurant Menu Loading...</Loading>
           )
         }
       </RestaurantScreen>

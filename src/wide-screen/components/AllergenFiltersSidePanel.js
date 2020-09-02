@@ -33,7 +33,6 @@ function TagGrid(props) {
             if (selected.has(tag.id)) { selected.delete(tag.id); }
             else { selected.add(tag.id); }
             props.onSelect(selected);
-            props.onApplyFilter();
           }}
         >
           {tags[tag_keys[i+j]].name}
@@ -70,7 +69,7 @@ export default class AllergenFiltersSidePanel extends React.Component {
   }
 
   onApplyFilter() {
-    this.props.onApplyFilter(this.state.selected, false);
+    this.props.onApplyFilter(this.state.selected);
   }
 
   onClearFilter() {
@@ -80,6 +79,7 @@ export default class AllergenFiltersSidePanel extends React.Component {
 
   onSelect(selected) {
     this.setState({ selected: selected });
+    this.props.onApplyFilter(selected);
   }
 
   render() {

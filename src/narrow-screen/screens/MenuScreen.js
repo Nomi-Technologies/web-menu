@@ -12,7 +12,6 @@ const CategoryTab = styled(Tab)`
   margin: 20px 15px 0 15px;
   padding-bottom: 10px;
   color: rgba(0, 0, 0, 0.25);
-
   &.is-selected {
     color: black;
     padding-bottom: 6px;
@@ -60,16 +59,16 @@ function MenuTabView(props) {
     >
       <CategoryTabList>
         {props.menu.categories.map(c =>
-          <CategoryTab key={c}>{c}</CategoryTab>
+          <CategoryTab key={c.id}>{c.name}</CategoryTab>
         )}
       </CategoryTabList>
       {props.menu.categories.map(c => {
-        const dishes = props.getDishByCategoryWithFilter(c);
+        const dishes = props.getDishByCategoryIdWithFilter(c.id);
         return (
           <CategoryDishPanel
-            key={c}
+            key={c.id}
           >
-            <MenuCategoryPanel dishes={dishes} category={c}/>
+            <MenuCategoryPanel dishes={dishes}/>
           </CategoryDishPanel>
         );
       })}
@@ -150,13 +149,12 @@ const PageError = styled.div`
   font-weight: bold;
 `;
 
-const MenuNotFound = styled.div`
+const Loading = styled.div`
   position: relative;
   flex: 0 0 auto;
   text-align: center;
-  color: #FF726F;
   margin-top: 5%;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
 `;
 
@@ -202,8 +200,8 @@ export default class extends React.Component {
     });
   }
 
-  getDishByCategoryWithFilter(category) {
-    const originalDishes = this.props.menu.dishesByCategory[category];
+  getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = this.props.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -221,7 +219,7 @@ export default class extends React.Component {
             {...this.state}
             menu={this.props.menu}
             onSelectTab={this.onSelectTab.bind(this)}
-            getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
+            getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
           />
           <NomiLogoBar>
             <NomiLogoText>Powered by</NomiLogoText>
@@ -257,11 +255,10 @@ export default class extends React.Component {
         </MenuScreen>
       );
     } else {
-      if (this.state.error) {
-        console.log(this.state.error);
+      if (this.props.error) {
         return <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError>;
       } else {
-        return <MenuNotFound>Restaurant Not Found - Please navigate to a different restaurant.</MenuNotFound>;
+        return <Loading>Restaurant Menu Loading...</Loading>;
       }
     }
 
