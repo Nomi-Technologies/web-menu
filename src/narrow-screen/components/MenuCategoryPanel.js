@@ -22,10 +22,24 @@ const CategoryTitle = styled.div`
   margin: 10px 0px;
 `;
 
+const CategoryDescription = styled.div`
+  font-family: Source Serif Pro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+  letter-spacing: 0.02em;
+  color: #000000;
+  flex: none;
+  order: 1;
+  margin-bottom: 10px;
+`;
+
 export default function(props) {
   return (
     <DishList>
-      <CategoryTitle>{props.category}</CategoryTitle>
+      <CategoryTitle>{props.category.name}</CategoryTitle>
+      <CategoryDescription>{props.category.description}</CategoryDescription>
       {props.dishes.map(dish => <DishTile key={dish.id} dish={dish}/>)}
     </DishList>
   );

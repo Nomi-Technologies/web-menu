@@ -68,7 +68,7 @@ function MenuTabView(props) {
           <CategoryDishPanel
             key={c.id}
           >
-            <MenuCategoryPanel dishes={dishes}/>
+            <MenuCategoryPanel dishes={dishes} category={c}/>
           </CategoryDishPanel>
         );
       })}

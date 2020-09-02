@@ -54,6 +54,7 @@ const TileSubtitle = styled.div`
 
 const Description = styled.div`
   flex: 1 1 auto;
+  font-family: Source Serif Pro;
 `;
 
 
