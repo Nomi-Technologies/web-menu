@@ -140,6 +140,26 @@ const ActiveFilterCount = styled.div`
   background-color: #5383EC;
 `;
 
+const PageError = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  color: #FF726F;
+  margin-top: 5%;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
+const MenuNotFound = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  color: #FF726F;
+  margin-top: 5%;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
 export default class extends React.Component {
 
   state = {
@@ -239,9 +259,9 @@ export default class extends React.Component {
     } else {
       if (this.state.error) {
         console.log(this.state.error);
-        return <div>Some error has ocurred. Please try reloading the page.</div>;
+        return <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError>;
       } else {
-        return <div>Loading...</div>;
+        return <MenuNotFound>Restaurant Not Found - Please navigate to a different restaurant.</MenuNotFound>;
       }
     }
 
