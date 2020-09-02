@@ -49,7 +49,7 @@ const TitleTrailing = styled(TrailingBox)`
 const TileSubtitle = styled.div`
   display: flex;
   flex-flow: row;
-  margin-top: 30px;
+  margin-top: 7px;
 `;
 
 const Description = styled.div`

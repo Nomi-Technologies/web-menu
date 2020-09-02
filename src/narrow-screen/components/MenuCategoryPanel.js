@@ -32,7 +32,7 @@ const CategoryDescription = styled.div`
   color: #000000;
   flex: none;
   order: 1;
-  margin-bottom: 10px;
+  padding-bottom: 10px;
 `;
 
 export default function(props) {
