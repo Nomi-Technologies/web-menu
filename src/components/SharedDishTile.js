@@ -1,8 +1,7 @@
 import React from 'react';
-import { Jumbotron } from 'react-bootstrap';
 import styled from "styled-components";
 
-const DishTile = styled(Jumbotron)`
+const DishTile = styled.div`
   padding: 20px;
   background-color: white;
   border-radius: 10px;

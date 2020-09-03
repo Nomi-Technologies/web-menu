@@ -1,7 +1,7 @@
 import React from 'react';
 import DishTile from './DishTile';
 import styled from 'styled-components';
-import { Container, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 const CategorySection = styled.div`
   padding-top: 30px;
@@ -19,12 +19,12 @@ const Description = styled.div`
   padding-top: 26px;
 `;
 
-const DishGrid = styled(Container)`
+const DishGrid = styled.div`
   position: relative;
   z-index: 1;
   padding: 24px 0 0 0;
   display: flex;
-  `;
+`;
 
 const Column = styled(Col)`
   padding: 0;
