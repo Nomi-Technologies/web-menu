@@ -138,7 +138,7 @@ const SectionTitle = styled.i`
 `;
 
 const SaveButton = styled(Button)`
-  background-color: #F9D5B4 !important;
+  background-color: #F3A35C;
   color: white;
   font-weight: bold;
   margin: 10px auto 0 auto;
