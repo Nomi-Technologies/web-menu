@@ -111,6 +111,25 @@ const FilterToggleSwitch = styled.div`
   border-radius: 10px;
 `;
 
+const PageError = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  color: #FF726F;
+  margin-top: 5%;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
+const Loading = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  margin-top: 5%;
+  font-size: 32px;
+  font-weight: bold;
+`;
+
 export default class extends React.Component{
 
   state = {
@@ -141,7 +160,7 @@ export default class extends React.Component{
             <FilterToggleSwitch/>
           </FilterToggle>
         </Header>
-        <MenuListNav 
+        <MenuListNav
           open={this.state.hamburgerOpen}
           {...this.props}
         />
@@ -151,11 +170,11 @@ export default class extends React.Component{
             restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
           />
-          : 
+          :
           (
-            this.props.error ? 
-            <div>Some error has ocurred. Please try reloading the page.</div> :
-            <div>Loading...</div>
+            this.state.error ?
+            <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
+            <Loading>Restaurant Menu Loading...</Loading>
           )
         }
       </RestaurantScreen>

@@ -19,8 +19,22 @@ const TileTitle = styled.div`
 
 const Name = styled.div`
   display: inline-block;
-  font-weight: bold;
   flex: 1 1 auto;
+  font-family: Source Serif Pro;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+`;
+
+const Price = styled.div`
+  display: inline-block;
+  flex: 0 0 auto;
+  font-family: Source Serif Pro;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
 `;
 
 const TrailingBox = styled.div`
@@ -34,11 +48,12 @@ const TitleTrailing = styled(TrailingBox)`
 const TileSubtitle = styled.div`
   display: flex;
   flex-flow: row;
-  margin-top: 30px;
+  margin-top: 7px;
 `;
 
 const Description = styled.div`
   flex: 1 1 auto;
+  font-family: Source Serif Pro;
 `;
 
 
@@ -53,7 +68,7 @@ export default function (props) {
         <TitleTrailing>{props.dish.price}</TitleTrailing>
       </TileTitle>
       {
-        props.dish.description ? 
+        props.dish.description ?
         (
           <TileSubtitle>
             <Description>{props.dish.description}</Description>
