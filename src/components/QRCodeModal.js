@@ -38,6 +38,32 @@ const ModalBody = styled(Modal.Body)`
   padding: 0 20px;
 `;
 
+const ModalHeader = styled(Modal.Header)`
+  padding: 0 0 0 20px;
+  height: 75px;
+  border-radius: 6px 6px 0px 0px;
+  border-bottom: 1px solid #DCE2E9;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+`;
+
+const ModalTitle = styled.div`
+  flex: 1 1 auto;
+  height: 100%;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 75px;
+`;
+
+const SectionBody = styled.div`
+  color: #8A9DB7;
+  padding-top: 18px;
+  font-weight: 500;
+`;
+
+
 const RestaruantLinkQRCode = styled(QRCode)`
   display: block;
   margin: 0 auto;
@@ -53,16 +79,21 @@ export default function(props) {
             centered
         >
             <ModalContainer>
-                <ModalBody>
+                <ModalHeader>
+                    <ModalTitle>Menu QR Code</ModalTitle>
                     <ExitButtonWrapper
                         onClick={props.onHide}
                     >
                         <ExitButton/>
                     </ExitButtonWrapper>
-                    <RestaruantLinkQRCode 
-                        value={window.location.href}
-                        renderAs={'svg'}
-                    />
+                </ModalHeader>
+                <ModalBody>
+                    <SectionBody>
+                        <RestaruantLinkQRCode 
+                            value={window.location.href}
+                            renderAs={'svg'}
+                        />
+                    </SectionBody>             
                 </ModalBody>
             </ModalContainer>
         </Modal>
