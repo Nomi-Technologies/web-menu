@@ -1,8 +1,11 @@
 import React from 'react';
 import MenuList from '../components/CategoryDishList';
 import ExpansionArrow from 'components/ExpansionArrow';
+
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
+import QRCodeSidePanel  from "../components/QRCodeSidePanel";
+
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import BannerImage from 'components/web_menu_banner.jpg';
@@ -94,6 +97,11 @@ function LeftPanel(props) {
           onClearFilter={props.onClearFilter}
         />
       </Panel>
+      <Panel>
+        <QRCodeSidePanel
+          StyledBody={PanelBodyStyle}
+        />
+      </Panel>
     </LeftPanelWrapper>
   );
 }
@@ -102,18 +110,9 @@ const RightPanelWrapper = styled(ColumnStyle)`
   width: 20%;
 `;
 
-const RestaruantLinkQRCode = styled(QRCode)`
-  display: block;
-  margin: 0 auto;
-`;
-
 function RightPanel() {
   return (
     <RightPanelWrapper>
-      <RestaruantLinkQRCode 
-        value={window.location.href}
-        renderAs={'svg'}
-      />
     </RightPanelWrapper>
   );
 }
