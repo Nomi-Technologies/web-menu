@@ -140,7 +140,7 @@ const RestaurantName = styled.div`
   left: calc(50% - 321px/2 + 1px);
   top: calc(50% - 43px/2 + 1px);
 
-  font-family: HK Grotesk;
+  font-family: 'HK Grotesk';
   font-style: normal;
   font-weight: bold;
   font-size: 36px;

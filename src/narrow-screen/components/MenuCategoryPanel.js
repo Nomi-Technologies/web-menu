@@ -3,13 +3,13 @@ import DishTile from './DishTile';
 import styled from 'styled-components';
 
 const DishList = styled.div`
+  font-family: 'Source Serif Pro';
   position: relative;
   padding: 24px 16px 0px 16px;
   z-index: 1;
 `;
 
 const CategoryTitle = styled.div`
-  font-family: Source Serif Pro;
   font-style: normal;
   font-weight: bold;
   font-size: 24px;
@@ -23,7 +23,6 @@ const CategoryTitle = styled.div`
 `;
 
 const CategoryDescription = styled.div`
-  font-family: Source Serif Pro;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
