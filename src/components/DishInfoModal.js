@@ -118,7 +118,7 @@ export default function(props) {
             {
               props.dish.Tags.length > 0 ?
               (
-                props.dish.Tags.map(t => <StyledAllergenIcon tag={t}/>)
+                props.dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t}/>)
               )
               :
               ("None")
