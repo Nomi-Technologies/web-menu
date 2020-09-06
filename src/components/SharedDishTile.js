@@ -2,6 +2,7 @@ import React from 'react';
 import styled from "styled-components";
 
 const DishTile = styled.div`
+  font-family: 'Source Serif Pro';
   padding: 20px;
   background-color: white;
   border-radius: 10px;
@@ -20,7 +21,6 @@ const TileTitle = styled.div`
 const Name = styled.div`
   display: inline-block;
   flex: 1 1 auto;
-  font-family: Source Serif Pro;
   font-style: normal;
   font-weight: bold;
   font-size: 16px;
@@ -37,12 +37,9 @@ const Price = styled.div`
   line-height: 22px;
 `;
 
-const TrailingBox = styled.div`
+const TitleTrailing = styled.div`
+  font-weight: bold;
   flex: 0 0 auto;
-`;
-
-const TitleTrailing = styled(TrailingBox)`
-  font-weight: 500;
 `;
 
 const TileSubtitle = styled.div`
@@ -53,9 +50,8 @@ const TileSubtitle = styled.div`
 
 const Description = styled.div`
   flex: 1 1 auto;
-  font-family: Source Serif Pro;
+  font-size: 16px;
 `;
-
 
 export default function (props) {
   return (
