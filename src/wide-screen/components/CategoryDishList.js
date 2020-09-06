@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Col } from 'react-bootstrap';
 
 const CategorySection = styled.div`
+  font-family: 'Source Serif Pro';
   padding-top: 30px;
 `;
 
