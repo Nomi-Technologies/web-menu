@@ -39,7 +39,7 @@ class RestaurantMenuScreen extends React.Component {
   }
 
   render() {
-    if (window.innerWidth < 1440) {
+    if (window.innerWidth < 760) {
       return <MobileRestaurantScreen
         {...this.state}
         onSelectMenu={this.onSelectMenu.bind(this)}

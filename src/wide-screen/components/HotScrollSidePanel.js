@@ -36,15 +36,16 @@ export default class extends React.Component {
         <this.props.StyledHeader
           onClick={this.onExpansionChanged.bind(this)}
         >
-          <div>
+          <div class="text">
             Menu Sections
           </div>
-          <this.props.StyledExpandArrow
-            pointingUp={this.props.expanded}
-          />
+            <this.props.StyledExpandArrow
+              pointingUp={this.props.expanded}
+              style={{margin: '0 25px'}}
+            />
         </this.props.StyledHeader>
         {this.props.expanded?
-          <this.props.StyledBody>
+          <this.props.StyledBody style={{paddingLeft: '20px'}}>
             {this.props.categories.map((category) =>
               <CategoryTitle
                 onClick={() => this.scrollToCategory(this.props.categoryToRef[category.id])}

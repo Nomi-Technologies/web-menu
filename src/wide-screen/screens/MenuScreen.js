@@ -19,6 +19,7 @@ const ColumnStyle = styled.div`
 
 const LeftPanelWrapper = styled(ColumnStyle)`
   width: 20%;
+  min-width: 250px;
 `;
 
 const Panel = styled.div`
@@ -59,6 +60,11 @@ const HeaderStyle = styled.div`
     display: inline-block;
     font-weight: 700;
   }
+
+  .text {
+    width: 60%;
+    line-height: 140%;
+  }
 `;
 
 const ExpandArrowStyle = styled(ExpansionArrow)`
@@ -68,13 +74,18 @@ const ExpandArrowStyle = styled(ExpansionArrow)`
 
 const PanelBodyStyle = styled.div`
   width: 100%;
-  padding: 10px 15px 20px 15px;
+  padding: 10px 15px 10px 15px;
 `;
+
+const panelStyle = {
+  paddingTop: "10px",
+  paddingBottom: "10px",
+}
 
 function LeftPanel(props) {
   return (
     <LeftPanelWrapper>
-      <Panel>
+      <Panel style={panelStyle}>
         <HotScrollSidePanel
           StyledHeader={HeaderStyle}
           StyledExpandArrow={ExpandArrowStyle}
@@ -85,7 +96,7 @@ function LeftPanel(props) {
           onExpansionChanged={props.onHotScrollPanelExpansionChanged}
         />
       </Panel>
-      <Panel>
+      <Panel style={panelStyle}>
         <AllergenFiltersSidePanel
           StyledHeader={HeaderStyle}
           StyledExpandArrow={ExpandArrowStyle}
@@ -119,6 +130,7 @@ function RightPanel() {
 
 const MainContentWrapper = styled(ColumnStyle)`
   width: 60%;
+  min-width: 520px;
 `;
 
 const Banner = styled.div`
