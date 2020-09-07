@@ -61,7 +61,7 @@ const FilterWords = styled.div`
   top: 35%;
   bottom: 36.67%;
 
-  font-family: HK Grotesk;
+  font-family: 'HK Grotesk';
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
