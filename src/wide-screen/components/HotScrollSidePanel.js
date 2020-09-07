@@ -20,7 +20,9 @@ const CategoryTitle = styled.div`
 export default class extends React.Component {
 
   scrollToCategory(categoryRef) {
-    categoryRef.current.scrollIntoView();
+    categoryRef.current.scrollIntoView({ 
+      behavior: 'smooth' 
+    });
   }
 
   onExpansionChanged() {
