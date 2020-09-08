@@ -9,11 +9,11 @@ export const parseMenu = data => {
 
   data.forEach(dish => {
     menu.dishes[dish.id] = dish;
-    if (!menu.categories.includes(dish.Category.name)) {
-      menu.categories.push(dish.Category.name);
-      menu.dishesByCategory[dish.Category.name] = [];
+    if (!(dish.Category.id in menu.dishesByCategory)) {
+      menu.categories.push(dish.Category);
+      menu.dishesByCategory[dish.Category.id] = [];
     }
-    menu.dishesByCategory[dish.Category.name].push(dish);
+    menu.dishesByCategory[dish.Category.id].push(dish);
     dish.Tags.forEach(tag => {
       if (!(tag.id in menu.tags)) {
         menu.tags[tag.id] = tag;

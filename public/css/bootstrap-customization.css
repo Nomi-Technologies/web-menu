@@ -6,7 +6,7 @@ from react (which only applies to root).
 .modal-dialog-centered { 
   height: 100%;
   margin: 0 auto;
-  max-width: 260px;
+  max-width: 400px;
 }
 
 .modal-content {

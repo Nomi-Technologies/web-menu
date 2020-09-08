@@ -12,7 +12,6 @@ const CategoryTab = styled(Tab)`
   margin: 20px 15px 0 15px;
   padding-bottom: 10px;
   color: rgba(0, 0, 0, 0.25);
-
   &.is-selected {
     color: black;
     padding-bottom: 6px;
@@ -60,16 +59,16 @@ function MenuTabView(props) {
     >
       <CategoryTabList>
         {props.menu.categories.map(c =>
-          <CategoryTab key={c}>{c}</CategoryTab>
+          <CategoryTab key={c.id}>{c.name}</CategoryTab>
         )}
       </CategoryTabList>
       {props.menu.categories.map(c => {
-        const dishes = props.getDishByCategoryWithFilter(c);
+        const dishes = props.getDishByCategoryIdWithFilter(c.id);
         return (
           <CategoryDishPanel
-            key={c}
+            key={c.id}
           >
-            <MenuCategoryPanel dishes={dishes}/>
+            <MenuCategoryPanel dishes={dishes} category={c}/>
           </CategoryDishPanel>
         );
       })}
@@ -140,6 +139,25 @@ const ActiveFilterCount = styled.div`
   background-color: #5383EC;
 `;
 
+const PageError = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  color: #FF726F;
+  margin-top: 5%;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
+const Loading = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  margin-top: 5%;
+  font-size: 32px;
+  font-weight: bold;
+`;
+
 export default class extends React.Component {
 
   state = {
@@ -182,8 +200,8 @@ export default class extends React.Component {
     });
   }
 
-  getDishByCategoryWithFilter(category) {
-    const originalDishes = this.props.menu.dishesByCategory[category];
+  getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = this.props.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -194,56 +212,46 @@ export default class extends React.Component {
   }
 
   render() {
-    if (this.props.menu) {
-      return (
-        <MenuScreen {...this.props}>
-          <MenuTabView
-            {...this.state}
-            menu={this.props.menu}
-            onSelectTab={this.onSelectTab.bind(this)}
-            getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
-          />
-          <NomiLogoBar>
-            <NomiLogoText>Powered by</NomiLogoText>
-            <a href='https://www.dinewithnomi.com/'>
-              <NomiLogoSVG
-                width='70px'
-                height='16px'
-                fill='#8A9DB7'
-              />
-            </a>
-          </NomiLogoBar>
-          <SlideUpPanelWrapper>
-            <FilterSlideUpPanel
-              tags={this.props.menu.tags}
-              expanded={this.state.panelExpanded}
-              onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
-              onApplyFilter={this.onApplyFilter.bind(this)}
-              onClearFilter={this.onClearFilter.bind(this)}
+    return (
+      <MenuScreen {...this.props}>
+        <MenuTabView
+          {...this.state}
+          menu={this.props.menu}
+          onSelectTab={this.onSelectTab.bind(this)}
+          getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
+        />
+        <NomiLogoBar>
+          <NomiLogoText>Powered by</NomiLogoText>
+          <a href='https://www.dinewithnomi.com/'>
+            <NomiLogoSVG
+              width='70px'
+              height='16px'
+              fill='#8A9DB7'
             />
-          </SlideUpPanelWrapper>
-          <Modal
-            className='react-bootstrap-modal'
-            show={this.state.modalShow}
-            aria-labelledby="contained-modal-vcenter"
-            centered
-            backdrop={false}
-          >
-            <ApplyFilterModalBody>
-              <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
-              Filters Applied
-            </ApplyFilterModalBody>
-          </Modal>
-        </MenuScreen>
-      );
-    } else {
-      if (this.state.error) {
-        console.log(this.state.error);
-        return <div>Some error has ocurred. Please try reloading the page.</div>;
-      } else {
-        return <div>Loading...</div>;
-      }
-    }
-
+          </a>
+        </NomiLogoBar>
+        <SlideUpPanelWrapper>
+          <FilterSlideUpPanel
+            tags={this.props.menu.tags}
+            expanded={this.state.panelExpanded}
+            onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
+            onApplyFilter={this.onApplyFilter.bind(this)}
+            onClearFilter={this.onClearFilter.bind(this)}
+          />
+        </SlideUpPanelWrapper>
+        <Modal
+          className='react-bootstrap-modal'
+          show={this.state.modalShow}
+          aria-labelledby="contained-modal-vcenter"
+          centered
+          backdrop={false}
+        >
+          <ApplyFilterModalBody>
+            <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
+            Filters Applied
+          </ApplyFilterModalBody>
+        </Modal>
+      </MenuScreen>
+    );
   }
 }

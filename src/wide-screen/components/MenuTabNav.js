@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from 'react-bootstrap';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const CategoryTab = styled(Tab)`
@@ -33,7 +32,7 @@ const CategoryTabList = styled(TabList)`
 export default function(props) {
   return (
     <Tabs
-      selectedIndex={props.tabIndex}
+      selectedIndex={props.selectedMenuIndex}
       forceRenderTabPanel={true}
       onSelect={props.onSelectMenu.bind(this)}
     >
@@ -42,7 +41,7 @@ export default function(props) {
           props.menus.map((menu, i) =>
             <CategoryTab
               key={menu.id}
-              className={props.selectedIndex === i ? 'is-selected': ''}
+              className={props.selectedMenuIndex === i ? 'is-selected': ''}
               onClick={() => props.onSelectMenu(i)}
             >
               {menu.name}

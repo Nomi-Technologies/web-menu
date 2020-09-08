@@ -15,7 +15,7 @@ const SideNav = styled.div`
   left: 0;
   transition: transform 0.3s ease-in-out;
 
-  @media (max-width: 576px) {
+  @media (max-width: 400px) {
     width: 100%;
   }
 `
@@ -34,7 +34,7 @@ export default function(props) {
       {props.menus.map((menu, i) =>
         <MenuTile
           key={menu.id}
-          variant={props.selectedIndex === i ? 'info': 'outline-info'}
+          variant={props.selectedMenuIndex === i ? 'info': 'outline-info'}
           onClick={() => props.onSelectMenu(i)}
         >
           {menu.name}

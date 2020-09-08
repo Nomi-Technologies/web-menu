@@ -1,8 +1,11 @@
 import React from 'react';
 import MenuList from '../components/CategoryDishList';
 import ExpansionArrow from 'components/ExpansionArrow';
+
 import HotScrollSidePanel from '../components/HotScrollSidePanel';
 import AllergenFiltersSidePanel from '../components/AllergenFiltersSidePanel';
+import QRCodeSidePanel  from "../components/QRCodeSidePanel";
+
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import BannerImage from 'components/web_menu_banner.jpg';
@@ -94,6 +97,11 @@ function LeftPanel(props) {
           onClearFilter={props.onClearFilter}
         />
       </Panel>
+      <Panel>
+        <QRCodeSidePanel
+          StyledBody={PanelBodyStyle}
+        />
+      </Panel>
     </LeftPanelWrapper>
   );
 }
@@ -102,18 +110,9 @@ const RightPanelWrapper = styled(ColumnStyle)`
   width: 20%;
 `;
 
-const RestaruantLinkQRCode = styled(QRCode)`
-  display: block;
-  margin: 0 auto;
-`;
-
 function RightPanel() {
   return (
     <RightPanelWrapper>
-      <RestaruantLinkQRCode 
-        value={window.location.href}
-        renderAs={'svg'}
-      />
     </RightPanelWrapper>
   );
 }
@@ -141,7 +140,7 @@ const RestaurantName = styled.div`
   left: calc(50% - 321px/2 + 1px);
   top: calc(50% - 43px/2 + 1px);
 
-  font-family: HK Grotesk;
+  font-family: 'HK Grotesk';
   font-style: normal;
   font-weight: bold;
   font-size: 36px;
@@ -175,7 +174,7 @@ const NomiBottomLogoText = styled.div`
 `;
 
 const NomiBottomLogoImage = styled.a`
-  
+
   & svg {
     position: relative;
     bottom: 4px;
@@ -191,14 +190,14 @@ function MainContent(props) {
         <RestaurantName>{props.restaruantName}</RestaurantName>
       </Banner>
       <DishList>
-        {props.menu.categories.map((c, i) => {
-          const dishes = props.getDishByCategoryWithFilter(c);
-          return <MenuList reactRef={props.categoryToRef[c]} dishes={dishes} category={c} key={i} />;
+        {props.menu.categories.map((c) => {
+          const dishes = props.getDishByCategoryIdWithFilter(c.id);
+          return <MenuList reactRef={props.categoryToRef[c.id]} dishes={dishes} category={c} key={c.id} />;
         })}
       </DishList>
       <NomiBottomLogo>
         <NomiBottomLogoText>Powered by</NomiBottomLogoText>
-        <NomiBottomLogoImage 
+        <NomiBottomLogoImage
           href='https://www.dinewithnomi.com/'
         >
           <NomiLogo
@@ -238,19 +237,12 @@ export default class extends React.Component {
 
     this.props.menu.categories.forEach(c => {
       const categoryRef = React.createRef();
-      categoryToRef[c] = categoryRef;
+      categoryToRef[c.id] = categoryRef;
     });
 
     this.setState({
       categoryToRef: categoryToRef,
     });
-  }
-
-  onSelect(index, lastIndex) {
-    if (lastIndex === index) {
-      return;
-    }
-    this.setState({ tabIndex: index });
   }
 
   onHotScrollPanelExpansionChanged(expanded) {
@@ -281,8 +273,8 @@ export default class extends React.Component {
     });
   }
 
-  getDishByCategoryWithFilter(category) {
-    const originalDishes = this.props.menu.dishesByCategory[category];
+  getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = this.props.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -308,7 +300,7 @@ export default class extends React.Component {
           menu={this.props.menu}
           {...this.state}
           restaruantName={this.props.restaurantName.toUpperCase()}
-          getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
+          getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
         />
         <RightPanel/>
       </MenuScreen>
