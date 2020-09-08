@@ -36,7 +36,7 @@ const CategoryTabList = styled(TabList)`
 const CategoryDishPanel = styled(TabPanel)`
   width: 100%;
   display: none;
-  
+
   &.is-selected {
     display: block;
     position: absolute;
@@ -66,8 +66,8 @@ function MenuTabView(props) {
       {props.menu.categories.map(c => {
         const dishes = props.getDishByCategoryWithFilter(c);
         return (
-          <CategoryDishPanel 
-            key={c} 
+          <CategoryDishPanel
+            key={c}
           >
             <MenuCategoryPanel dishes={dishes}/>
           </CategoryDishPanel>

@@ -94,7 +94,7 @@ export default class extends React.Component {
             ALL MENUS
           </AllMenusButton>
           <RestaurantLogo href='https://www.bacariwadams.com/'>
-            <ReactSVG 
+            <ReactSVG
               wrapper='span'
               src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
               />
@@ -112,9 +112,9 @@ export default class extends React.Component {
             restaurantName={this.props.restaurantId}
             menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
           />
-          : 
+          :
           (
-            this.state.error ? 
+            this.state.error ?
             <div>Some error has ocurred. Please try reloading the page.</div> :
             <div>Loading...</div>
           )

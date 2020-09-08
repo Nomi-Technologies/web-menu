@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
 import MenuListNav from 'components/MenuListNav';
 import { Button } from 'react-bootstrap';
+import MenuTabNav from '../components/MenuTabNav';
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -160,12 +161,17 @@ export default class extends React.Component{
             height='28px'
           />
           <RestaurantImgLogo src={RestaurantLogo} />
+          <MenuTabNav
+            menus={this.state.menus}
+            selectedIndex={this.state.selectedMenuIndex}
+            onSelectMenu={this.onSelectMenu.bind(this)}
+          />
           <FilterWords>Display Filtered Dishes</FilterWords>
           <FilterToggle>
             <FilterToggleSwitch/>
           </FilterToggle>
         </Header>
-        <MenuListNav 
+        <MenuListNav
           open={this.state.hamburgerOpen}
           menus={this.state.menus}
           selectedIndex={this.state.selectedMenuIndex}
@@ -177,9 +183,9 @@ export default class extends React.Component{
           restaurantName={this.props.restaurantId}
             menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
           />
-          : 
+          :
           (
-            this.state.error ? 
+            this.state.error ?
             <div>Some error has ocurred. Please try reloading the page.</div> :
             <div>Loading...</div>
           )
