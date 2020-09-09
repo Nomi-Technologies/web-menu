@@ -2,7 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-const CategoryTab = styled(Tab)`
+const MenuTabs = styled(Tabs)`
+  width: 100%;
+  margin-left: 13%;
+`;
+
+const MenuTab = styled(Tab)`
   height: 30px;
   display: inline-block;
   margin: 20px 15px 0 15px;
@@ -18,9 +23,10 @@ const CategoryTab = styled(Tab)`
   }
 `;
 
-const CategoryTabList = styled(TabList)`
+// TODO: Restrict the width of tab bar
+// Maybe we also need to re-align the icons in the top bar
+const MenuTabList = styled(TabList)`
   list-style-type: none;
-  margin: 0;
   padding: 0 5px;
   overflow: auto;
   white-space: nowrap;
@@ -31,23 +37,23 @@ const CategoryTabList = styled(TabList)`
 
 export default function(props) {
   return (
-    <Tabs
+    <MenuTabs
       selectedIndex={props.selectedMenuIndex}
       forceRenderTabPanel={true}
       onSelect={props.onSelectMenu.bind(this)}
     >
-      <CategoryTabList>
+      <MenuTabList>
         {
           props.menus.map((menu, i) =>
-            <CategoryTab
+            <MenuTab
               key={menu.id}
               className={props.selectedMenuIndex === i ? 'is-selected': ''}
               onClick={() => props.onSelectMenu(i)}
             >
               {menu.name}
-            </CategoryTab>)
+            </MenuTab>)
         }
-      </CategoryTabList>
-    </Tabs>
+      </MenuTabList>
+    </MenuTabs>
   )
 };

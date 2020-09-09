@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
 
 const DishTile = styled.div`
-  font-family: 'Source Serif Pro';
+  font-family: "Source Serif Pro";
   padding: 20px;
   background-color: white;
   border-radius: 10px;
   margin: 0;
-  box-shadow: 0 0 5px #E3EDF2;
+  box-shadow: 0 0 5px #e3edf2;
   cursor: pointer;
 `;
 
@@ -51,26 +51,27 @@ const TileSubtitle = styled.div`
 const Description = styled.div`
   flex: 1 1 auto;
   font-size: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default function (props) {
   return (
-    <DishTile
-      className={props.className}
-      onClick={props.onClick}
-    >
+    <DishTile className={props.className} onClick={props.onClick}>
       <TileTitle>
         <Name>{props.dish.name}</Name>
         <TitleTrailing>{props.dish.price}</TitleTrailing>
       </TileTitle>
-      {
-        props.dish.description ?
-        (
-          <TileSubtitle>
-            <Description>{props.dish.description}</Description>
-          </TileSubtitle>
-        ) : (<></>)
-      }
+      {props.dish.description ? (
+        <TileSubtitle>
+          <Description>{props.dish.description}</Description>
+        </TileSubtitle>
+      ) : (
+        <></>
+      )}
     </DishTile>
-  )
+  );
 }

@@ -55,48 +55,6 @@ const RestaurantImgLogo = styled.img`
   margin-right: 10%;
 `;
 
-const FilterWords = styled.div`
-  /* Display Filtered Dishes */
-  left: 60.49%;
-  right: 29.17%;
-  top: 35%;
-  bottom: 36.67%;
-
-  font-family: 'HK Grotesk';
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-
-  display: flex;
-  align-items: center;
-  text-align: right;
-  letter-spacing: 0.02em;
-
-  margin-left: 30%;
-  height: 28px;
-
-  color: #000000;
-`;
-
-const FilterToggle = styled.div`
-  /* Rectangle 149 */
-  left: 0%;
-  right: 0%;
-  top: 0%;
-  bottom: 0%;
-
-  height: 20px;
-  width: 40px;
-
-  margin-left: 1%;
-
-  background: #64C255;
-  border-radius: 20px;
-
-  display: flex;
-  align-items: center;
-`;
-
 const FilterToggleSwitch = styled.div`
   /* Rectangle 150 */
 
@@ -134,13 +92,8 @@ const Loading = styled.div`
 export default class extends React.Component{
 
   state = {
-    hamburgerOpen: false,
     tabIndex: 0,
   };
-
-  onClickHambergerMenu() {
-    this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
-  }
 
   onSelectTab(index, lastIndex) {
     if (lastIndex === index) {
@@ -153,12 +106,6 @@ export default class extends React.Component{
     return (
       <RestaurantScreen>
         <Header>
-          <AllMenusButton
-            variant='link'
-            onClick={this.onClickHambergerMenu.bind(this)}
-          >
-            ALL MENUS
-          </AllMenusButton>
           <NomiLogo
             width='70px'
             height='28px'
@@ -167,10 +114,6 @@ export default class extends React.Component{
           <MenuTabNav
             {...this.props}
           />
-          <FilterWords>Display Filtered Dishes</FilterWords>
-          <FilterToggle>
-            <FilterToggleSwitch/>
-          </FilterToggle>
         </Header>
         <MenuListNav
           open={this.state.hamburgerOpen}
