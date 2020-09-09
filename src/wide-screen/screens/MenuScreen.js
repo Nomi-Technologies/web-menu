@@ -23,6 +23,9 @@ const LeftPanelWrapper = styled(ColumnStyle)`
 `;
 
 const Panel = styled.div`
+  padding-top: 10px;
+  padding-bottom: 10px;
+
   /* Menu Sections */
   left: 0%;
   right: 0%;
@@ -77,15 +80,10 @@ const PanelBodyStyle = styled.div`
   padding: 10px 15px 10px 15px;
 `;
 
-const panelStyle = {
-  paddingTop: "10px",
-  paddingBottom: "10px",
-}
-
 function LeftPanel(props) {
   return (
-    <LeftPanelWrapper>
-      <Panel style={panelStyle}>
+    <LeftPanelWrapper id="leftPanel">
+      <Panel>
         <HotScrollSidePanel
           StyledHeader={HeaderStyle}
           StyledExpandArrow={ExpandArrowStyle}
@@ -96,7 +94,7 @@ function LeftPanel(props) {
           onExpansionChanged={props.onHotScrollPanelExpansionChanged}
         />
       </Panel>
-      <Panel style={panelStyle}>
+      <Panel>
         <AllergenFiltersSidePanel
           StyledHeader={HeaderStyle}
           StyledExpandArrow={ExpandArrowStyle}
@@ -197,7 +195,7 @@ const NomiBottomLogoImage = styled.a`
 
 function MainContent(props) {
   return (
-    <MainContentWrapper>
+    <MainContentWrapper id="mainContent">
       <Banner>
         <RestaurantName>{props.restaruantName}</RestaurantName>
       </Banner>
@@ -303,6 +301,17 @@ export default class extends React.Component {
     return filtered;
   }
 
+  renderRightPanel() {
+    const panel = document.querySelector('#leftPanel');
+    if(panel) {
+      if (panel.clientWidth > 250) {
+        return <RightPanel/>
+      }
+      else { return null; }
+    }
+    return <RightPanel/>
+  }
+
   // TODO(tony): use restaurant name instead of slug field
   render() {
     return (
@@ -321,7 +330,7 @@ export default class extends React.Component {
           restaruantName={this.props.restaurantName.toUpperCase()}
           getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
         />
-        <RightPanel/>
+        { this.renderRightPanel() }
       </MenuScreen>
     );
   }

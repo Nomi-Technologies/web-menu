@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const GridTagButton = styled(TagButton)`
   margin: 10px;
-  min-width: 80px;
+  min-width: 75px;
 `;
 
 const Grid = styled(Container)`
@@ -22,7 +22,7 @@ function TagGrid(props) {
     let cols = [];
     for (let j = 0; j < 2; ++j) {
       if (i + j >= tag_keys.length) {
-        cols.push(<Col key={j}><div style={{minWidth: "100px"}}></div></Col>);
+        cols.push(<Col key={j}><div style={{minWidth: "95px"}}></div></Col>);
         continue;
       }
       cols.push(<Col key={j}>
