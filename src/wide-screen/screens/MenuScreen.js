@@ -244,13 +244,6 @@ export default class extends React.Component {
     });
   }
 
-  onSelect(index, lastIndex) {
-    if (lastIndex === index) {
-      return;
-    }
-    this.setState({ tabIndex: index });
-  }
-
   onHotScrollPanelExpansionChanged(expanded) {
     this.setState({ hotScrollPanelExpanded: expanded });
   }
