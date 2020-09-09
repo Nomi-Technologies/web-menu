@@ -8,10 +8,11 @@ const ToggleButton = styled(Button)`
   background-color: #F3A35C;
   color: white;
   font-weight: bold;
-  margin: 10px auto 0 auto;
+  margin: 10px auto 10px auto;
   display: block;
   width: 85%;
-  height: 44px;
+  height: auto;
+  min-height: 44px;
   border-radius: 22px;
 `;
 

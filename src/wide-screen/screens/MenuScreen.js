@@ -23,9 +23,16 @@ const ColumnStyle = styled.div`
 
 const LeftPanelWrapper = styled(ColumnStyle)`
   width: 20%;
+  min-width: 250px;
+  @media (max-width: 1440px) {
+    width: 25%;
+  }
 `;
 
 const Panel = styled.div`
+  padding-top: 10px;
+  padding-bottom: 10px;
+
   /* Menu Sections */
   left: 0%;
   right: 0%;
@@ -63,6 +70,11 @@ const HeaderStyle = styled.div`
     display: inline-block;
     font-weight: 700;
   }
+
+  .text {
+    width: 60%;
+    line-height: 140%;
+  }
 `;
 
 const ExpandArrowStyle = styled(ExpansionArrow)`
@@ -72,7 +84,7 @@ const ExpandArrowStyle = styled(ExpansionArrow)`
 
 const PanelBodyStyle = styled.div`
   width: 100%;
-  padding: 10px 15px 20px 15px;
+  padding: 10px 15px 10px 15px;
 `;
 
 function LeftPanel(props) {
@@ -110,6 +122,9 @@ function LeftPanel(props) {
 
 const RightPanelWrapper = styled(ColumnStyle)`
   width: 20%;
+  @media (max-width: 1440px) {
+    display: none;
+  }
 `;
 
 function RightPanel() {
@@ -118,6 +133,9 @@ function RightPanel() {
 
 const MainContentWrapper = styled(ColumnStyle)`
   width: 60%;
+  @media (max-width: 1440px) {
+    width: 75%;
+  }
 `;
 
 const Banner = styled.div`
@@ -184,7 +202,7 @@ const NomiBottomLogoImage = styled.a`
 
 function MainContent(props) {
   return (
-    <MainContentWrapper>
+    <MainContentWrapper id="mainContent">
       <Banner>
         <RestaurantName>{props.restaruantName}</RestaurantName>
       </Banner>
