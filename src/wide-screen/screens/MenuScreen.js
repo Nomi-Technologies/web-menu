@@ -24,6 +24,9 @@ const ColumnStyle = styled.div`
 const LeftPanelWrapper = styled(ColumnStyle)`
   width: 20%;
   min-width: 250px;
+  @media (max-width: 1440px) {
+    width: 25%;
+  }
 `;
 
 const Panel = styled.div`
@@ -86,7 +89,7 @@ const PanelBodyStyle = styled.div`
 
 function LeftPanel(props) {
   return (
-    <LeftPanelWrapper id="leftPanel">
+    <LeftPanelWrapper>
       <Panel>
         <HotScrollSidePanel
           StyledHeader={HeaderStyle}
@@ -119,6 +122,9 @@ function LeftPanel(props) {
 
 const RightPanelWrapper = styled(ColumnStyle)`
   width: 20%;
+  @media (max-width: 1440px) {
+    display: none;
+  }
 `;
 
 function RightPanel() {
@@ -127,7 +133,9 @@ function RightPanel() {
 
 const MainContentWrapper = styled(ColumnStyle)`
   width: 60%;
-  min-width: 520px;
+  @media (max-width: 1440px) {
+    width: 75%;
+  }
 `;
 
 const Banner = styled.div`
@@ -293,17 +301,6 @@ export default class extends React.Component {
     return filtered;
   }
 
-  renderRightPanel() {
-    const panel = document.querySelector('#leftPanel');
-    if(panel) {
-      if (panel.clientWidth > 250) {
-        return <RightPanel/>
-      }
-      else { return null; }
-    }
-    return <RightPanel/>
-  }
-
   // TODO(tony): use restaurant name instead of slug field
   render() {
     return (
@@ -328,7 +325,7 @@ export default class extends React.Component {
             this
           )}
         />
-        { this.renderRightPanel() }
+        <RightPanel />
       </MenuScreen>
     );
   }
