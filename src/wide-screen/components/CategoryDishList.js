@@ -1,10 +1,10 @@
-import React from 'react';
-import DishTile from './DishTile';
-import styled from 'styled-components';
-import { Col } from 'react-bootstrap';
+import React from "react";
+import DishTile from "./DishTile";
+import styled from "styled-components";
+import { Col } from "react-bootstrap";
 
 const CategorySection = styled.div`
-  font-family: 'Source Serif Pro';
+  font-family: "Source Serif Pro";
   padding-top: 30px;
 `;
 
@@ -18,6 +18,9 @@ const Title = styled.div`
 const Description = styled.div`
   font-size: 18px;
   padding-top: 26px;
+  color: #000000;
+  line-height: 25px;
+  letter-spacing: 0.02em;
 `;
 
 const DishGrid = styled.div`
@@ -36,26 +39,30 @@ const ColumnSeparator = styled(Column)`
 `;
 
 export default class extends React.Component {
-
   render() {
     return (
       <CategorySection ref={this.props.reactRef}>
         <Title>{this.props.category.name}</Title>
-        {
-          this.props.category.description ? 
-          (<Description>{this.props.category.description}</Description>) : <></>
-        }
+        {this.props.category.description ? (
+          <Description>{this.props.category.description}</Description>
+        ) : (
+          <></>
+        )}
         <DishGrid>
           <Column>
-            {this.props.dishes.slice(0,Math.ceil(this.props.dishes.length / 2)).map(dish =>
-              <DishTile key={dish.id} dish={dish}/>
-            )}
+            {this.props.dishes
+              .slice(0, Math.ceil(this.props.dishes.length / 2))
+              .map((dish) => (
+                <DishTile key={dish.id} dish={dish} />
+              ))}
           </Column>
-          <ColumnSeparator/>
+          <ColumnSeparator />
           <Column>
-            {this.props.dishes.slice(Math.ceil(this.props.dishes.length / 2)).map(dish =>
-              <DishTile key={dish.id} dish={dish}/>
-            )}
+            {this.props.dishes
+              .slice(Math.ceil(this.props.dishes.length / 2))
+              .map((dish) => (
+                <DishTile key={dish.id} dish={dish} />
+              ))}
           </Column>
         </DishGrid>
       </CategorySection>
