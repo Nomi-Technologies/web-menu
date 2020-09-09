@@ -63,7 +63,7 @@ export default function (props) {
     <DishTile className={props.className} onClick={props.onClick}>
       <TileTitle>
         <Name>{props.dish.name}</Name>
-        <TitleTrailing>{props.dish.price}</TitleTrailing>
+        <TitleTrailing>{'$' + props.dish.price}</TitleTrailing>
       </TileTitle>
       {props.dish.description ? (
         <TileSubtitle>
