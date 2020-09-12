@@ -46,6 +46,10 @@ const ClearButton = styled(Button)`
   z-index: 25;
 `;
 
+const StyledExpansionArrow = styled(ExpansionArrow)`
+  margin: 0 25px;
+`;
+
 function SlideUpPanelHeader(props) {
   return (
     <PanelHeader>
@@ -62,7 +66,7 @@ function SlideUpPanelHeader(props) {
       </PanelHeaderElement>
       <Spacer onClick={props.onExpansionChanged}/>
       <PanelHeaderElement>
-        <ClearButton id='clear-btn'
+        <ClearButton
           variant='secondary'
           disabled={props.selected.size === 0}
           onClick={props.onClearFilter}
@@ -71,7 +75,7 @@ function SlideUpPanelHeader(props) {
         </ClearButton>
       </PanelHeaderElement>
       <PanelHeaderElement>
-        <ExpansionArrow
+        <StyledExpansionArrow
           onClick={props.onExpansionChanged}
           pointingUp={!props.expanded ? 1 : 0}
         />
