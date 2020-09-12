@@ -127,7 +127,7 @@ export default class extends React.Component{
           />
           :
           (
-            this.state.error ?
+            this.props.error ?
             <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
             <Loading>Restaurant Menu Loading...</Loading>
           )

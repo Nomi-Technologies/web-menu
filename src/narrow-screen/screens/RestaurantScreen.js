@@ -99,7 +99,7 @@ export default class extends React.Component {
             restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
           />
-        ) : this.state.error ? (
+        ) : this.props.error ? (
           <PageError>
             There was an error loading this page. Please try reloading the page
             or contact the Nomi team by filling out a form at dinewithnomi.com

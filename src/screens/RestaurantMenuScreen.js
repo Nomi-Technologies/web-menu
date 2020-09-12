@@ -30,6 +30,7 @@ class RestaurantMenuScreen extends React.Component {
           .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
       })
       .catch(err => {
+        console.log(err);
         this.setState({ error: err });
       });
   }
