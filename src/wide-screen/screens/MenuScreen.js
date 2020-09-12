@@ -9,10 +9,8 @@ import QRCodeSidePanel from "../components/QRCodeSidePanel";
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
 import styled from "styled-components";
 import BannerImage from "components/web_menu_banner.jpg";
-import QRCode from "qrcode.react";
 
 const ColumnStyle = styled.div`
-  height: 100%;
   padding: 20px 16px;
   overflow: scroll;
   &::-webkit-scrollbar {
@@ -51,7 +49,6 @@ const Panel = styled.div`
 
   flex: none;
   order: 0;
-  align-self: center;
   margin: 15px 15px;
 `;
 
@@ -202,7 +199,7 @@ const NomiBottomLogoImage = styled.a`
 
 function MainContent(props) {
   return (
-    <MainContentWrapper id="mainContent">
+    <MainContentWrapper>
       <Banner>
         <RestaurantName>{props.restaruantName}</RestaurantName>
       </Banner>
@@ -231,8 +228,6 @@ function MainContent(props) {
 
 const MenuScreen = styled.div`
   position: relative;
-  align-items: center;
-  justify-content: center;
   display: flex;
   flex-flow: row;
   flex: 1 1 auto;
