@@ -89,7 +89,7 @@ export default class AllergenFiltersSidePanel extends React.Component {
         <this.props.StyledHeader
           onClick={this.onExpansionChanged.bind(this)}
         >
-          <div class='text'>
+          <div className={'text'}>
             Allergen Filters
           </div>
           <div style={{
