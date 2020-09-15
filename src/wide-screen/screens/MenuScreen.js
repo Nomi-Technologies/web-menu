@@ -262,6 +262,21 @@ export default class extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps) {
+    if(this.props.menu != prevProps.menu) {
+      let categoryToRef = {};
+
+      this.props.menu.categories.forEach((c) => {
+        const categoryRef = React.createRef();
+        categoryToRef[c.id] = categoryRef;
+      });
+
+      this.setState({
+        categoryToRef: categoryToRef,
+      });
+    }
+  }
+
   onHotScrollPanelExpansionChanged(expanded) {
     this.setState({ hotScrollPanelExpanded: expanded });
   }
