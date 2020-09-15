@@ -37,7 +37,7 @@ export default class extends React.Component {
         <this.props.StyledHeader
           onClick={this.onExpansionChanged.bind(this)}
         >
-          <div class="text">
+          <div className="text">
             Menu Sections
           </div>
             <this.props.StyledExpandArrow

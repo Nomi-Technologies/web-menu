@@ -3,8 +3,6 @@ import MenuScreen from './MenuScreen';
 import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
-import MenuListNav from 'components/MenuListNav';
-import { Button } from 'react-bootstrap';
 import MenuTabNav from '../components/MenuTabNav';
 
 const RestaurantScreen = styled.div`
@@ -27,32 +25,15 @@ const Header = styled.div`
   box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
 `;
 
-const AllMenusButton = styled(Button)`
-  position: relative;
-  margin-left: 20px;
-  z-index: 20;
-  display: block;
-  font-weight: bold;
-  color: #628DEB;
-
-  text-decoration: none;
-  &:hover, &:focus {
-    text-decoration: none;
-  }
-`;
-
 const NomiLogo = styled(NomiTopBottomLogo)`
   position: relative;
   display: inline-block;
-  margin-left: 2%;
-  margin-right: 2%;
 `;
 
 const RestaurantImgLogo = styled.img`
   height: 28px;
   width: 84px;
-  margin-left: 10%;
-  margin-right: 10%;
+  display: inline-block;
 `;
 
 const FilterToggleSwitch = styled.div`
@@ -89,6 +70,10 @@ const Loading = styled.div`
   font-weight: bold;
 `;
 
+const HeaderColumns = styled.div`
+  text-align: center;
+`;
+
 export default class extends React.Component{
 
   state = {
@@ -106,19 +91,21 @@ export default class extends React.Component{
     return (
       <RestaurantScreen>
         <Header>
-          <NomiLogo
-            width='70px'
-            height='28px'
-          />
-          <RestaurantImgLogo src={RestaurantLogo} />
-          <MenuTabNav
-            {...this.props}
-          />
+          <HeaderColumns style={{ width: '20%' }}>
+            <RestaurantImgLogo src={RestaurantLogo} />
+          </HeaderColumns>
+          <HeaderColumns style={{ width: '60%' }}>
+            <MenuTabNav
+              {...this.props}
+            />
+          </HeaderColumns>
+          <HeaderColumns style={{ width: '20%' }}>
+            <NomiLogo
+              width='70px'
+              height='28px'
+            />
+          </HeaderColumns>
         </Header>
-        <MenuListNav
-          open={this.state.hamburgerOpen}
-          {...this.props}
-        />
         {this.props.dishesByMenu.length > 0 ?
           <MenuScreen
             onClick={() => this.setState({ hamburgerOpen: false })}
@@ -127,7 +114,7 @@ export default class extends React.Component{
           />
           :
           (
-            this.state.error ?
+            this.props.error ?
             <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
             <Loading>Restaurant Menu Loading...</Loading>
           )

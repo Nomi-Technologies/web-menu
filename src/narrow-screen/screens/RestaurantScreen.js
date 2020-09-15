@@ -87,7 +87,7 @@ export default class extends React.Component {
           </AllMenusButton>
           <RestaurantLogo href="https://www.bacariwadams.com/">
             <ReactSVG
-              wrapper="span"
+              wrapper="div"
               src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
             />
           </RestaurantLogo>
@@ -99,7 +99,7 @@ export default class extends React.Component {
             restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
           />
-        ) : this.state.error ? (
+        ) : this.props.error ? (
           <PageError>
             There was an error loading this page. Please try reloading the page
             or contact the Nomi team by filling out a form at dinewithnomi.com
