@@ -14,6 +14,7 @@ const CategoryTitle = styled.div`
   &:hover {
     color: #000000;
     text-decoration: underline #5383EC;
+    cursor: pointer;
   }
 `;
 
