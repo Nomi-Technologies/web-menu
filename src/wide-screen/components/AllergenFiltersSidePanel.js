@@ -94,7 +94,6 @@ export default class AllergenFiltersSidePanel extends React.Component {
           </div>
           <div style={{
             position: 'absolute', 
-            right: '0',
             right: '0px',
             width: 'max-content',
             margin: '0 25px',

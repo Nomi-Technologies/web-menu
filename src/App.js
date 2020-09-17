@@ -44,10 +44,14 @@ function App(props) {
           <Route path='/:restaurant_identifier'>
             <RestaurantMenuScreen/>
           </Route>
-          <Route path='/'>
-            <div>
-              A list of restaurants.
-            </div>
+          <Route path='/' render={() => {
+            console.log('here');
+            window.location = 'https://www.dinewithnomi.com/';
+          }}>
+            {
+              process.env.NODE_ENV === 'production' ?
+              null : 'A list of restaurants'
+            }
           </Route>
         </Switch>
       </div>
