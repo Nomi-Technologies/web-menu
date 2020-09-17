@@ -12,6 +12,7 @@ const CategoryTab = styled(Tab)`
   margin: 20px 15px 0 15px;
   padding-bottom: 10px;
   color: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
   &.is-selected {
     color: black;
     padding-bottom: 6px;

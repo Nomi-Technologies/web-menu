@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const MenuTab = styled.div`
   display: inline-block;
   margin: 18px 15px 0 15px;
   color: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 
   &.is-selected {
     color: black;
