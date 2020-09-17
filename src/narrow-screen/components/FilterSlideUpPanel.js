@@ -67,7 +67,7 @@ function SlideUpPanelHeader(props) {
       <Spacer onClick={props.onExpansionChanged}/>
       <PanelHeaderElement>
         <ClearButton
-          variant='secondary'
+          variant='primary'
           disabled={props.selected.size === 0}
           onClick={props.onClearFilter}
         >
