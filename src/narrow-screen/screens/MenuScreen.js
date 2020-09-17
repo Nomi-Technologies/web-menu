@@ -1,18 +1,18 @@
-import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import React, { useEffect, useState } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 
-const CategoryTab = styled(Tab)`
+const CategoryTab = styled.div`
   height: 30px;
   display: inline-block;
   margin: 20px 15px 0 15px;
   padding-bottom: 10px;
   color: rgba(0, 0, 0, 0.25);
   cursor: pointer;
+
   &.is-selected {
     color: black;
     padding-bottom: 6px;
@@ -22,7 +22,7 @@ const CategoryTab = styled(Tab)`
   }
 `;
 
-const CategoryTabList = styled(TabList)`
+const CategoryTabList = styled.div`
   list-style-type: none;
   margin: 0;
   padding: 0 5px;
@@ -33,47 +33,71 @@ const CategoryTabList = styled(TabList)`
   z-index: 10;
 `;
 
-const CategoryDishPanel = styled(TabPanel)`
+const MenuBody = styled.div`
   width: 100%;
-  display: none;
-
-  &.is-selected {
-    display: block;
-    position: absolute;
-    /* 50px for header; 80px for expansion strip + 70px for nomi logo */
-    padding: 50px 0 150px 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    overflow: auto;
-  }
+  display: block;
+  position: absolute;
+  /* 50px for header; 80px for expansion strip + 70px for nomi logo */
+  padding: 0 0 150px 0;
+  margin-top: 50px;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
 `;
 
 function MenuTabView(props) {
+
+  const [categoryToRef, setCategoryToRef] = useState({});
+  const [activeCategoryId, setActiveCategoryId] = useState();
+
+  useEffect(() => {
+    const newCategoryToRef = {};
+    props.menu.categories.forEach((c) => {
+      const categoryRef = React.createRef();
+      newCategoryToRef[c.id] = categoryRef;
+    });
+    setCategoryToRef(newCategoryToRef);
+    setActiveCategoryId(props.menu.categories[0]?.id);
+  }, [props.menu]);
+
+  function onScroll() {
+    // Find the largest non-positive offset from tab bar.
+    let runningMax = Number.MIN_SAFE_INTEGER;
+    let activeCategoryId;
+    for (const id in categoryToRef) {
+      const offset = categoryToRef[id].current.getBoundingClientRect().top - 110;
+      if (offset > 0) { continue; }
+      if (runningMax < offset) {
+        runningMax = runningMax;
+        activeCategoryId = id;
+      }
+    }
+    setActiveCategoryId(activeCategoryId);
+  }
+
   return (
-    <Tabs
-      selectedIndex={props.tabIndex}
-      forceRenderTabPanel={true}
-      onSelect={props.onSelectTab.bind(this)}
-      selectedTabClassName='is-selected'
-      selectedTabPanelClassName='is-selected'
-    >
+    <>
       <CategoryTabList>
         {props.menu.categories.map(c =>
-          <CategoryTab key={c.id}>{c.name}</CategoryTab>
+          <CategoryTab
+            key={c.id}
+            // == for string number comparison
+            className={activeCategoryId == c.id ? 'is-selected': ''}
+            onClick={() => categoryToRef[c.id].current.scrollIntoView() }
+          >{c.name}</CategoryTab>
         )}
       </CategoryTabList>
-      {props.menu.categories.map(c => {
-        const dishes = props.getDishByCategoryIdWithFilter(c.id);
-        return (
-          <CategoryDishPanel
-            key={c.id}
-          >
-            <MenuCategoryPanel dishes={dishes} category={c}/>
-          </CategoryDishPanel>
-        );
-      })}
-    </Tabs>
+      <MenuBody onScroll={onScroll}>
+        {
+          props.menu.categories.map(c => {
+            const dishes = props.getDishByCategoryIdWithFilter(c.id);
+            return (
+              <MenuCategoryPanel dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} />
+            );
+          })
+        }
+      </MenuBody>
+    </>
   );
 }
 

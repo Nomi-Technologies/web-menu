@@ -36,7 +36,7 @@ const CategoryDescription = styled.div`
 
 export default function(props) {
   return (
-    <DishList>
+    <DishList ref={props.categoryRef}>
       <CategoryTitle>{props.category.name}</CategoryTitle>
       <CategoryDescription>{props.category.description}</CategoryDescription>
       {props.dishes.map(dish => <DishTile key={dish.id} dish={dish}/>)}
