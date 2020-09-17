@@ -45,7 +45,6 @@ function App(props) {
             <RestaurantMenuScreen/>
           </Route>
           <Route path='/' render={() => {
-            console.log('here');
             window.location = 'https://www.dinewithnomi.com/';
           }}>
             {
