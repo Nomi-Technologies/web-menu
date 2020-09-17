@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
+import Banner from 'components/Banner';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
@@ -45,6 +46,19 @@ const MenuBody = styled.div`
   overflow: auto;
 `;
 
+const StyledBanner = styled(Banner)`
+  height: 325px;
+`;
+
+const RestaurantName = styled.div`
+  font-weight: bold;
+  font-size: 36px;
+  text-align: center;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  z-index: 20;
+`;
+
 function MenuTabView(props) {
 
   const [categoryToRef, setCategoryToRef] = useState({});
@@ -63,16 +77,16 @@ function MenuTabView(props) {
   function onScroll() {
     // Find the largest non-positive offset from tab bar.
     let runningMax = Number.MIN_SAFE_INTEGER;
-    let activeCategoryId;
+    let activeId = activeCategoryId;
     for (const id in categoryToRef) {
       const offset = categoryToRef[id].current.getBoundingClientRect().top - 110;
       if (offset > 0) { continue; }
       if (runningMax < offset) {
         runningMax = runningMax;
-        activeCategoryId = id;
+        activeId = id;
       }
     }
-    setActiveCategoryId(activeCategoryId);
+    setActiveCategoryId(activeId);
   }
 
   return (
@@ -88,6 +102,8 @@ function MenuTabView(props) {
         )}
       </CategoryTabList>
       <MenuBody onScroll={onScroll}>
+        <StyledBanner>
+        </StyledBanner>
         {
           props.menu.categories.map(c => {
             const dishes = props.getDishByCategoryIdWithFilter(c.id);
@@ -162,25 +178,6 @@ const ActiveFilterCount = styled.div`
   color: white;
   font-weight: bold;
   background-color: #5383EC;
-`;
-
-const PageError = styled.div`
-  position: relative;
-  flex: 0 0 auto;
-  text-align: center;
-  color: #FF726F;
-  margin-top: 5%;
-  font-size: 24px;
-  font-weight: bold;
-`;
-
-const Loading = styled.div`
-  position: relative;
-  flex: 0 0 auto;
-  text-align: center;
-  margin-top: 5%;
-  font-size: 32px;
-  font-weight: bold;
 `;
 
 export default class extends React.Component {

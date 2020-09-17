@@ -1,6 +1,7 @@
 import React from "react";
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
+import Banner from "components/Banner";
 
 import HotScrollSidePanel from "../components/HotScrollSidePanel";
 import AllergenFiltersSidePanel from "../components/AllergenFiltersSidePanel";
@@ -8,7 +9,6 @@ import QRCodeSidePanel from "../components/QRCodeSidePanel";
 
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
 import styled from "styled-components";
-import BannerImage from "components/web_menu_banner.jpg";
 
 const ColumnStyle = styled.div`
   padding: 20px 16px;
@@ -135,34 +135,18 @@ const MainContentWrapper = styled(ColumnStyle)`
   }
 `;
 
-const Banner = styled.div`
+
+const StyledBanner = styled(Banner)`
   height: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  left: 0px;
-  top: 0px;
-  background: url(${BannerImage});
-  background-size: cover;
-  background-color: none;
-  box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
-  z-index: 10;
-  border-radius: 10px;
 `;
 
 const RestaurantName = styled.div`
-  left: calc(50% - 321px / 2 + 1px);
-  top: calc(50% - 43px / 2 + 1px);
-
-  font-family: "HK Grotesk";
-  font-style: normal;
   font-weight: bold;
   font-size: 36px;
-  line-height: 43px;
   text-align: center;
   letter-spacing: 0.02em;
   color: #ffffff;
-  text-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
+  z-index: 20;
 `;
 
 const DishList = styled.div`
@@ -200,9 +184,9 @@ const NomiBottomLogoImage = styled.a`
 function MainContent(props) {
   return (
     <MainContentWrapper>
-      <Banner>
+      <StyledBanner>
         <RestaurantName>{props.restaruantName}</RestaurantName>
-      </Banner>
+      </StyledBanner>
       <DishList>
         {props.menu.categories.map((c) => {
           const dishes = props.getDishByCategoryIdWithFilter(c.id);
