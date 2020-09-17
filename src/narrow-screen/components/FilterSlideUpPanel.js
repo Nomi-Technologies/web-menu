@@ -86,6 +86,7 @@ function SlideUpPanelHeader(props) {
 
 const GridTagButton = styled(TagButton)`
   margin: 10px;
+  cursor: default;
 `;
 
 const Grid = styled(Container)`
@@ -133,7 +134,7 @@ const PanelBody = styled.div`
 `;
 
 const SectionTitle = styled.i`
-  margin-left: 10px;
+  margin-left: 23px;  /* Align with Filters label */
   margin-bottom: 5px;
   display: block;
   font-size: 14px;
