@@ -50,13 +50,28 @@ const StyledBanner = styled(Banner)`
   height: 325px;
 `;
 
+const BannerContent = styled.div`
+  z-index: 20;
+  text-align: center;
+`;
+
 const RestaurantName = styled.div`
   font-weight: bold;
-  font-size: 36px;
+  font-size: 30px;
   text-align: center;
   letter-spacing: 0.02em;
   color: #ffffff;
-  z-index: 20;
+`;
+
+const MenuName = styled.div`
+  margin-top: 14px;
+  background: #FFFFFF;
+  border-radius: 6px;
+  padding: 13px;
+  display: inline-block;
+  font-weight: normal;
+  font-size: 14px;
+  color: #628DEB;
 `;
 
 function MenuTabView(props) {
@@ -103,6 +118,10 @@ function MenuTabView(props) {
       </CategoryTabList>
       <MenuBody onScroll={onScroll}>
         <StyledBanner>
+          <BannerContent>
+            <RestaurantName>{props.restaurantName}</RestaurantName>
+            <MenuName>{`${props.menuName} menu`}</MenuName>
+          </BannerContent>
         </StyledBanner>
         {
           props.menu.categories.map(c => {
@@ -234,9 +253,12 @@ export default class extends React.Component {
   }
 
   render() {
+    console.log(this.props.menu);
     return (
       <MenuScreen {...this.props}>
         <MenuTabView
+          menuName={this.props.menuName}
+          restaurantName={this.props.restaurantName}
           {...this.state}
           menu={this.props.menu}
           onSelectTab={this.onSelectTab.bind(this)}

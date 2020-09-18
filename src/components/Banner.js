@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import BannerImage from "components/web_menu_banner.jpg";
 
 const Banner = styled.div`
+  font-family: 'Oswald', sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,6 +14,8 @@ const Banner = styled.div`
   background-size: cover;
   z-index: 10;
   position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 `;
 
 const BlackLayer = styled.div`

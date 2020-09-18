@@ -138,13 +138,12 @@ const MainContentWrapper = styled(ColumnStyle)`
 
 const StyledBanner = styled(Banner)`
   height: 250px;
+  border-radius: 5px;
 `;
 
 const RestaurantName = styled.div`
   font-weight: bold;
   font-size: 36px;
-  text-align: center;
-  letter-spacing: 0.02em;
   color: #ffffff;
   z-index: 20;
 `;

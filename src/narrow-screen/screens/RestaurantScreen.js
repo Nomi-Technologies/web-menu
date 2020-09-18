@@ -98,6 +98,7 @@ export default class extends React.Component {
             onClick={() => this.setState({ hamburgerOpen: false })}
             restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
+            menuName={this.props.menus[this.props.selectedMenuIndex].name}
           />
         ) : this.props.error ? (
           <PageError>
