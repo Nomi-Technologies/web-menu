@@ -59,7 +59,6 @@ const RestaurantName = styled.div`
   font-weight: bold;
   font-size: 30px;
   text-align: center;
-  letter-spacing: 0.02em;
   color: #ffffff;
 `;
 
