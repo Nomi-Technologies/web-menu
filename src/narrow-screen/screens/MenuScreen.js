@@ -75,6 +75,7 @@ const MenuName = styled.div`
   font-weight: normal;
   font-size: 14px;
   color: #628DEB;
+  cursor: pointer;
 `;
 
 function MenuTabView(props) {
@@ -148,7 +149,9 @@ function MenuTabView(props) {
         <StyledBanner>
           <BannerContent>
             <RestaurantName>{props.restaurantName}</RestaurantName>
-            <MenuName>{`${props.menuName} menu`}</MenuName>
+            <MenuName
+              onClick={props.openSideNav}
+            >{`${props.menuName} menu`}</MenuName>
           </BannerContent>
         </StyledBanner>
         {
@@ -291,6 +294,7 @@ export default class extends React.Component {
         <MenuTabView
           menuName={this.props.menuName}
           restaurantName={this.props.restaurantName}
+          openSideNav={this.props.openSideNav}
           {...this.state}
           onMenuScroll={this.props.onMenuScroll}
           menu={this.props.menu}

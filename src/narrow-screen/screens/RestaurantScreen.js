@@ -111,11 +111,15 @@ export default class extends React.Component {
             </RestaurantLogo>
           </Header>
         </HeaderFlexBox>
-        <MenuListNav open={this.state.hamburgerOpen} {...this.props} />
+        <MenuListNav
+          onClose={() => this.setState({ hamburgerOpen: false })}
+          open={this.state.hamburgerOpen}
+          {...this.props}
+        />
         {this.props.dishesByMenu.length > 0 ? (
           <MenuScreen
             onMenuScroll={this.onMenuScroll.bind(this)}
-            onClick={() => this.setState({ hamburgerOpen: false })}
+            openSideNav={() => this.setState({ hamburgerOpen: true })}
             restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
             menuName={this.props.menus[this.props.selectedMenuIndex].name}
