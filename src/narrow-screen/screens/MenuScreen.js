@@ -7,31 +7,35 @@ import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 
 const CategoryTab = styled.div`
-  height: 30px;
   display: inline-block;
-  margin: 20px 15px 0 15px;
-  padding-bottom: 10px;
-  color: rgba(0, 0, 0, 0.25);
+  margin: 0 15px;
+  color: ${({ active }) => active ? 'black': '#B9B9B9'};
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
   cursor: pointer;
+`;
 
-  &.is-selected {
-    color: black;
-    padding-bottom: 6px;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom: solid 4px #5383EC;
-  }
+const BlueDot = styled.div`
+  height: 4px;
+  width: 4px;
+  border-radius: 2px;
+  background-color: #5383EC;
+  margin: 0 auto;
+  margin-top: 7px;
 `;
 
 const CategoryTabList = styled.div`
   list-style-type: none;
   margin: 0;
-  padding: 0 5px;
+  padding: 20px 5px 0 5px;
   overflow: auto;
   white-space: nowrap;
   position: sticky;
-  background-color: white;
+  background-color: #F8F8F8;
   z-index: 10;
+  height: 58px;
 `;
 
 const MenuBody = styled.div`
@@ -40,7 +44,7 @@ const MenuBody = styled.div`
   position: absolute;
   /* 50px for header; 80px for expansion strip + 70px for nomi logo */
   padding: 0 0 150px 0;
-  margin-top: 50px;
+  margin-top: 58px;
   top: 0;
   bottom: 0;
   overflow: auto;
@@ -107,7 +111,7 @@ function MenuTabView(props) {
     // Find the largest non-positive offset from tab bar.
     let runningMax = Number.MIN_SAFE_INTEGER;
     let activeId = activeCategoryId;
-    const tabBarBottomScreenOffset = tabBarRef.current.getBoundingClientRect().top + 60;
+    const tabBarBottomScreenOffset = tabBarRef.current.getBoundingClientRect().top + 58;
     for (const id in categoryToRef) {
       const offsetFromTabBar = categoryToRef[id].current.getBoundingClientRect().top - tabBarBottomScreenOffset;
       if (offsetFromTabBar > 0) { continue; }
@@ -128,13 +132,17 @@ function MenuTabView(props) {
   return (
     <>
       <CategoryTabList ref={tabBarRef}>
-        {props.menu.categories.map(c =>
-          <CategoryTab
+        {props.menu.categories.map(c => {
+          const active = c.id === activeCategoryId;
+          return <CategoryTab
             key={c.id}
-            className={activeCategoryId === c.id ? 'is-selected': ''}
+            active={active}
             onClick={() => onClickTab(c.id)}
-          >{c.name}</CategoryTab>
-        )}
+          >
+            {c.name}
+            {active ? <BlueDot /> : <></>}
+          </CategoryTab>;
+        })}
       </CategoryTabList>
       <MenuBody onScroll={onScroll}>
         <StyledBanner>
