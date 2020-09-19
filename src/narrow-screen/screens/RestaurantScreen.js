@@ -22,6 +22,12 @@ const Header = styled.div`
   padding: 5px 0;
   display: flex;
   justify-content: center;
+  transform: ${({ translation }) => `translate(0, -${translation}px)`};
+`;
+
+const HeaderFlexBox = styled.div`
+  position: relative;
+  flex: 0 0 auto;
 `;
 
 const RestaurantLogo = styled.a`
@@ -39,6 +45,8 @@ const AllMenusButton = styled(Button)`
   margin: auto 0;
   z-index: 20;
   font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   color: #628deb;
   text-decoration: none;
   &:hover,
@@ -69,32 +77,44 @@ const Loading = styled.div`
 export default class extends React.Component {
   state = {
     hamburgerOpen: false,
+    headerTranslation: 0,
   };
 
   onClickHambergerMenu() {
     this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
   }
 
+  onMenuScroll(delta) {
+    console.log(delta);
+    let newTranslation = this.state.headerTranslation + delta;
+    if (newTranslation > 60) { newTranslation = 60; }
+    else if (newTranslation < 0) { newTranslation = 0; }
+    this.setState({ headerTranslation: newTranslation });
+  }
+
   render() {
     return (
       <RestaurantScreen>
-        <Header>
-          <AllMenusButton
-            variant="link"
-            onClick={this.onClickHambergerMenu.bind(this)}
-          >
-            ALL MENUS
-          </AllMenusButton>
-          <RestaurantLogo href="https://www.bacariwadams.com/">
-            <ReactSVG
-              wrapper="div"
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
-            />
-          </RestaurantLogo>
-        </Header>
+        <HeaderFlexBox style={{ height: `${60 - this.state.headerTranslation}px` }}>
+          <Header translation={this.state.headerTranslation}>
+            <AllMenusButton
+              variant="link"
+              onClick={this.onClickHambergerMenu.bind(this)}
+              >
+              SEE MENUS
+            </AllMenusButton>
+            <RestaurantLogo href="https://www.bacariwadams.com/">
+              <ReactSVG
+                wrapper="div"
+                src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
+                />
+            </RestaurantLogo>
+          </Header>
+        </HeaderFlexBox>
         <MenuListNav open={this.state.hamburgerOpen} {...this.props} />
         {this.props.dishesByMenu.length > 0 ? (
           <MenuScreen
+            onMenuScroll={this.onMenuScroll.bind(this)}
             onClick={() => this.setState({ hamburgerOpen: false })}
             restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}

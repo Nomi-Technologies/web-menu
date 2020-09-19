@@ -77,6 +77,10 @@ function MenuTabView(props) {
 
   const [categoryToRef, setCategoryToRef] = useState({});
   const [activeCategoryId, setActiveCategoryId] = useState();
+  const [scrollTop, setScrollTop] = useState(0);
+  const [tabBarRef] = useState(React.createRef());
+  const [smoothScrolling, setSmoothScrolling] = useState(false);
+  const [smoothScrollTimeout, setSmoothScrollTimeout] = useState();
 
   useEffect(() => {
     const newCategoryToRef = {};
@@ -88,30 +92,47 @@ function MenuTabView(props) {
     setActiveCategoryId(props.menu.categories[0]?.id);
   }, [props.menu]);
 
-  function onScroll() {
+  function onScroll(event) {
+    const newScrollTop = event.currentTarget.scrollTop;
+    if (smoothScrolling) { // when smooth auto scrolling, don't update hide or unhide
+      clearTimeout(smoothScrollTimeout);
+
+      // clear smooth scrolling state when the next scroll does not trigger immediately after
+      const timeout = setTimeout(() => setSmoothScrolling(false), 100);
+      setSmoothScrollTimeout(timeout);
+    } else {
+      props.onMenuScroll(newScrollTop - scrollTop);
+    } 
+    setScrollTop(newScrollTop);
     // Find the largest non-positive offset from tab bar.
     let runningMax = Number.MIN_SAFE_INTEGER;
     let activeId = activeCategoryId;
+    const tabBarBottomScreenOffset = tabBarRef.current.getBoundingClientRect().top + 60;
     for (const id in categoryToRef) {
-      const offset = categoryToRef[id].current.getBoundingClientRect().top - 110;
-      if (offset > 0) { continue; }
-      if (runningMax < offset) {
+      const offsetFromTabBar = categoryToRef[id].current.getBoundingClientRect().top - tabBarBottomScreenOffset;
+      if (offsetFromTabBar > 0) { continue; }
+      if (runningMax < offsetFromTabBar) {
         runningMax = runningMax;
-        activeId = id;
+        activeId = parseInt(id);
       }
     }
     setActiveCategoryId(activeId);
   }
 
+  function onClickTab(id) {
+    setSmoothScrolling(true);
+    categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  
   return (
     <>
-      <CategoryTabList>
+      <CategoryTabList ref={tabBarRef}>
         {props.menu.categories.map(c =>
           <CategoryTab
             key={c.id}
-            // == for string number comparison
-            className={activeCategoryId == c.id ? 'is-selected': ''}
-            onClick={() => categoryToRef[c.id].current.scrollIntoView() }
+            className={activeCategoryId === c.id ? 'is-selected': ''}
+            onClick={() => onClickTab(c.id)}
           >{c.name}</CategoryTab>
         )}
       </CategoryTabList>
@@ -126,7 +147,12 @@ function MenuTabView(props) {
           props.menu.categories.map(c => {
             const dishes = props.getDishByCategoryIdWithFilter(c.id);
             return (
-              <MenuCategoryPanel dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} />
+              <MenuCategoryPanel 
+                key={c.id}
+                dishes={dishes}
+                category={c}
+                categoryRef={categoryToRef[c.id]}
+              />
             );
           })
         }
@@ -252,13 +278,13 @@ export default class extends React.Component {
   }
 
   render() {
-    console.log(this.props.menu);
     return (
-      <MenuScreen {...this.props}>
+      <MenuScreen className={this.props.className}>
         <MenuTabView
           menuName={this.props.menuName}
           restaurantName={this.props.restaurantName}
           {...this.state}
+          onMenuScroll={this.props.onMenuScroll}
           menu={this.props.menu}
           onSelectTab={this.onSelectTab.bind(this)}
           getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
