@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
 const SideNav = styled.div`
-  min-width: 250px;
+  min-width: 240px;
   background: #F2F3F5;
   transform: ${props => props.open ? 'translateX(0)' : 'translateX(-100%)'};
   height: 100%;
@@ -14,7 +14,7 @@ const SideNav = styled.div`
   left: 0;
   transition: transform 0.3s ease-in-out;
 
-  @media (max-width: 400px) {
+  @media (max-width: 240px) {
     width: 100%;
   }
 `
