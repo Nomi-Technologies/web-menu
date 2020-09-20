@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
@@ -87,7 +87,8 @@ function MenuTabView(props) {
   const [smoothScrolling, setSmoothScrolling] = useState(false);
   const [smoothScrollTimeout, setSmoothScrollTimeout] = useState();
 
-  useEffect(() => {
+  // Must be triggered before render
+  useLayoutEffect(() => {
     const newCategoryToRef = {};
     props.menu.categories.forEach((c) => {
       const categoryRef = React.createRef();
@@ -118,7 +119,7 @@ function MenuTabView(props) {
       if (offsetFromTabBar > 0) { continue; }
       if (runningMax < offsetFromTabBar) {
         runningMax = runningMax;
-        activeId = parseInt(id);
+        activeId = id;
       }
     }
     setActiveCategoryId(activeId);
