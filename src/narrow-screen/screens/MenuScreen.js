@@ -1,79 +1,154 @@
-import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
+import Banner from 'components/Banner';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 
-const CategoryTab = styled(Tab)`
-  height: 30px;
+const CategoryTab = styled.div`
   display: inline-block;
-  margin: 20px 15px 0 15px;
-  padding-bottom: 10px;
-  color: rgba(0, 0, 0, 0.25);
+  margin: 0 15px;
+  color: ${({ active }) => active ? 'black': '#B9B9B9'};
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
   cursor: pointer;
-  &.is-selected {
-    color: black;
-    padding-bottom: 6px;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom: solid 4px #5383EC;
-  }
 `;
 
-const CategoryTabList = styled(TabList)`
+const BlueDot = styled.div`
+  height: 4px;
+  width: 4px;
+  border-radius: 2px;
+  background-color: #5383EC;
+  margin: 0 auto;
+  margin-top: 7px;
+`;
+
+const CategoryTabList = styled.div`
   list-style-type: none;
   margin: 0;
-  padding: 0 5px;
+  padding: 20px 5px 0 5px;
   overflow: auto;
   white-space: nowrap;
   position: sticky;
-  background-color: white;
+  background-color: #F8F8F8;
   z-index: 10;
+  height: 58px;
 `;
 
-const CategoryDishPanel = styled(TabPanel)`
+const MenuBody = styled.div`
   width: 100%;
-  display: none;
+  display: block;
+  position: absolute;
+  /* 50px for header; 80px for expansion strip + 70px for nomi logo */
+  padding: 0 0 150px 0;
+  margin-top: 58px;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+`;
 
-  &.is-selected {
-    display: block;
-    position: absolute;
-    /* 50px for header; 80px for expansion strip + 70px for nomi logo */
-    padding: 50px 0 150px 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    overflow: auto;
-  }
+const StyledBanner = styled(Banner)`
+  height: 325px;
+`;
+
+const BannerContent = styled.div`
+  z-index: 20;
+  text-align: center;
+  letter-spacing: 0.02em;
+`;
+
+const RestaurantName = styled.div`
+  font-weight: bold;
+  font-size: 30px;
+  text-align: center;
+  color: #ffffff;
+`;
+
+const MenuName = styled.div`
+  margin-top: 14px;
+  background: #FFFFFF;
+  border-radius: 6px;
+  padding: 13px;
+  display: inline-block;
+  font-weight: normal;
+  font-size: 14px;
+  color: #628DEB;
+  cursor: pointer;
 `;
 
 function MenuTabView(props) {
+
+  const [categoryToRef, setCategoryToRef] = useState({});
+  const [activeCategoryId, setActiveCategoryId] = useState();
+
+  // Must be triggered before render
+  useLayoutEffect(() => {
+    const newCategoryToRef = {};
+    props.menu.categories.forEach((c) => {
+      const categoryRef = React.createRef();
+      newCategoryToRef[c.id] = categoryRef;
+    });
+    setCategoryToRef(newCategoryToRef);
+    setActiveCategoryId(props.menu.categories[0]?.id);
+  }, [props.menu]);
+
+  function onScroll() {
+    // Find the largest non-positive offset from tab bar.
+    let runningMax = Number.MIN_SAFE_INTEGER;
+    let activeId = activeCategoryId;
+    for (const id in categoryToRef) {
+      const offset = categoryToRef[id].current.getBoundingClientRect().top - 118;
+      if (offset > 0) { continue; }
+      if (runningMax < offset) {
+        runningMax = runningMax;
+        activeId = id;
+      }
+    }
+    setActiveCategoryId(activeId);
+  }
+
+  function onSelectTab(id) {
+    props.onSelectTab(id);
+    categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
+  }
+
   return (
-    <Tabs
-      selectedIndex={props.tabIndex}
-      forceRenderTabPanel={true}
-      onSelect={props.onSelectTab.bind(this)}
-      selectedTabClassName='is-selected'
-      selectedTabPanelClassName='is-selected'
-    >
+    <>
       <CategoryTabList>
-        {props.menu.categories.map(c =>
-          <CategoryTab key={c.id}>{c.name}</CategoryTab>
-        )}
-      </CategoryTabList>
-      {props.menu.categories.map(c => {
-        const dishes = props.getDishByCategoryIdWithFilter(c.id);
-        return (
-          <CategoryDishPanel
+        {props.menu.categories.map(c => {
+          const active = c.id === activeCategoryId;
+          return <CategoryTab
             key={c.id}
+            active={active}
+            onClick={() => onSelectTab(c.id)}
           >
-            <MenuCategoryPanel dishes={dishes} category={c}/>
-          </CategoryDishPanel>
-        );
-      })}
-    </Tabs>
+            {c.name}
+            {active ? <BlueDot /> : <></>}
+          </CategoryTab>;
+        })}
+      </CategoryTabList>
+      <MenuBody onScroll={onScroll}>
+        <StyledBanner>
+          <BannerContent>
+            <RestaurantName>{props.restaurantName}</RestaurantName>
+            <MenuName
+              onClick={props.openSideNav}
+            >{`${props.menuName} menu`}</MenuName>
+          </BannerContent>
+        </StyledBanner>
+        {
+          props.menu.categories.map(c => {
+            const dishes = props.getDishByCategoryIdWithFilter(c.id);
+            return (
+              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} />
+            );
+          })
+        }
+      </MenuBody>
+    </>
   );
 }
 
@@ -140,25 +215,6 @@ const ActiveFilterCount = styled.div`
   background-color: #5383EC;
 `;
 
-const PageError = styled.div`
-  position: relative;
-  flex: 0 0 auto;
-  text-align: center;
-  color: #FF726F;
-  margin-top: 5%;
-  font-size: 24px;
-  font-weight: bold;
-`;
-
-const Loading = styled.div`
-  position: relative;
-  flex: 0 0 auto;
-  text-align: center;
-  margin-top: 5%;
-  font-size: 32px;
-  font-weight: bold;
-`;
-
 export default class extends React.Component {
 
   state = {
@@ -216,6 +272,9 @@ export default class extends React.Component {
     return (
       <MenuScreen {...this.props}>
         <MenuTabView
+          menuName={this.props.menuName}
+          restaurantName={this.props.restaurantName}
+          openSideNav={this.props.openSideNav}
           {...this.state}
           menu={this.props.menu}
           onSelectTab={this.onSelectTab.bind(this)}

@@ -3,7 +3,7 @@ import MenuScreen from "./MenuScreen";
 import { ReactSVG } from "react-svg";
 import styled from "styled-components";
 import MenuListNav from "components/MenuListNav";
-import { Button } from "react-bootstrap";
+import { Button } from 'react-bootstrap';
 
 const RestaurantScreen = styled.div`
   position: relative;
@@ -37,8 +37,9 @@ const AllMenusButton = styled(Button)`
   left: 5px;
   bottom: 0;
   margin: auto 0;
-  z-index: 20;
   font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.1em;
   color: #628deb;
   text-decoration: none;
   &:hover,
@@ -83,7 +84,7 @@ export default class extends React.Component {
             variant="link"
             onClick={this.onClickHambergerMenu.bind(this)}
           >
-            ALL MENUS
+            SEE MENUS
           </AllMenusButton>
           <RestaurantLogo href="https://www.bacariwadams.com/">
             <ReactSVG
@@ -92,12 +93,17 @@ export default class extends React.Component {
             />
           </RestaurantLogo>
         </Header>
-        <MenuListNav open={this.state.hamburgerOpen} {...this.props} />
+        <MenuListNav
+          onClose={() => this.setState({ hamburgerOpen: false })}
+          open={this.state.hamburgerOpen} 
+          {...this.props}
+        />
         {this.props.dishesByMenu.length > 0 ? (
           <MenuScreen
-            onClick={() => this.setState({ hamburgerOpen: false })}
+            openSideNav={() => this.setState({ hamburgerOpen: true })}
             restaurantName={this.props.restaurantId}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
+            menuName={this.props.menus[this.props.selectedMenuIndex].name}
           />
         ) : this.props.error ? (
           <PageError>

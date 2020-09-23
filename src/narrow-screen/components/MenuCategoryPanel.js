@@ -7,6 +7,8 @@ const DishList = styled.div`
   position: relative;
   padding: 24px 16px 0px 16px;
   z-index: 1;
+  background-color: #d8e2f8;
+  overflow: auto;
 `;
 
 const CategoryTitle = styled.div`
@@ -36,7 +38,10 @@ const CategoryDescription = styled.div`
 
 export default function(props) {
   return (
-    <DishList>
+    <DishList
+      className={props.className}
+      ref={props.categoryRef}
+    >
       <CategoryTitle>{props.category.name}</CategoryTitle>
       <CategoryDescription>{props.category.description}</CategoryDescription>
       {props.dishes.map(dish => <DishTile key={dish.id} dish={dish}/>)}
