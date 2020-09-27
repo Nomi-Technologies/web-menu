@@ -12,7 +12,6 @@
     "react-animation": "^1.2.2",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.8",
-    "react-hamburger-menu": "^1.2.1",
     "react-is": "^16.8",
     "react-overlays": "^3.2.0",
     "react-router-dom": "^5.2.0",
@@ -24,7 +23,7 @@
     "websocket-extensions": "^0.1.4"
   },
   "scripts": {
-    "start": "PORT=8000 react-scripts start",
+    "start": "PORT=8001 react-scripts start",
     "build": "CI=false react-scripts build"
   },
   "homepage": ".",

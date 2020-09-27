@@ -3,9 +3,7 @@ import MenuScreen from './MenuScreen';
 import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
-import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
-import MenuListNav from 'components/MenuListNav';
-import { Button } from 'react-bootstrap';
+import MenuTabNav from '../components/MenuTabNav';
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -27,74 +25,15 @@ const Header = styled.div`
   box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
 `;
 
-const AllMenusButton = styled(Button)`
-  position: relative;
-  margin-left: 20px;
-  z-index: 20;
-  display: block;
-  font-weight: bold;
-  color: #628DEB;
-
-  text-decoration: none;
-  &:hover, &:focus {
-    text-decoration: none;
-  }
-`;
-
 const NomiLogo = styled(NomiTopBottomLogo)`
   position: relative;
   display: inline-block;
-  margin-left: 2%;
-  margin-right: 2%;
 `;
 
 const RestaurantImgLogo = styled.img`
   height: 28px;
   width: 84px;
-  margin-left: 10%;
-  margin-right: 10%;
-`;
-
-const FilterWords = styled.div`
-  /* Display Filtered Dishes */
-  left: 60.49%;
-  right: 29.17%;
-  top: 35%;
-  bottom: 36.67%;
-
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-
-  display: flex;
-  align-items: center;
-  text-align: right;
-  letter-spacing: 0.02em;
-
-  margin-left: 30%;
-  height: 28px;
-
-  color: #000000;
-`;
-
-const FilterToggle = styled.div`
-  /* Rectangle 149 */
-  left: 0%;
-  right: 0%;
-  top: 0%;
-  bottom: 0%;
-
-  height: 20px;
-  width: 40px;
-
-  margin-left: 1%;
-
-  background: #64C255;
-  border-radius: 20px;
-
-  display: flex;
-  align-items: center;
+  display: inline-block;
 `;
 
 const FilterToggleSwitch = styled.div`
@@ -112,76 +51,72 @@ const FilterToggleSwitch = styled.div`
   border-radius: 10px;
 `;
 
+const PageError = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  color: #FF726F;
+  margin-top: 5%;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
+const Loading = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  margin-top: 5%;
+  font-size: 32px;
+  font-weight: bold;
+`;
+
+const HeaderColumns = styled.div`
+  text-align: center;
+`;
+
 export default class extends React.Component{
 
   state = {
-    hamburgerOpen: false,
-    menus: [],
-    selectedMenuIndex: 0,
-    dishesByMenu: [],
-    error: null,
+    tabIndex: 0,
   };
 
-  componentDidMount() {
-    getMenus(this.props.restaurantId)
-      .then(menus => {
-        this.setState({ menus: menus });
-        Promise.all(menus.map(async menu => {
-          let rawMenu = await getDishesOfMenu(this.props.restaurantId, menu.id);
-          return parseMenu(rawMenu);
-        }))
-          .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
-      })
-      .catch(err => {
-        this.setState({ error: err });
-      });
-  }
-
-  onClickHambergerMenu() {
-    this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
-  }
-
-  onSelectMenu(index) {
-    this.setState({ selectedMenuIndex: index });
+  onSelectTab(index, lastIndex) {
+    if (lastIndex === index) {
+      return;
+    }
+    this.setState({ tabIndex: index });
   }
 
   render() {
     return (
       <RestaurantScreen>
         <Header>
-          <AllMenusButton
-            variant='link'
-            onClick={this.onClickHambergerMenu.bind(this)}
-          >
-            ALL MENUS
-          </AllMenusButton>
-          <NomiLogo
-            width='70px'
-            height='28px'
-          />
-          <RestaurantImgLogo src={RestaurantLogo} />
-          <FilterWords>Display Filtered Dishes</FilterWords>
-          <FilterToggle>
-            <FilterToggleSwitch/>
-          </FilterToggle>
+          <HeaderColumns style={{ width: '20%' }}>
+            <RestaurantImgLogo src={RestaurantLogo} />
+          </HeaderColumns>
+          <HeaderColumns style={{ width: '60%' }}>
+            <MenuTabNav
+              {...this.props}
+            />
+          </HeaderColumns>
+          <HeaderColumns style={{ width: '20%' }}>
+            <NomiLogo
+              width='70px'
+              height='28px'
+            />
+          </HeaderColumns>
         </Header>
-        <MenuListNav 
-          open={this.state.hamburgerOpen}
-          menus={this.state.menus}
-          selectedIndex={this.state.selectedMenuIndex}
-          onSelectMenu={this.onSelectMenu.bind(this)}
-        />
-        {this.state.dishesByMenu.length > 0 ?
+        {this.props.dishesByMenu.length > 0 ?
           <MenuScreen
-          onClick={() => this.setState({ hamburgerOpen: false })}
-          restaurantName={this.props.restaurantId}
-            menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
+            onClick={() => this.setState({ hamburgerOpen: false })}
+            restaurantName={this.props.restaurantId}
+            menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
           />
-          : 
+          :
           (
-            this.state.error ? 
-            <div>Some error has ocurred. Please try reloading the page.</div> :
-            <div>Loading...</div>
+            this.props.error ?
+            <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
+            <Loading>Restaurant Menu Loading...</Loading>
           )
         }
       </RestaurantScreen>

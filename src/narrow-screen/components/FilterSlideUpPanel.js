@@ -46,6 +46,10 @@ const ClearButton = styled(Button)`
   z-index: 25;
 `;
 
+const StyledExpansionArrow = styled(ExpansionArrow)`
+  margin: 0 25px;
+`;
+
 function SlideUpPanelHeader(props) {
   return (
     <PanelHeader>
@@ -62,8 +66,8 @@ function SlideUpPanelHeader(props) {
       </PanelHeaderElement>
       <Spacer onClick={props.onExpansionChanged}/>
       <PanelHeaderElement>
-        <ClearButton id='clear-btn'
-          variant='secondary'
+        <ClearButton
+          variant='primary'
           disabled={props.selected.size === 0}
           onClick={props.onClearFilter}
         >
@@ -71,7 +75,7 @@ function SlideUpPanelHeader(props) {
         </ClearButton>
       </PanelHeaderElement>
       <PanelHeaderElement>
-        <ExpansionArrow
+        <StyledExpansionArrow
           onClick={props.onExpansionChanged}
           pointingUp={!props.expanded ? 1 : 0}
         />
@@ -82,6 +86,7 @@ function SlideUpPanelHeader(props) {
 
 const GridTagButton = styled(TagButton)`
   margin: 10px;
+  cursor: default;
 `;
 
 const Grid = styled(Container)`
@@ -129,7 +134,7 @@ const PanelBody = styled.div`
 `;
 
 const SectionTitle = styled.i`
-  margin-left: 10px;
+  margin-left: 23px;  /* Align with Filters label */
   margin-bottom: 5px;
   display: block;
   font-size: 14px;

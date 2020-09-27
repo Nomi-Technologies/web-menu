@@ -1,10 +1,8 @@
-import React from 'react';
-import MenuScreen from './MenuScreen';
-import { ReactSVG } from 'react-svg';
-import styled from 'styled-components';
-// import HamburgerMenu from 'react-hamburger-menu'; TODO(tony): remove from deps
-import MenuListNav from 'components/MenuListNav';
-import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
+import React from "react";
+import MenuScreen from "./MenuScreen";
+import { ReactSVG } from "react-svg";
+import styled from "styled-components";
+import MenuListNav from "components/MenuListNav";
 import { Button } from 'react-bootstrap';
 
 const RestaurantScreen = styled.div`
@@ -20,106 +18,102 @@ const Header = styled.div`
   position: relative;
   flex: 0 0 auto;
   background-color: white;
-  text-align: center;
   height: 60px; /* LOGO's 50px + 5px*2 */
   padding: 5px 0;
+  display: flex;
+  justify-content: center;
 `;
 
 const RestaurantLogo = styled.a`
-  position: absolute;
-  display: inline-block;
-  right: 30px;
+  padding-top: 5px;
   & svg {
-    height: 50px;
+    height: 35px;
   }
 `;
 
 const AllMenusButton = styled(Button)`
   position: absolute !important;
-  top: 0%; left: 20px; bottom: 0;
+  top: 0%;
+  left: 5px;
+  bottom: 0;
   margin: auto 0;
-  z-index: 20;
   font-weight: bold;
-  color: #628DEB;
-
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: #628deb;
   text-decoration: none;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     text-decoration: none;
   }
 `;
 
+const PageError = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  color: #ff726f;
+  margin-top: 5%;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
+const Loading = styled.div`
+  position: relative;
+  flex: 0 0 auto;
+  text-align: center;
+  margin-top: 5%;
+  font-size: 32px;
+  font-weight: bold;
+`;
 
 export default class extends React.Component {
-
   state = {
     hamburgerOpen: false,
-    menus: [],
-    selectedMenuIndex: 0,
-    dishesByMenu: [],
-    error: null,
   };
-
-  componentDidMount() {
-    getMenus(this.props.restaurantId)
-      .then(menus => {
-        this.setState({ menus: menus });
-        Promise.all(menus.map(async menu => {
-          let rawMenu = await getDishesOfMenu(this.props.restaurantId, menu.id);
-          return parseMenu(rawMenu);
-        }))
-          .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
-      })
-      .catch(err => {
-        this.setState({ error: err });
-      });
-  }
 
   onClickHambergerMenu() {
     this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
   }
 
-  onSelectMenu(index) {
-    this.setState({ selectedMenuIndex: index });
-  }
-
-  render () {
-
+  render() {
     return (
       <RestaurantScreen>
         <Header>
           <AllMenusButton
-            variant='link'
+            variant="link"
             onClick={this.onClickHambergerMenu.bind(this)}
           >
-            ALL MENUS
+            SEE MENUS
           </AllMenusButton>
-          <RestaurantLogo href='https://www.bacariwadams.com/'>
-            <ReactSVG 
-              wrapper='span'
+          <RestaurantLogo href="https://www.bacariwadams.com/">
+            <ReactSVG
+              wrapper="div"
               src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
-              />
+            />
           </RestaurantLogo>
         </Header>
         <MenuListNav
-          open={this.state.hamburgerOpen}
-          menus={this.state.menus}
-          selectedIndex={this.state.selectedMenuIndex}
-          onSelectMenu={this.onSelectMenu.bind(this)}
+          onClose={() => this.setState({ hamburgerOpen: false })}
+          open={this.state.hamburgerOpen} 
+          {...this.props}
         />
-        {this.state.dishesByMenu.length > 0 ?
+        {this.props.dishesByMenu.length > 0 ? (
           <MenuScreen
-            onClick={() => this.setState({ hamburgerOpen: false })}
+            openSideNav={() => this.setState({ hamburgerOpen: true })}
             restaurantName={this.props.restaurantId}
-            menu={this.state.dishesByMenu[this.state.selectedMenuIndex]}
+            menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
+            menuName={this.props.menus[this.props.selectedMenuIndex].name}
           />
-          : 
-          (
-            this.state.error ? 
-            <div>Some error has ocurred. Please try reloading the page.</div> :
-            <div>Loading...</div>
-          )
-        }
+        ) : this.props.error ? (
+          <PageError>
+            There was an error loading this page. Please try reloading the page
+            or contact the Nomi team by filling out a form at dinewithnomi.com
+          </PageError>
+        ) : (
+          <Loading>Restaurant Menu Loading...</Loading>
+        )}
       </RestaurantScreen>
-  );
+    );
   }
 }

@@ -1,80 +1,154 @@
-import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
+import Banner from 'components/Banner';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
-import { parseMenu } from 'utils';
 import styled from 'styled-components';
 
-const CategoryTab = styled(Tab)`
-  height: 30px;
+const CategoryTab = styled.div`
   display: inline-block;
-  margin: 20px 15px 0 15px;
-  padding-bottom: 10px;
-  color: rgba(0, 0, 0, 0.25);
-
-  &.is-selected {
-    color: black;
-    padding-bottom: 6px;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom: solid 4px #5383EC;
-  }
+  margin: 0 15px;
+  color: ${({ active }) => active ? 'black': '#B9B9B9'};
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
 `;
 
-const CategoryTabList = styled(TabList)`
+const BlueDot = styled.div`
+  height: 4px;
+  width: 4px;
+  border-radius: 2px;
+  background-color: #5383EC;
+  margin: 0 auto;
+  margin-top: 7px;
+`;
+
+const CategoryTabList = styled.div`
   list-style-type: none;
   margin: 0;
-  padding: 0 5px;
+  padding: 20px 5px 0 5px;
   overflow: auto;
   white-space: nowrap;
   position: sticky;
-  background-color: white;
+  background-color: #F8F8F8;
   z-index: 10;
+  height: 58px;
 `;
 
-const CategoryDishPanel = styled(TabPanel)`
+const MenuBody = styled.div`
   width: 100%;
-  display: none;
-  
-  &.is-selected {
-    display: block;
-    position: absolute;
-    /* 50px for header; 80px for expansion strip + 70px for nomi logo */
-    padding: 50px 0 150px 0;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    overflow: auto;
-  }
+  display: block;
+  position: absolute;
+  /* 50px for header; 80px for expansion strip + 70px for nomi logo */
+  padding: 0 0 150px 0;
+  margin-top: 58px;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+`;
+
+const StyledBanner = styled(Banner)`
+  height: 325px;
+`;
+
+const BannerContent = styled.div`
+  z-index: 20;
+  text-align: center;
+  letter-spacing: 0.02em;
+`;
+
+const RestaurantName = styled.div`
+  font-weight: bold;
+  font-size: 30px;
+  text-align: center;
+  color: #ffffff;
+`;
+
+const MenuName = styled.div`
+  margin-top: 14px;
+  background: #FFFFFF;
+  border-radius: 6px;
+  padding: 13px;
+  display: inline-block;
+  font-weight: normal;
+  font-size: 14px;
+  color: #628DEB;
+  cursor: pointer;
 `;
 
 function MenuTabView(props) {
+
+  const [categoryToRef, setCategoryToRef] = useState({});
+  const [activeCategoryId, setActiveCategoryId] = useState();
+
+  // Must be triggered before render
+  useLayoutEffect(() => {
+    const newCategoryToRef = {};
+    props.menu.categories.forEach((c) => {
+      const categoryRef = React.createRef();
+      newCategoryToRef[c.id] = categoryRef;
+    });
+    setCategoryToRef(newCategoryToRef);
+    setActiveCategoryId(props.menu.categories[0]?.id);
+  }, [props.menu]);
+
+  function onScroll() {
+    // Find the largest non-positive offset from tab bar.
+    let runningMax = Number.MIN_SAFE_INTEGER;
+    let activeId = activeCategoryId;
+    for (const id in categoryToRef) {
+      const offset = categoryToRef[id].current.getBoundingClientRect().top - 118;
+      if (offset > 0) { continue; }
+      if (runningMax < offset) {
+        runningMax = runningMax;
+        activeId = id;
+      }
+    }
+    setActiveCategoryId(activeId);
+  }
+
+  function onSelectTab(id) {
+    props.onSelectTab(id);
+    categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
+  }
+
   return (
-    <Tabs
-      selectedIndex={props.tabIndex}
-      forceRenderTabPanel={true}
-      onSelect={props.onSelectTab.bind(this)}
-      selectedTabClassName='is-selected'
-      selectedTabPanelClassName='is-selected'
-    >
+    <>
       <CategoryTabList>
-        {props.menu.categories.map(c =>
-          <CategoryTab key={c}>{c}</CategoryTab>
-        )}
-      </CategoryTabList>
-      {props.menu.categories.map(c => {
-        const dishes = props.getDishByCategoryWithFilter(c);
-        return (
-          <CategoryDishPanel 
-            key={c} 
+        {props.menu.categories.map(c => {
+          const active = c.id === activeCategoryId;
+          return <CategoryTab
+            key={c.id}
+            active={active}
+            onClick={() => onSelectTab(c.id)}
           >
-            <MenuCategoryPanel dishes={dishes}/>
-          </CategoryDishPanel>
-        );
-      })}
-    </Tabs>
+            {c.name}
+            {active ? <BlueDot /> : <></>}
+          </CategoryTab>;
+        })}
+      </CategoryTabList>
+      <MenuBody onScroll={onScroll}>
+        <StyledBanner>
+          <BannerContent>
+            <RestaurantName>{props.restaurantName}</RestaurantName>
+            <MenuName
+              onClick={props.openSideNav}
+            >{`${props.menuName} menu`}</MenuName>
+          </BannerContent>
+        </StyledBanner>
+        {
+          props.menu.categories.map(c => {
+            const dishes = props.getDishByCategoryIdWithFilter(c.id);
+            return (
+              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} />
+            );
+          })
+        }
+      </MenuBody>
+    </>
   );
 }
 
@@ -183,8 +257,8 @@ export default class extends React.Component {
     });
   }
 
-  getDishByCategoryWithFilter(category) {
-    const originalDishes = this.props.menu.dishesByCategory[category];
+  getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = this.props.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach(d => {
       if (!this.state.excludedDishes.has(d.id)) {
@@ -195,56 +269,49 @@ export default class extends React.Component {
   }
 
   render() {
-    if (this.props.menu) {
-      return (
-        <MenuScreen {...this.props}>
-          <MenuTabView
-            {...this.state}
-            menu={this.props.menu}
-            onSelectTab={this.onSelectTab.bind(this)}
-            getDishByCategoryWithFilter={this.getDishByCategoryWithFilter.bind(this)}
-          />
-          <NomiLogoBar>
-            <NomiLogoText>Powered by</NomiLogoText>
-            <a href='https://www.dinewithnomi.com/'>
-              <NomiLogoSVG
-                width='70px'
-                height='16px'
-                fill='#8A9DB7'
-              />
-            </a>
-          </NomiLogoBar>
-          <SlideUpPanelWrapper>
-            <FilterSlideUpPanel
-              tags={this.props.menu.tags}
-              expanded={this.state.panelExpanded}
-              onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
-              onApplyFilter={this.onApplyFilter.bind(this)}
-              onClearFilter={this.onClearFilter.bind(this)}
+    return (
+      <MenuScreen {...this.props}>
+        <MenuTabView
+          menuName={this.props.menuName}
+          restaurantName={this.props.restaurantName}
+          openSideNav={this.props.openSideNav}
+          {...this.state}
+          menu={this.props.menu}
+          onSelectTab={this.onSelectTab.bind(this)}
+          getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
+        />
+        <NomiLogoBar>
+          <NomiLogoText>Powered by</NomiLogoText>
+          <a href='https://www.dinewithnomi.com/'>
+            <NomiLogoSVG
+              width='70px'
+              height='16px'
+              fill='#8A9DB7'
             />
-          </SlideUpPanelWrapper>
-          <Modal
-            className='react-bootstrap-modal'
-            show={this.state.modalShow}
-            aria-labelledby="contained-modal-vcenter"
-            centered
-            backdrop={false}
-          >
-            <ApplyFilterModalBody>
-              <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
-              Filters Applied
-            </ApplyFilterModalBody>
-          </Modal>
-        </MenuScreen>
-      );
-    } else {
-      if (this.state.error) {
-        console.log(this.state.error);
-        return <div>Some error has ocurred. Please try reloading the page.</div>;
-      } else {
-        return <div>Loading...</div>;
-      }
-    }
-
+          </a>
+        </NomiLogoBar>
+        <SlideUpPanelWrapper>
+          <FilterSlideUpPanel
+            tags={this.props.menu.tags}
+            expanded={this.state.panelExpanded}
+            onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
+            onApplyFilter={this.onApplyFilter.bind(this)}
+            onClearFilter={this.onClearFilter.bind(this)}
+          />
+        </SlideUpPanelWrapper>
+        <Modal
+          className='react-bootstrap-modal'
+          show={this.state.modalShow}
+          aria-labelledby="contained-modal-vcenter"
+          centered
+          backdrop={false}
+        >
+          <ApplyFilterModalBody>
+            <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
+            Filters Applied
+          </ApplyFilterModalBody>
+        </Modal>
+      </MenuScreen>
+    );
   }
 }

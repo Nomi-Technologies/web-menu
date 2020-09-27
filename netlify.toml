@@ -4,11 +4,15 @@ REACT_APP_API_BASE_URL = "https://nomi-menu-service.herokuapp.com"
 
 [context.deploy-preview.environment]
 NODE_ENV = "production"
-REACT_APP_API_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com"
+REACT_APP_API_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com"
 
-[context.branch-deploy.environment]
+[context.master.environment]
 NODE_ENV = "production"
 REACT_APP_API_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com"
+
+[context.develop.environment]
+NODE_ENV = "production"
+REACT_APP_API_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com"
 
 [[redirects]]
 from = "/*"

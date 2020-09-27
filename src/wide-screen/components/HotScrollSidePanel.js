@@ -14,13 +14,16 @@ const CategoryTitle = styled.div`
   &:hover {
     color: #000000;
     text-decoration: underline #5383EC;
+    cursor: pointer;
   }
 `;
 
 export default class extends React.Component {
 
   scrollToCategory(categoryRef) {
-    categoryRef.current.scrollIntoView();
+    categoryRef.current.scrollIntoView({ 
+      behavior: 'smooth' 
+    });
   }
 
   onExpansionChanged() {
@@ -34,21 +37,22 @@ export default class extends React.Component {
         <this.props.StyledHeader
           onClick={this.onExpansionChanged.bind(this)}
         >
-          <div>
+          <div className="text">
             Menu Sections
           </div>
-          <this.props.StyledExpandArrow
-            pointingUp={this.props.expanded}
-          />
+            <this.props.StyledExpandArrow
+              pointingUp={this.props.expanded}
+              style={{margin: '0 25px'}}
+            />
         </this.props.StyledHeader>
         {this.props.expanded?
-          <this.props.StyledBody>
-            {this.props.categories.map((category, i) =>
+          <this.props.StyledBody style={{paddingLeft: '20px'}}>
+            {this.props.categories.map((category) =>
               <CategoryTitle
-                onClick={() => this.scrollToCategory(this.props.categoryToRef[category])}
-                key={i}
+                onClick={() => this.scrollToCategory(this.props.categoryToRef[category.id])}
+                key={category.id}
               >
-                {category}
+                {category.name}
               </CategoryTitle>
             )}
           </this.props.StyledBody>

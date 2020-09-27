@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 const GridTagButton = styled(TagButton)`
   margin: 10px;
+  min-width: 75px;
 `;
 
 const Grid = styled(Container)`
@@ -21,7 +22,7 @@ function TagGrid(props) {
     let cols = [];
     for (let j = 0; j < 2; ++j) {
       if (i + j >= tag_keys.length) {
-        cols.push(<Col key={j}></Col>);
+        cols.push(<Col key={j}><div style={{minWidth: "95px"}}></div></Col>);
         continue;
       }
       cols.push(<Col key={j}>
@@ -33,7 +34,6 @@ function TagGrid(props) {
             if (selected.has(tag.id)) { selected.delete(tag.id); }
             else { selected.add(tag.id); }
             props.onSelect(selected);
-            props.onApplyFilter();
           }}
         >
           {tags[tag_keys[i+j]].name}
@@ -70,7 +70,7 @@ export default class AllergenFiltersSidePanel extends React.Component {
   }
 
   onApplyFilter() {
-    this.props.onApplyFilter(this.state.selected, false);
+    this.props.onApplyFilter(this.state.selected);
   }
 
   onClearFilter() {
@@ -80,6 +80,7 @@ export default class AllergenFiltersSidePanel extends React.Component {
 
   onSelect(selected) {
     this.setState({ selected: selected });
+    this.props.onApplyFilter(selected);
   }
 
   render() {
@@ -88,19 +89,27 @@ export default class AllergenFiltersSidePanel extends React.Component {
         <this.props.StyledHeader
           onClick={this.onExpansionChanged.bind(this)}
         >
-          <div>
+          <div className={'text'}>
             Allergen Filters
           </div>
-          <div>
-            <Counter
-              active={this.state.selected.size > 0}
-            >
-              {this.state.selected.size}
-            </Counter>
+          <div style={{
+            position: 'absolute', 
+            right: '0px',
+            width: 'max-content',
+            margin: '0 25px',
+            minWidth: '50px',
+          }}>
+            <div style={{paddingTop: '2px'}}>
+              <Counter
+                active={this.state.selected.size > 0}
+              >
+                {this.state.selected.size}
+              </Counter>
+            </div>
+            <this.props.StyledExpandArrow
+              pointingUp={this.props.expanded}
+            />
           </div>
-          <this.props.StyledExpandArrow
-            pointingUp={this.props.expanded}
-          />
         </this.props.StyledHeader>
         {this.props.expanded?
           <this.props.StyledBody>
