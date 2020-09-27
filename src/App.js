@@ -1,12 +1,12 @@
 import React from 'react';
-import RestaurantMenuScreen from './screens/RestaurantMenuScreen';
+import RestaurantMenuScreen from 'screens/RestaurantMenuScreen';
 import { withUserAgent } from 'react-useragent';
-import { 
+import {
   BrowserRouter,
   Switch,
   Route,
 } from 'react-router-dom';
-import './index.css';
+import 'index.css';
 
 /******
  * App is restricted to the window's size to be compatible with mobile version
@@ -14,7 +14,7 @@ import './index.css';
  */
 function App(props) {
 
-  const [windowSize, setWindowSize] = React.useState({ 
+  const [windowSize, setWindowSize] = React.useState({
     height: window.innerHeight,
     width: window.innerWidth
   })
@@ -31,10 +31,10 @@ function App(props) {
     return () => window.removeEventListener('resize', handleResize);
   }, []); // [] to trigger only on first render
 
-  
+
   return (
     <BrowserRouter>
-      <div className='app-mobile'/*{props.ua.mobile? 'app-mobile': 'app'}*/
+      <div className='app'
         style={{
           height: `${windowSize.height}px`,
           width: `${windowSize.width}px`
@@ -44,10 +44,13 @@ function App(props) {
           <Route path='/:restaurant_identifier'>
             <RestaurantMenuScreen/>
           </Route>
-          <Route path='/'>
-            <div>
-              A list of restaurants.
-            </div>
+          <Route path='/' render={() => {
+            window.location = 'https://www.dinewithnomi.com/';
+          }}>
+            {
+              process.env.NODE_ENV === 'production' ?
+              null : 'A list of restaurants'
+            }
           </Route>
         </Switch>
       </div>

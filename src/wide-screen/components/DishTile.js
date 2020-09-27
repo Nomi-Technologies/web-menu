@@ -4,13 +4,12 @@ import DishInfoModal from 'components/DishInfoModal';
 import styled from "styled-components";
 
 const DishTile = styled(SharedDishTile)`
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `;
 
 export default function(props) {
 
   const [showModal, setShowModal] = React.useState(false);
-
   return (
     <>
       <DishTile

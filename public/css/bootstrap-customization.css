@@ -1,6 +1,12 @@
+/**
+Modals are not even in the body of the html page. So we cannot inject global style
+from react (which only applies to root).
+*/
+
 .modal-dialog-centered { 
   height: 100%;
   margin: 0 auto;
+  max-width: 400px;
 }
 
 .modal-content {
