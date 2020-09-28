@@ -89,7 +89,7 @@ export default class extends React.Component {
           <RestaurantLogo href="https://www.bacariwadams.com/">
             <ReactSVG
               wrapper="div"
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
+              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
             />
           </RestaurantLogo>
         </Header>
