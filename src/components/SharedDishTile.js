@@ -12,7 +12,6 @@ const DishTile = styled.div`
 `;
 
 const TileTitle = styled.div`
-  height: 24px;
   line-height: 24px;
   display: flex;
   flex-flow: row;
@@ -56,6 +55,8 @@ const Description = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding-bottom: 1px;
+  line-height: 17px;
 `;
 
 export default function (props) {

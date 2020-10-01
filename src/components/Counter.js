@@ -5,8 +5,10 @@ const Counter = styled.div`
   margin-left: 5px;
   /* includes some hard-coded stuff because text is off-center smh */
   display: inline-block;
-  line-height: 23px;
   text-align: center;
+  font-size: 14px;
+  line-height: 14px;
+  padding: 4px;
   height: 22px;
   min-width: 22px;
   border-radius: 11px;

@@ -82,6 +82,7 @@ const MenuName = styled.div`
 function MenuTabView(props) {
 
   const [categoryToRef, setCategoryToRef] = useState({});
+  const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
 
   // Must be triggered before render
@@ -91,6 +92,8 @@ function MenuTabView(props) {
       const categoryRef = React.createRef();
       newCategoryToRef[c.id] = categoryRef;
     });
+
+    setContainerRef(React.createRef)
     setCategoryToRef(newCategoryToRef);
     setActiveCategoryId(props.menu.categories[0]?.id);
   }, [props.menu]);
@@ -101,6 +104,12 @@ function MenuTabView(props) {
     let activeId = activeCategoryId;
     for (const id in categoryToRef) {
       const offset = categoryToRef[id].current.getBoundingClientRect().top - 118;
+      // if at the bottom of the menu, set the last category as the active one
+      if(containerRef.current.getBoundingClientRect().bottom - categoryToRef[id].current.getBoundingClientRect().bottom == 150) {
+        activeId = id;
+        continue;
+      }
+
       if (offset > 0) { continue; }
       if (runningMax < offset) {
         runningMax = runningMax;
@@ -130,10 +139,10 @@ function MenuTabView(props) {
           </CategoryTab>;
         })}
       </CategoryTabList>
-      <MenuBody onScroll={onScroll}>
+      <MenuBody onScroll={onScroll} ref={ containerRef }>
         <StyledBanner>
           <BannerContent>
-            <RestaurantName>{props.restaurantName}</RestaurantName>
+            <RestaurantName>{ props.restaurantName }</RestaurantName>
             <MenuName
               onClick={props.openSideNav}
             >{`${props.menuName} menu`}</MenuName>
