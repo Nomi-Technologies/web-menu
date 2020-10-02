@@ -84,6 +84,7 @@ function MenuTabView(props) {
   const [categoryToRef, setCategoryToRef] = useState({});
   const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
+  const [scrolling, setScrolling] = useState(false);
 
   // Must be triggered before render
   useLayoutEffect(() => {
@@ -120,8 +121,12 @@ function MenuTabView(props) {
   }
 
   function onSelectTab(id) {
-    props.onSelectTab(id);
-    categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
+    if(!scrolling) {
+      props.onSelectTab(id);
+      setScrolling(true)
+      categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(_ => {setScrolling(false)}, 1500)
+    }
   }
 
   return (
