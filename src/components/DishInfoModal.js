@@ -16,19 +16,21 @@ const ModalContainer = styled.div`
   padding-bottom: 30px;
 
   @media (max-width: 400px) {
-    width: 100%;
+    width: auto;
+    margin: 0 15px;
+    box-sizing: border-box;
   }
 `;
 
 const ModalHeader = styled(Modal.Header)`
   padding: 0 0 0 20px;
-  height: 75px;
   border-radius: 6px 6px 0px 0px;
   border-bottom: 1px solid #DCE2E9;
   position: sticky;
   top: 0;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
 const DishName = styled.div`
@@ -36,7 +38,6 @@ const DishName = styled.div`
   height: 100%;
   font-weight: bold;
   font-size: 28px;
-  line-height: 75px;
 `;
 
 const ExitButtonWrapper = styled.div`
@@ -88,7 +89,7 @@ export default function(props) {
 
   return (
     <Modal
-      className='react-bootstrap-modal'
+      // className='react-bootstrap-modal'
       show={props.show}
       aria-labelledby="contained-modal-vcenter"
       onHide={props.onHide}

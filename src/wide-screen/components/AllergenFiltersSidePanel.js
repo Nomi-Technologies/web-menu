@@ -7,6 +7,7 @@ import styled from 'styled-components';
 const GridTagButton = styled(TagButton)`
   margin: 10px;
   min-width: 75px;
+  cursor: pointer;
 `;
 
 const Grid = styled(Container)`
@@ -48,7 +49,7 @@ function TagGrid(props) {
 }
 
 const SaveButton = styled(Button)`
-  background-color: #F3A35C;
+  background-color: #628DEB;
   color: white;
   font-weight: bold;
   margin: 10px auto 0 auto;
@@ -56,6 +57,17 @@ const SaveButton = styled(Button)`
   width: 85%;
   height: 44px;
   border-radius: 22px;
+  border: none;
+
+  &:hover {
+    background-color: #A9C1F5;
+    opacity: 0.8;
+  }
+
+  &:disabled {
+    background-color: #A9C1F5;
+    opacity: 0.8;
+  }
 `;
 
 export default class AllergenFiltersSidePanel extends React.Component {
@@ -99,13 +111,11 @@ export default class AllergenFiltersSidePanel extends React.Component {
             margin: '0 25px',
             minWidth: '50px',
           }}>
-            <div style={{paddingTop: '2px'}}>
-              <Counter
-                active={this.state.selected.size > 0}
-              >
-                {this.state.selected.size}
-              </Counter>
-            </div>
+            <Counter
+              active={this.state.selected.size > 0}
+            >
+              {this.state.selected.size}
+            </Counter>
             <this.props.StyledExpandArrow
               pointingUp={this.props.expanded}
             />
