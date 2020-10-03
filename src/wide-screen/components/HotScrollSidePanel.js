@@ -50,7 +50,6 @@ export default class extends React.Component {
             {this.props.categories.map((category) =>
               <CategoryTitle
                 onClick={() => this.scrollToCategory(this.props.categoryToRef[category.id])}
-                //onClick={() => this.scrollToCategory(this.props.categoryToRef[category.id], 275, "center")}
                 key={category.id}
               >
                 {category.name}
