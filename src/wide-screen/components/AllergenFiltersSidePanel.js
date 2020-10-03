@@ -7,6 +7,7 @@ import styled from 'styled-components';
 const GridTagButton = styled(TagButton)`
   margin: 10px;
   min-width: 75px;
+  cursor: pointer;
 `;
 
 const Grid = styled(Container)`

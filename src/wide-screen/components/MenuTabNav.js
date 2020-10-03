@@ -20,6 +20,12 @@ const MenuTabList = styled.div`
   max-width: 100%;
   overflow: scroll;
   white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export default function(props) {

@@ -77,6 +77,7 @@ const HeaderStyle = styled.div`
 const ExpandArrowStyle = styled(ExpansionArrow)`
   position: absolute;
   right: 0;
+  cursor: pointer;
 `;
 
 const PanelBodyStyle = styled.div`
