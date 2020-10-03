@@ -14,6 +14,12 @@ const ToggleButton = styled(Button)`
   height: auto;
   min-height: 44px;
   border-radius: 22px;
+  border: none;
+
+  &:hover {
+      opacity: 0.8;
+      background-color: #F3A35C;
+  }
 `;
 
 export default function (props) {

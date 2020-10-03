@@ -101,7 +101,7 @@ export default class extends React.Component {
         {this.props.dishesByMenu.length > 0 ? (
           <MenuScreen
             openSideNav={() => this.setState({ hamburgerOpen: true })}
-            restaurantName={this.props.restaurantId}
+            restaurantName={this.props.restaurantName}
             menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
             menuName={this.props.menus[this.props.selectedMenuIndex].name}
           />

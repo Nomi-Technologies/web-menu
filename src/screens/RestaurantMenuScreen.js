@@ -14,6 +14,7 @@ class RestaurantMenuScreen extends React.Component {
 
   state = {
     menus: [],
+    restaurantName: "",
     selectedMenuIndex: 0,
     dishesByMenu: [],
     error: null,
@@ -21,13 +22,19 @@ class RestaurantMenuScreen extends React.Component {
   
   componentDidMount() {
     getMenus(this.restaurantIdentifier)
-      .then(menus => {
-        this.setState({ menus: menus });
-        Promise.all(menus.map(async menu => {
+      .then(restaurant => {
+        console.log(restaurant)
+        
+        this.setState({ menus: restaurant.Menus, restaurantName: restaurant.name });
+        
+        Promise.all(restaurant.Menus.map(async menu => {
           let rawMenu = await getDishesOfMenu(this.restaurantIdentifier, menu.id);
           return parseMenu(rawMenu);
-        }))
-          .then(dishesByMenu => this.setState({ dishesByMenu: dishesByMenu }));
+        })).then(
+          dishesByMenu => { 
+            this.setState({ dishesByMenu: dishesByMenu })
+          }
+        );
       })
       .catch(err => {
         console.log(err);
@@ -45,12 +52,14 @@ class RestaurantMenuScreen extends React.Component {
         {...this.state}
         onSelectMenu={this.onSelectMenu.bind(this)}
         restaurantId={this.restaurantIdentifier}
+        restaurantName={ this.state.restaurantName }
       />;
     } else {
       return <WebRestuarantScreen
         {...this.state}
         onSelectMenu={this.onSelectMenu.bind(this)}
         restaurantId={this.restaurantIdentifier}
+        restaurantName={ this.state.restaurantName }
       />;
     }
   }

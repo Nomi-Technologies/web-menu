@@ -16,7 +16,9 @@ const ModalContainer = styled.div`
   padding-bottom: 30px;
 
   @media (max-width: 400px) {
-    width: 100%;
+    width: auto;
+    margin: 0 15px;
+    box-sizing: border-box;
   }
 `;
 
@@ -30,6 +32,7 @@ const ModalHeader = styled(Modal.Header)`
   display: flex;
   flex-direction: row;
   margin-bottom: 15px;
+  align-items: center;
 `;
 
 const DishName = styled.div`
@@ -91,7 +94,7 @@ export default function(props) {
 
   return (
     <Modal
-      className='react-bootstrap-modal'
+      // className='react-bootstrap-modal'
       show={props.show}
       aria-labelledby="contained-modal-vcenter"
       onHide={props.onHide}

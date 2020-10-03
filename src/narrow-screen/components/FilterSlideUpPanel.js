@@ -9,10 +9,11 @@ const SlideUpPanel = styled.div`
   position: relative;
   z-index: 11;
   background-color: white;
-  border-radius: 20px 20px 0 0;
+  border-radius: 12px 12px 0px 0px;
   width: 100%;
   height: 100%;
-  box-shadow: 0 -5px 10px #E3EDF2;
+  box-shadow: 0px 0px 20px rgba(136, 146, 158, 0.15);
+  
 `;
 
 const PanelHeader = styled.div`
@@ -25,7 +26,8 @@ const PanelHeader = styled.div`
 `;
 
 const PanelHeaderElement = styled.div`
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   font-weight: 700;
 `;
 
@@ -44,6 +46,12 @@ const ClearButton = styled(Button)`
   font-size: 18px;
   border-radius: 22px;
   z-index: 25;
+  border: none;
+  
+  &:disabled {
+    background: #628DEB;
+    opacity: 0.5;
+  }
 `;
 
 const StyledExpansionArrow = styled(ExpansionArrow)`
@@ -151,6 +159,24 @@ const SaveButton = styled(Button)`
   width: 85%;
   height: 44px;
   border-radius: 22px;
+
+  &:hover { 
+    background-color: #F3A35C;
+    opacity: 0.8;
+    color: white;
+  }
+
+  &:active {
+    background-color: #F3A35C;
+    opacity: 0.8;
+    color: white;
+  }
+
+  &:disabled {
+    background-color: #F3A35C;
+    opacity: 0.5;
+    color: white;
+  }
 `;
 
 function SlideUpPanelBody(props) {
