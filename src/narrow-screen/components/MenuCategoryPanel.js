@@ -44,7 +44,7 @@ export default function(props) {
     >
       <CategoryTitle>{props.category.name}</CategoryTitle>
       <CategoryDescription>{props.category.description}</CategoryDescription>
-      {props.dishes.map(dish => <DishTile key={dish.id} dish={dish}/>)}
+      {props.dishes.map(dish => <DishTile key={dish.id} dish={dish} hasAllergens = { props.menuHasAllergens }/>)}
     </DishList>
   );
 }
