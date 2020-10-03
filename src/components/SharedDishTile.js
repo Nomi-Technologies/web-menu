@@ -47,7 +47,7 @@ const TileSubtitle = styled.div`
   margin-top: 7px;
 `;
 
-const Description = styled.div`
+const Description = styled.p`
   flex: 1 1 auto;
   font-size: 16px;
   display: -webkit-box;
@@ -55,8 +55,9 @@ const Description = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding-bottom: 1px;
-  line-height: 17px;
+  line-height:1.3;
+  padding-bottom: 3px;
+  margin: 0;
 `;
 
 export default function (props) {
