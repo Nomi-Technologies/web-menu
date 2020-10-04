@@ -1,6 +1,5 @@
 import React from 'react';
 import MenuScreen from './MenuScreen';
-import { ReactSVG } from "react-svg";
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import MenuTabNav from '../components/MenuTabNav';
