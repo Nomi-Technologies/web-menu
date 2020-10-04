@@ -26,7 +26,7 @@ const Header = styled.div`
 
 const RestaurantLogo = styled.a`
   padding-top: 5px;
-  & svg {
+  & img {
     height: 35px;
   }
 `;
@@ -86,12 +86,15 @@ export default class extends React.Component {
           >
             SEE MENUS
           </AllMenusButton>
-          <RestaurantLogo href="https://www.bacariwadams.com/">
-            <ReactSVG
-              wrapper="div"
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
-            />
-          </RestaurantLogo>
+          {
+            this.props.restaurantId ?
+            <RestaurantLogo href="https://www.bacariwadams.com/">
+              <img
+                alt={`${this.props.restaurantName} logo`}
+                src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
+              />
+            </RestaurantLogo> : <></>
+          }
         </Header>
         <MenuListNav
           onClose={() => this.setState({ hamburgerOpen: false })}

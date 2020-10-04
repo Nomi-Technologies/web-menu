@@ -30,7 +30,7 @@ const NomiLogo = styled(NomiTopBottomLogo)`
   display: inline-block;
 `;
 
-const RestaurantImgLogo = styled(ReactSVG)`
+const RestaurantImgLogo = styled.img`
   display: inline-block;
 
   
@@ -94,10 +94,13 @@ export default class extends React.Component {
       <RestaurantScreen>
         <Header>
           <HeaderColumns style={{ width: '20%' }}>
-            <RestaurantImgLogo
-              wrapper="div"
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/assets/restaurant_logos/bacari.svg`}
-            />
+            {
+              this.props.restaurantId ?
+              <RestaurantImgLogo
+                alt={`${this.props.restaurantName} logo`}
+                src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
+              /> : <></>
+            }
           </HeaderColumns>
           <HeaderColumns style={{ width: '60%' }}>
             <MenuTabNav
