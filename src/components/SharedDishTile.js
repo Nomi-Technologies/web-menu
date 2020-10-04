@@ -12,6 +12,7 @@ const DishTile = styled.div`
 `;
 
 const TileTitle = styled.div`
+  height: 100%;
   line-height: 24px;
   display: flex;
   flex-flow: row;
