@@ -74,7 +74,7 @@ const HeaderColumns = styled.div`
   text-align: center;
 `;
 
-export default class extends React.Component{
+export default class extends React.Component {
 
   state = {
     tabIndex: 0,

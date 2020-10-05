@@ -78,6 +78,7 @@ const HeaderStyle = styled.div`
 const ExpandArrowStyle = styled(ExpansionArrow)`
   position: absolute;
   right: 0;
+  cursor: pointer;
 `;
 
 const PanelBodyStyle = styled.div`
@@ -99,18 +100,20 @@ function LeftPanel(props) {
           onExpansionChanged={props.onHotScrollPanelExpansionChanged}
         />
       </Panel>
-      <Panel>
-        <AllergenFiltersSidePanel
-          StyledHeader={HeaderStyle}
-          StyledExpandArrow={ExpandArrowStyle}
-          StyledBody={PanelBodyStyle}
-          tags={props.menu.tags}
-          expanded={props.allergenFiltersPanelExpanded}
-          onExpansionChanged={props.onAllergenFiltersPanelExpansionChanged}
-          onApplyFilter={props.onApplyFilter}
-          onClearFilter={props.onClearFilter}
-        />
-      </Panel>
+      { props.menu.hasAllergens ? 
+        <Panel>
+            <AllergenFiltersSidePanel
+              StyledHeader={HeaderStyle}
+              StyledExpandArrow={ExpandArrowStyle}
+              StyledBody={PanelBodyStyle}
+              tags={props.menu.tags}
+              expanded={props.allergenFiltersPanelExpanded}
+              onExpansionChanged={props.onAllergenFiltersPanelExpansionChanged}
+              onApplyFilter={props.onApplyFilter}
+              onClearFilter={props.onClearFilter}
+            /> 
+        </Panel> : "" 
+      }      
       <Panel>
         <QRCodeSidePanel StyledBody={PanelBodyStyle} />
       </Panel>
