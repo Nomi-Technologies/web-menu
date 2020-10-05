@@ -17,14 +17,12 @@ class RestaurantMenuScreen extends React.Component {
     restaurantName: "",
     selectedMenuIndex: 0,
     dishesByMenu: [],
-    error: null,
+    error: null
   };
-  
+
   componentDidMount() {
     getMenus(this.restaurantIdentifier)
       .then(restaurant => {
-        console.log(restaurant)
-        
         this.setState({ menus: restaurant.Menus, restaurantName: restaurant.name });
         
         Promise.all(restaurant.Menus.map(async menu => {
@@ -32,7 +30,7 @@ class RestaurantMenuScreen extends React.Component {
           return parseMenu(rawMenu);
         })).then(
           dishesByMenu => { 
-            this.setState({ dishesByMenu: dishesByMenu })
+            this.setState({ dishesByMenu: dishesByMenu})
           }
         );
       })

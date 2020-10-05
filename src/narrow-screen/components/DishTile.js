@@ -21,6 +21,7 @@ export default function(props) {
         dish={props.dish}
         show={showModal}
         onHide={() => setShowModal(false)}
+        menuHasAllergens = { props.menuHasAllergens }
       />
     </>
   );

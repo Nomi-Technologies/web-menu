@@ -5,10 +5,16 @@ export const parseMenu = data => {
     dishesByCategory: {},
     dishesByTags: {},
     tags: {},
+    hasAllergens: false
   };
 
   data.forEach(dish => {
-    menu.dishes[dish.id] = dish;
+    // track if a menu has allergens, if not we can hide the slide up bar etc.
+    if(dish.Tags.length > 0) {
+      menu.hasAllergens = true;
+    }
+
+    menu.dishes.push(dish);
     if (!(dish.Category.id in menu.dishesByCategory)) {
       menu.categories.push(dish.Category);
       menu.dishesByCategory[dish.Category.id] = [];
