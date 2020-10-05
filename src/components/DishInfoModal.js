@@ -80,6 +80,7 @@ const SectionBody = styled.div`
   color: #8A9DB7;
   padding-top: 18px;
   font-weight: 500;
+  font-size: 14px;
 `;
 
 const StyledAllergenIcon = styled(AllergenIcon)`
@@ -116,21 +117,27 @@ export default function(props) {
               props.dish.description.length > 0 ?
               <>
                 <Description>{props.dish.description}</Description>
-                <Divider/>
+
               </> : <></>
             }
           </SectionBody>
-          <SectionTitle>ALLERGENS</SectionTitle>
-          <SectionBody>
-            {
-              props.dish.Tags.length > 0 ?
-              (
-                props.dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t}/>)
-              )
-              :
-              ("None")
-            }
-          </SectionBody>
+          { props.menuHasAllergens ? 
+          <>
+            <Divider/>
+            <SectionTitle>ALLERGENS</SectionTitle>
+            <SectionBody>
+              {
+                props.dish.Tags.length > 0 ?
+                (
+                  props.dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t}/>)
+                )
+                :
+                "None"
+              }
+            </SectionBody>
+          </>  : ""
+          }
+
           {
             props.dish.price.length > 0 ?
             <>

@@ -157,7 +157,7 @@ function MenuTabView(props) {
           props.menu.categories.map(c => {
             const dishes = props.getDishByCategoryIdWithFilter(c.id);
             return (
-              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} />
+              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} menuHasAllergens = { props.menu.hasAllergens }/>
             );
           })
         }
@@ -283,6 +283,8 @@ export default class extends React.Component {
   }
 
   render() {
+    console.log(this.props.menu);
+
     return (
       <MenuScreen {...this.props}>
         <MenuTabView
@@ -304,15 +306,21 @@ export default class extends React.Component {
             />
           </a>
         </NomiLogoBar>
-        <SlideUpPanelWrapper>
-          <FilterSlideUpPanel
-            tags={this.props.menu.tags}
-            expanded={this.state.panelExpanded}
-            onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
-            onApplyFilter={this.onApplyFilter.bind(this)}
-            onClearFilter={this.onClearFilter.bind(this)}
-          />
-        </SlideUpPanelWrapper>
+        { 
+          // hide filtering menu if menu doesn't have allergens
+          this.props.menu.hasAllergens ? 
+          <SlideUpPanelWrapper>
+            <FilterSlideUpPanel
+              tags={this.props.menu.tags}
+              expanded={this.state.panelExpanded}
+              onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
+              onApplyFilter={this.onApplyFilter.bind(this)}
+              onClearFilter={this.onClearFilter.bind(this)}
+            />
+          </SlideUpPanelWrapper>
+          : ""
+        }
+
         <Modal
           className='react-bootstrap-modal'
           show={this.state.modalShow}
