@@ -132,7 +132,7 @@ export default function(props) {
                   props.dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t}/>)
                 )
                 :
-                "None"
+                "No Allergy Info"
               }
             </SectionBody>
           </>  : ""
