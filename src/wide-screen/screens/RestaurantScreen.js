@@ -1,6 +1,5 @@
 import React from 'react';
 import MenuScreen from './MenuScreen';
-import RestaurantLogo from 'components/bacari-logo.png';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import MenuTabNav from '../components/MenuTabNav';
@@ -31,9 +30,11 @@ const NomiLogo = styled(NomiTopBottomLogo)`
 `;
 
 const RestaurantImgLogo = styled.img`
+  display: inline-block;
+
+  
   height: 28px;
   width: 84px;
-  display: inline-block;
 `;
 
 const FilterToggleSwitch = styled.div`
@@ -92,7 +93,13 @@ export default class extends React.Component {
       <RestaurantScreen>
         <Header>
           <HeaderColumns style={{ width: '20%' }}>
-            <RestaurantImgLogo src={RestaurantLogo} />
+            {
+              this.props.restaurantId ?
+              <RestaurantImgLogo
+                alt={`${this.props.restaurantName} logo`}
+                src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
+              /> : <></>
+            }
           </HeaderColumns>
           <HeaderColumns style={{ width: '60%' }}>
             <MenuTabNav
