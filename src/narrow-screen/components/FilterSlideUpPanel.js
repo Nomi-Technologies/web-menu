@@ -72,7 +72,7 @@ function SlideUpPanelHeader(props) {
           {props.selected.size}
         </Counter>
       </PanelHeaderElement>
-      <Spacer onClick={props.onExpansionChanged}/>
+      <Spacer onClick={props.onExpansionChanged} />
       <PanelHeaderElement>
         <ClearButton
           variant='primary'
@@ -92,10 +92,28 @@ function SlideUpPanelHeader(props) {
   );
 }
 
-const GridTagButton = styled(TagButton)`
+const StyledGridTagButton = styled(TagButton)`
   margin: 10px;
   cursor: default;
 `;
+
+
+const GridTagButton = (props) => {
+  const onClick = () => {
+    let currentTags = new Set(props.currentTags);
+    if (currentTags.has(props.tag.id)) { currentTags.delete(props.tag.id); }
+    else { currentTags.add(props.tag.id); }
+    props.onSelect(currentTags);
+  }
+
+  return (
+    <StyledGridTagButton {...props} onClick={onClick}>
+      { props.tag.name}
+    </StyledGridTagButton>
+  )
+
+}
+
 
 const Grid = styled(Container)`
   margin-bottom: 20px;
@@ -105,33 +123,33 @@ const Grid = styled(Container)`
 function TagGrid(props) {
   const tags = props.tags;
   const tag_keys = Object.keys(tags);
-  let rows = [];
-  for (let i = 0; i < tag_keys.length; i += 3) {
-    let cols = [];
-    for (let j = 0; j < 3; ++j) {
-      if (i + j >= tag_keys.length) {
-        cols.push(<Col key={j}></Col>);
-        continue;
+
+  const createGrid = () => {
+    let rows = [];
+    for (let i = 0; i < tag_keys.length; i += 3) {
+      let cols = [];
+      for (let j = 0; j < 3; ++j) {
+        if (i + j >= tag_keys.length) {
+          cols.push(<Col key={j}></Col>);
+          continue;
+        }
+        cols.push(<Col key={j}>
+          <GridTagButton
+            selected={props.selected.has(tags[tag_keys[i + j]].id)}
+            tag={tags[tag_keys[i + j]]}
+            onSelect={props.onSelect}
+            currentTags={props.selected}
+          />
+
+        </Col>);
       }
-      cols.push(<Col key={j}>
-        <GridTagButton
-          selected={props.selected.has(tags[tag_keys[i+j]].id)}
-          onClick={() => {
-            const tag = tags[tag_keys[i+j]];
-            let selected = new Set(props.selected);
-            if (selected.has(tag.id)) { selected.delete(tag.id); }
-            else { selected.add(tag.id); }
-            props.onSelect(selected);
-          }}
-        >
-          {tags[tag_keys[i+j]].name}
-        </GridTagButton>
-      </Col>);
+      rows.push(<Row noGutters={true} key={i}>{cols}</Row>);
     }
-    rows.push(<Row noGutters={true} key={i}>{cols}</Row>);
+    return rows
   }
+
   return (
-    <Grid>{rows}</Grid>
+    <Grid>{createGrid()}</Grid>
   );
 }
 
@@ -183,15 +201,7 @@ function SlideUpPanelBody(props) {
   return (
     <PanelBody>
       <SectionTitle>Exclude dishes that contain:</SectionTitle>
-      <TagGrid {...props}/>
-      <SaveButton
-        disabled={props.selected.size === 0}
-        id='save-btn'
-        variant='warning'
-        onClick={props.onApplyFilter}
-      >
-        Apply
-      </SaveButton>
+      <TagGrid {...props} />
     </PanelBody>
   )
 }
@@ -207,8 +217,8 @@ export default class extends React.Component {
     this.props.onExpansionChanged(!expanded);
   }
 
-  onApplyFilter() {
-    this.props.onApplyFilter(this.state.selected, false);
+  onApplyFilter(selected) {
+    this.props.onApplyFilter(selected, false);
   }
 
   onClearFilter() {
@@ -218,6 +228,7 @@ export default class extends React.Component {
 
   onSelect(selected) {
     this.setState({ selected: selected });
+    this.onApplyFilter(selected)
   }
 
   render() {
@@ -229,7 +240,7 @@ export default class extends React.Component {
           expanded={this.props.expanded}
           selected={this.state.selected}
         />
-        {this.props.expanded?
+        {this.props.expanded ?
           <SlideUpPanelBody
             tags={this.props.tags}
             selected={this.state.selected}
