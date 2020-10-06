@@ -62,7 +62,7 @@ const HeaderStyle = styled.div`
   display: inline-block;
   font-weight: bold;
   padding-left: 20px;
-  align-itmes: center;
+  align-items: center;
 
   & div {
     display: inline-block;
@@ -187,7 +187,7 @@ const NomiBottomLogoImage = styled.a`
 function MainContent(props) {
   return (
     <MainContentWrapper>
-      <StyledBanner>
+      <StyledBanner background={ `${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${this.props.menu.id}` }>
         <RestaurantName>{props.restaruantName}</RestaurantName>
       </StyledBanner>
       <DishList>
