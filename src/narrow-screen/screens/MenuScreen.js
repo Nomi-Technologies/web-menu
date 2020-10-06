@@ -85,7 +85,7 @@ function MenuTabView(props) {
   const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [scrolling, setScrolling] = useState(false);
-
+  
   // Must be triggered before render
   useLayoutEffect(() => {
     const newCategoryToRef = {};
@@ -157,7 +157,7 @@ function MenuTabView(props) {
           props.menu.categories.map(c => {
             const dishes = props.getDishByCategoryIdWithFilter(c.id);
             return (
-              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} menuHasAllergens = { props.menu.hasAllergens }/>
+              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} menuHasAllergens={ props.menu.hasAllergens }/>
             );
           })
         }
@@ -283,8 +283,6 @@ export default class extends React.Component {
   }
 
   render() {
-    console.log(this.props.menu);
-
     return (
       <MenuScreen {...this.props}>
         <MenuTabView
