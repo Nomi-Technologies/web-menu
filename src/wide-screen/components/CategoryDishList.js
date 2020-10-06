@@ -53,7 +53,7 @@ export default class extends React.Component {
             {this.props.dishes
               .slice(0, Math.ceil(this.props.dishes.length / 2))
               .map((dish) => (
-                <DishTile key={dish.id} dish={dish} />
+                <DishTile key={dish.id} dish={dish} menuHasAllergens={ this.props.menuHasAllergens }/>
               ))}
           </Column>
           <ColumnSeparator />
@@ -61,7 +61,7 @@ export default class extends React.Component {
             {this.props.dishes
               .slice(Math.ceil(this.props.dishes.length / 2))
               .map((dish) => (
-                <DishTile key={dish.id} dish={dish} />
+                <DishTile key={dish.id} dish={dish} menuHasAllergens={ this.props.menuHasAllergens }/>
               ))}
           </Column>
         </DishGrid>
