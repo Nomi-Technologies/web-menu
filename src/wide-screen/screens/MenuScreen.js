@@ -195,6 +195,7 @@ function MainContent(props) {
           const dishes = props.getDishByCategoryIdWithFilter(c.id);
           return (
             <MenuList
+              menuHasAllergens={ props.menu.hasAllergens }
               reactRef={props.categoryToRef[c.id]}
               dishes={dishes}
               category={c}
