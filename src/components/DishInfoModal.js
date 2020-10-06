@@ -92,7 +92,6 @@ const Price = styled.span`
 `;
 
 export default function(props) {
-  console.log(props)
   return (
     <Modal
       // className='react-bootstrap-modal'

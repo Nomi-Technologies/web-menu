@@ -252,14 +252,16 @@ export default class extends React.Component {
 
   onApplyFilter(selected) {
     let excluded = new Set();
-    selected.forEach(t =>
-      this.props.menu.dishesByTags[t].forEach(d => excluded.add(d.id))
-    );
+    selected.forEach(t => {
+      let dishesWithTag = this.props.menu.dishesByTags[t]
+      if(dishesWithTag) {
+        dishesWithTag.forEach(d => excluded.add(d.id))
+      }
+    })
+    
     this.setState({
       selected: selected,
-      excludedDishes: excluded,
-      panelExpanded: false,
-      modalShow: true
+      excludedDishes: excluded
     });
     setTimeout(() => this.setState({ modalShow: false }), 1000);
   }
@@ -328,7 +330,7 @@ export default class extends React.Component {
         >
           <ApplyFilterModalBody>
             <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
-            Filters Applied
+            { this.state.selected.size > 1 ? "Filters Applied" : "Filter Applied" }
           </ApplyFilterModalBody>
         </Modal>
       </MenuScreen>
