@@ -3,7 +3,7 @@ import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
 import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
 import { withRouter } from 'react-router-dom';
 import { withUserAgent } from 'react-useragent';
-import { getMenus, getDishesOfMenu, parseMenu } from 'utils';
+import { getRestaurant, getDishesOfMenu, parseMenu } from 'utils';
 
 class RestaurantMenuScreen extends React.Component {
 
@@ -15,15 +15,20 @@ class RestaurantMenuScreen extends React.Component {
   state = {
     menus: [],
     restaurantName: "",
+    restaurantId: "",
     selectedMenuIndex: 0,
     dishesByMenu: [],
     error: null
   };
 
   componentDidMount() {
-    getMenus(this.restaurantIdentifier)
+    getRestaurant(this.restaurantIdentifier)
       .then(restaurant => {
-        this.setState({ menus: restaurant.Menus, restaurantName: restaurant.name });
+        this.setState({
+          menus: restaurant.Menus,
+          restaurantName: restaurant.name,
+          restaurantId: restaurant.id,
+        });
         
         Promise.all(restaurant.Menus.map(async menu => {
           let rawMenu = await getDishesOfMenu(this.restaurantIdentifier, menu.id);
@@ -48,15 +53,11 @@ class RestaurantMenuScreen extends React.Component {
       return <MobileRestaurantScreen
         {...this.state}
         onSelectMenu={this.onSelectMenu.bind(this)}
-        restaurantId={this.restaurantIdentifier}
-        restaurantName={ this.state.restaurantName }
       />;
     } else {
       return <WebRestuarantScreen
         {...this.state}
         onSelectMenu={this.onSelectMenu.bind(this)}
-        restaurantId={this.restaurantIdentifier}
-        restaurantName={ this.state.restaurantName }
       />;
     }
   }
