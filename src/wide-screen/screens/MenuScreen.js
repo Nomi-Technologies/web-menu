@@ -62,7 +62,7 @@ const HeaderStyle = styled.div`
   display: inline-block;
   font-weight: bold;
   padding-left: 20px;
-  align-itmes: center;
+  align-items: center;
 
   & div {
     display: inline-block;
