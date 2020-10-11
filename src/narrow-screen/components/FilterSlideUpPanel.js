@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
@@ -206,51 +206,47 @@ function SlideUpPanelBody(props) {
   )
 }
 
-export default class extends React.Component {
+export default (props) => {
 
-  state = {
-    selected: new Set(),
-  };
+  const [selected, setSelected] = useState(new Set());
 
-  onExpansionChanged() {
-    const expanded = this.props.expanded;
-    this.props.onExpansionChanged(!expanded);
+  function onExpansionChanged() {
+    const expanded = props.expanded;
+    props.onExpansionChanged(!expanded);
   }
 
-  onApplyFilter(selected) {
-    this.props.onApplyFilter(selected, false);
+  function onApplyFilter(selected) {
+    props.onApplyFilter(selected, false);
   }
 
-  onClearFilter() {
-    this.setState({ selected: new Set() });
-    this.props.onClearFilter();
+  function onClearFilter() {
+    setSelected(new Set());
+    props.onClearFilter();
   }
 
-  onSelect(selected) {
-    this.setState({ selected: selected });
-    this.onApplyFilter(selected)
+  function onSelect(selected) {
+    setSelected(selected);
+    onApplyFilter(selected)
   }
 
-  render() {
-    return (
-      <SlideUpPanel>
-        <SlideUpPanelHeader
-          onExpansionChanged={this.onExpansionChanged.bind(this)}
-          onClearFilter={this.onClearFilter.bind(this)}
-          expanded={this.props.expanded}
-          selected={this.state.selected}
+  return (
+    <SlideUpPanel>
+      <SlideUpPanelHeader
+        onExpansionChanged={onExpansionChanged}
+        onClearFilter={onClearFilter}
+        expanded={props.expanded}
+        selected={selected}
+      />
+      {props.expanded ?
+        <SlideUpPanelBody
+          tags={props.tags}
+          selected={selected}
+          onSelect={onSelect}
+          onApplyFilter={onApplyFilter}
         />
-        {this.props.expanded ?
-          <SlideUpPanelBody
-            tags={this.props.tags}
-            selected={this.state.selected}
-            onSelect={this.onSelect.bind(this)}
-            onApplyFilter={this.onApplyFilter.bind(this)}
-          />
-          :
-          <></>
-        }
-      </SlideUpPanel>
-    );
-  }
+        :
+        <></>
+      }
+    </SlideUpPanel>
+  );
 }
