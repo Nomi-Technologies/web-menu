@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import RestaurantContext from '../restaurant-context';
 import styled from 'styled-components';
-import { Button } from 'react-bootstrap';
 
 const SideNav = styled.div`
   min-width: 240px;
@@ -50,17 +50,19 @@ const CloseButton = styled(Tile)`
 `;
 
 export default function(props) {
+  const context = useContext(RestaurantContext);
+  
   return (
     <SideNav open={props.open}>
       <CloseButton onClick={props.onClose}>
         CLOSE
       </CloseButton>
-      {props.menus.map((menu, i) =>
+      {context.restaurant?.Menus.map((menu, i) =>
         <MenuTile
           key={menu.id}
-          active={props.selectedMenuIndex === i}
+          active={context.selectedMenuIndex === i}
           onClick={() => {
-            props.onSelectMenu(i);
+            context.setSelectedMenu(i);
             props.onClose();
           }}
         >

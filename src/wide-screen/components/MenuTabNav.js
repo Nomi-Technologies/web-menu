@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import RestaurantContext from '../../restaurant-context';
 
 const MenuTab = styled.div`
   display: inline-block;
@@ -28,15 +29,17 @@ const MenuTabList = styled.div`
   }
 `;
 
-export default function(props) {
+export default () => {
+  const context = useContext(RestaurantContext);
+
   return (
     <MenuTabList>
       {
-        props.menus.map((menu, i) =>
+        context.restaurant?.Menus.map((menu, i) =>
           <MenuTab
             key={menu.id}
-            className={props.selectedMenuIndex === i ? 'is-selected': ''}
-            onClick={() => props.onSelectMenu(i)}
+            className={context.selectedMenuIndex === i ? 'is-selected': ''}
+            onClick={() => context.setSelectedMenu(i)}
           >
             {menu.name}
           </MenuTab>)

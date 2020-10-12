@@ -11,7 +11,7 @@ import 'index.css';
  * App is restricted to the window's size to be compatible with mobile version
  * #root generally does not respond to the changes in size in .App
  */
-export default(props) => {
+export default () => {
 
   const [windowSize, setWindowSize] = React.useState({
     height: window.innerHeight,
