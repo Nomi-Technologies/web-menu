@@ -80,10 +80,6 @@ export default (props) => {
     props.onExpansionChanged(!expanded);
   }
 
-  function onClearFilter() {
-    context.setFilters(new Set());
-  }
-
   return (
     <>
       <props.StyledHeader
@@ -118,7 +114,7 @@ export default (props) => {
           />
           <SaveButton
             disabled={context.activeFilters.size === 0}
-            onClick={onClearFilter}
+            onClick={() => context.setFilters(new Set())}
           >
             Clear All
           </SaveButton>
