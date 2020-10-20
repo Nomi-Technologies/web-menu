@@ -187,7 +187,7 @@ const NomiBottomLogoImage = styled.a`
 function MainContent(props) {
   return (
     <MainContentWrapper>
-      <StyledBanner background={ `${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${this.props.menu.id}` }>
+      <StyledBanner background={ `${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${props.menu.id}` }>
         <RestaurantName>{props.restaruantName}</RestaurantName>
       </StyledBanner>
       <DishList>
