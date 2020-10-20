@@ -1,6 +1,5 @@
 import React from 'react';
 import RestaurantMenuScreen from 'screens/RestaurantMenuScreen';
-import { withUserAgent } from 'react-useragent';
 import {
   BrowserRouter,
   Switch,
@@ -12,7 +11,7 @@ import 'index.css';
  * App is restricted to the window's size to be compatible with mobile version
  * #root generally does not respond to the changes in size in .App
  */
-function App(props) {
+export default(props) => {
 
   const [windowSize, setWindowSize] = React.useState({
     height: window.innerHeight,
@@ -58,5 +57,3 @@ function App(props) {
   )
 
 }
-
-export default withUserAgent(App);
