@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import ReactGA from 'react-ga';
+
+
+// if (process.env.NODE_ENV === "production") {
+  console.log("initializing google analytics")
+  ReactGA.initialize('G-1V27CCNXDJ');
+  ReactGA.pageview(window.location.pathname + window.location.search);
+// }
+
 
 ReactDOM.render(
   <React.StrictMode>

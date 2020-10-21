@@ -203,7 +203,7 @@ function MainContent({ categoryToRef }) {
 
   return (
     <MainContentWrapper>
-      <StyledBanner>
+      <StyledBanner background={`${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${context.menu.id}`}>
         <RestaurantName>{context.restaurant.name.toUpperCase()}</RestaurantName>
       </StyledBanner>
       <DishList>
