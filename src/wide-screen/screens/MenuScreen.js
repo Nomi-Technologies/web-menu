@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import RestaurantContext from '../../restaurant-context';
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
 import Banner from "components/Banner";
@@ -86,7 +87,12 @@ const PanelBodyStyle = styled.div`
   padding: 10px 15px 10px 15px;
 `;
 
-function LeftPanel(props) {
+function LeftPanel({ categoryToRef }) {
+  
+  const context = useContext(RestaurantContext);
+  const [hotScrollPanelExpanded, setHotScrollPanelExpanded] = useState(true);
+  const [allergenFiltersPanelExpanded, setAllergenFiltersPanelExpanded] = useState(true);
+
   return (
     <LeftPanelWrapper>
       <Panel>
@@ -94,24 +100,20 @@ function LeftPanel(props) {
           StyledHeader={HeaderStyle}
           StyledExpandArrow={ExpandArrowStyle}
           StyledBody={PanelBodyStyle}
-          categories={props.menu.categories}
-          categoryToRef={props.categoryToRef}
-          expanded={props.hotScrollPanelExpanded}
-          onExpansionChanged={props.onHotScrollPanelExpansionChanged}
+          categoryToRef={categoryToRef}
+          expanded={hotScrollPanelExpanded}
+          onExpansionChanged={setHotScrollPanelExpanded}
         />
       </Panel>
-      { props.menu.hasAllergens ? 
+      { context.menu.hasAllergens ? 
         <Panel>
-            <AllergenFiltersSidePanel
-              StyledHeader={HeaderStyle}
-              StyledExpandArrow={ExpandArrowStyle}
-              StyledBody={PanelBodyStyle}
-              tags={props.menu.tags}
-              expanded={props.allergenFiltersPanelExpanded}
-              onExpansionChanged={props.onAllergenFiltersPanelExpansionChanged}
-              onApplyFilter={props.onApplyFilter}
-              onClearFilter={props.onClearFilter}
-            /> 
+          <AllergenFiltersSidePanel
+            StyledHeader={HeaderStyle}
+            StyledExpandArrow={ExpandArrowStyle}
+            StyledBody={PanelBodyStyle}
+            expanded={allergenFiltersPanelExpanded}
+            onExpansionChanged={setAllergenFiltersPanelExpanded}
+          />
         </Panel> : "" 
       }      
       <Panel>
@@ -184,20 +186,33 @@ const NomiBottomLogoImage = styled.a`
   }
 `;
 
-function MainContent(props) {
+function MainContent({ categoryToRef }) {
+  
+  const context = useContext(RestaurantContext);
+  console.log(context);
+  function getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = context.menu.dishesByCategory[categoryId];
+    let filtered = [];
+    originalDishes.forEach((d) => {
+      if (!context.excludedDishes.has(d.id)) {
+        filtered.push(d);
+      }
+    });
+    return filtered;
+  }
+
   return (
     <MainContentWrapper>
-      <StyledBanner background={ `${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${props.menu.id}` }>
-        <RestaurantName>{props.restaruantName}</RestaurantName>
+      <StyledBanner background={`${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${context.menu.id}`}>
+        <RestaurantName>{context.restaurant.name.toUpperCase()}</RestaurantName>
       </StyledBanner>
       <DishList>
-        {props.menu.categories.map((c) => {
-          const dishes = props.getDishByCategoryIdWithFilter(c.id);
+        {context.menu.categories.map((c) => {
           return (
             <MenuList
-              menuHasAllergens={ props.menu.hasAllergens }
-              reactRef={props.categoryToRef[c.id]}
-              dishes={dishes}
+              menuHasAllergens={context.menu.hasAllergens}
+              reactRef={categoryToRef[c.id]}
+              dishes={getDishByCategoryIdWithFilter(c.id)}
               category={c}
               key={c.id}
             />
@@ -222,18 +237,14 @@ const MenuScreen = styled.div`
   overflow: hidden;
 `;
 
-export default (props) => {
-
-  const [selected, setSelected] = useState(new Set());
-  const [excludedDishes, setExcludedDishes] = useState(new Set());
-  const [hotScrollPanelExpanded, setHotScrollPanelExpanded] = useState(true);
-  const [allergenFiltersPanelExpanded, setAllergenFiltersPanelExpanded] = useState(true);
+export default () => {
+  const context = useContext(RestaurantContext);
   const [categoryToRef, setCategoryToRef] = useState({});
 
   useEffect(() => {
     let categoryToRef = {};
 
-    props.menu.categories.forEach((c) => {
+    context.menu.categories.forEach((c) => {
       const categoryRef = React.createRef();
       categoryToRef[c.id] = categoryRef;
     });
@@ -244,59 +255,18 @@ export default (props) => {
   useEffect(() => {
     let categoryToRef = {};
 
-    props.menu.categories.forEach((c) => {
+    context.menu.categories.forEach((c) => {
       const categoryRef = React.createRef();
       categoryToRef[c.id] = categoryRef;
     });
 
     setCategoryToRef(categoryToRef);
-  }, [props.menu]);
-
-  function onApplyFilter(selected) {
-    let excluded = new Set();
-    selected.forEach((t) =>
-      props.menu.dishesByTags[t].forEach((d) => excluded.add(d.id))
-    );
-    setSelected(selected);
-    setExcludedDishes(excluded);
-  }
-
-  function onClearFilter() {
-    setSelected(new Set());
-    setExcludedDishes(new Set());
-  }
-
-  function getDishByCategoryIdWithFilter(categoryId) {
-    const originalDishes = props.menu.dishesByCategory[categoryId];
-    let filtered = [];
-    originalDishes.forEach((d) => {
-      if (!excludedDishes.has(d.id)) {
-        filtered.push(d);
-      }
-    });
-    return filtered;
-  }
+  }, [context.menu]);
 
   return (
-    <MenuScreen {...props}>
-      <LeftPanel
-        menu={props.menu}
-        selected={selected}
-        categoryToRef={categoryToRef}
-        hotScrollPanelExpanded={hotScrollPanelExpanded}
-        allergenFiltersPanelExpanded={allergenFiltersPanelExpanded}
-        onHotScrollPanelExpansionChanged={setHotScrollPanelExpanded}
-        onAllergenFiltersPanelExpansionChanged={setAllergenFiltersPanelExpanded}
-        onApplyFilter={onApplyFilter}
-        onClearFilter={onClearFilter}
-      />
-      <MainContent
-        menu={props.menu}
-        excludedDishes={excludedDishes}
-        categoryToRef={categoryToRef}
-        restaruantName={props.restaurantName.toUpperCase()}
-        getDishByCategoryIdWithFilter={getDishByCategoryIdWithFilter}
-      />
+    <MenuScreen>
+      <LeftPanel categoryToRef={categoryToRef} />
+      <MainContent categoryToRef={categoryToRef} />
       <RightPanel />
     </MenuScreen>
   );

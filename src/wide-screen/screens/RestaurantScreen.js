@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import MenuScreen from './MenuScreen';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import MenuTabNav from '../components/MenuTabNav';
+import RestaurantContext from '../../restaurant-context';
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -75,24 +76,26 @@ const HeaderColumns = styled.div`
   text-align: center;
 `;
 
-export default (props) => {
+export default () => {
+
+  const context = useContext(RestaurantContext);
+  const restaurant = context.restaurant;
+  console.log(context);
 
   return (
     <RestaurantScreen>
       <Header>
         <HeaderColumns style={{ width: '20%' }}>
           {
-            props.restaurantId ?
+            restaurant ?
             <RestaurantImgLogo
-              alt={`${props.restaurantName} logo`}
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${props.restaurantId}`}
+              alt={`${restaurant.name} logo`}
+              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${restaurant.id}`}
             /> : <></>
           }
         </HeaderColumns>
         <HeaderColumns style={{ width: '60%' }}>
-          <MenuTabNav
-            {...props}
-          />
+          <MenuTabNav />
         </HeaderColumns>
         <HeaderColumns style={{ width: '20%' }}>
           <NomiLogo
@@ -101,14 +104,14 @@ export default (props) => {
           />
         </HeaderColumns>
       </Header>
-      {props.dishesByMenu.length > 0 ?
+      {context.menu?
         <MenuScreen
-          restaurantName={props.restaurantName}
-          menu={props.dishesByMenu[props.selectedMenuIndex]}
+          restaurantName={restaurant.name}
+          menu={context.menu}
         />
         :
         (
-          props.error ?
+          context.error ?
           <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
           <Loading>Restaurant Menu Loading...</Loading>
         )

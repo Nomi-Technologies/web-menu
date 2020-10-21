@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import RestaurantContext from '../../restaurant-context';
 import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
 import MenuListNav from "components/MenuListNav";
@@ -66,7 +67,9 @@ const Loading = styled.div`
   font-weight: bold;
 `;
 
-export default (props) => {
+export default () => {
+  const context = useContext(RestaurantContext);
+  console.log(context);
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
 
   function onClickHambergerMenu() {
@@ -83,11 +86,11 @@ export default (props) => {
           SEE MENUS
         </AllMenusButton>
         {
-          props.restaurantId ?
+          context.restaurant ?
           <RestaurantLogo href="https://www.bacariwadams.com/">
             <img
-              alt={`${props.restaurantName} logo`}
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${props.restaurantId}`}
+              alt={`${context.restaurant.name} logo`}
+              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${context.restaurant.id}`}
             />
           </RestaurantLogo> : <></>
         }
@@ -95,16 +98,12 @@ export default (props) => {
       <MenuListNav
         onClose={() => setHamburgerOpen(false)}
         open={hamburgerOpen} 
-        {...props}
       />
-      {props.dishesByMenu.length > 0 ? (
+      {context.menu ? (
         <MenuScreen
           openSideNav={() => setHamburgerOpen(true)}
-          restaurantName={props.restaurantName}
-          menu={props.dishesByMenu[props.selectedMenuIndex]}
-          menuName={props.menus[props.selectedMenuIndex].name}
         />
-      ) : props.error ? (
+      ) : context.error ? (
         <PageError>
           There was an error loading this page. Please try reloading the page
           or contact the Nomi team by filling out a form at dinewithnomi.com

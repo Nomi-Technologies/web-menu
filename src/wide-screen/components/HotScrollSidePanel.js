@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import RestaurantContext from 'restaurant-context';
 import styled from 'styled-components';
 
 const CategoryTitle = styled.div`
@@ -19,6 +20,8 @@ const CategoryTitle = styled.div`
 `;
 
 export default (props) => {
+
+  const context = useContext(RestaurantContext);
 
   function scrollToCategory(categoryRef) {
     categoryRef.current.scrollIntoView({ 
@@ -46,7 +49,7 @@ export default (props) => {
       </props.StyledHeader>
       {props.expanded?
         <props.StyledBody style={{paddingLeft: '20px'}}>
-          {props.categories.map((category) =>
+          {context.menu.categories.map((category) =>
             <CategoryTitle
               onClick={() => scrollToCategory(props.categoryToRef[category.id])}
               key={category.id}
