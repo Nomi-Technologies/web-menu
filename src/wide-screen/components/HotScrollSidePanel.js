@@ -18,48 +18,46 @@ const CategoryTitle = styled.div`
   }
 `;
 
-export default class extends React.Component {
+export default (props) => {
 
-  scrollToCategory(categoryRef) {
+  function scrollToCategory(categoryRef) {
     categoryRef.current.scrollIntoView({ 
       behavior: 'smooth' 
     });
   }
 
-  onExpansionChanged() {
-    const expanded = this.props.expanded;
-    this.props.onExpansionChanged(!expanded);
+  function onExpansionChanged() {
+    const expanded = props.expanded;
+    props.onExpansionChanged(!expanded);
   }
 
-  render() {
-    return (
-      <>
-        <this.props.StyledHeader
-          onClick={this.onExpansionChanged.bind(this)}
-        >
-          <div className="text">
-            Menu Sections
-          </div>
-            <this.props.StyledExpandArrow
-              pointingUp={this.props.expanded}
-              style={{margin: '0 25px'}}
-            />
-        </this.props.StyledHeader>
-        {this.props.expanded?
-          <this.props.StyledBody style={{paddingLeft: '20px'}}>
-            {this.props.categories.map((category) =>
-              <CategoryTitle
-                onClick={() => this.scrollToCategory(this.props.categoryToRef[category.id])}
-                key={category.id}
-              >
-                {category.name}
-              </CategoryTitle>
-            )}
-          </this.props.StyledBody>
-          :
-          <></>
-        }
-      </>
-    );
-  }
+  return (
+    <>
+      <props.StyledHeader
+        onClick={onExpansionChanged}
+      >
+        <div className="text">
+          Menu Sections
+        </div>
+          <props.StyledExpandArrow
+            pointingUp={props.expanded}
+            style={{margin: '0 25px'}}
+          />
+      </props.StyledHeader>
+      {props.expanded?
+        <props.StyledBody style={{paddingLeft: '20px'}}>
+          {props.categories.map((category) =>
+            <CategoryTitle
+              onClick={() => scrollToCategory(props.categoryToRef[category.id])}
+              key={category.id}
+            >
+              {category.name}
+            </CategoryTitle>
+          )}
+        </props.StyledBody>
+        :
+        <></>
+      }
+    </>
+  );
 }

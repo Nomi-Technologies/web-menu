@@ -75,58 +75,44 @@ const HeaderColumns = styled.div`
   text-align: center;
 `;
 
-export default class extends React.Component {
+export default (props) => {
 
-  state = {
-    tabIndex: 0,
-  };
-
-  onSelectTab(index, lastIndex) {
-    if (lastIndex === index) {
-      return;
-    }
-    this.setState({ tabIndex: index });
-  }
-
-  render() {
-    return (
-      <RestaurantScreen>
-        <Header>
-          <HeaderColumns style={{ width: '20%' }}>
-            {
-              this.props.restaurantId ?
-              <RestaurantImgLogo
-                alt={`${this.props.restaurantName} logo`}
-                src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
-              /> : <></>
-            }
-          </HeaderColumns>
-          <HeaderColumns style={{ width: '60%' }}>
-            <MenuTabNav
-              {...this.props}
-            />
-          </HeaderColumns>
-          <HeaderColumns style={{ width: '20%' }}>
-            <NomiLogo
-              width='70px'
-              height='28px'
-            />
-          </HeaderColumns>
-        </Header>
-        {this.props.dishesByMenu.length > 0 ?
-          <MenuScreen
-            onClick={() => this.setState({ hamburgerOpen: false })}
-            restaurantName={this.props.restaurantName}
-            menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
+  return (
+    <RestaurantScreen>
+      <Header>
+        <HeaderColumns style={{ width: '20%' }}>
+          {
+            props.restaurantId ?
+            <RestaurantImgLogo
+              alt={`${props.restaurantName} logo`}
+              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${props.restaurantId}`}
+            /> : <></>
+          }
+        </HeaderColumns>
+        <HeaderColumns style={{ width: '60%' }}>
+          <MenuTabNav
+            {...props}
           />
-          :
-          (
-            this.props.error ?
-            <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
-            <Loading>Restaurant Menu Loading...</Loading>
-          )
-        }
-      </RestaurantScreen>
-    );
-  }
+        </HeaderColumns>
+        <HeaderColumns style={{ width: '20%' }}>
+          <NomiLogo
+            width='70px'
+            height='28px'
+          />
+        </HeaderColumns>
+      </Header>
+      {props.dishesByMenu.length > 0 ?
+        <MenuScreen
+          restaurantName={props.restaurantName}
+          menu={props.dishesByMenu[props.selectedMenuIndex]}
+        />
+        :
+        (
+          props.error ?
+          <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
+          <Loading>Restaurant Menu Loading...</Loading>
+        )
+      }
+    </RestaurantScreen>
+  );
 }

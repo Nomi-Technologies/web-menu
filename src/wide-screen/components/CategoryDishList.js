@@ -38,34 +38,32 @@ const ColumnSeparator = styled(Column)`
   max-width: 15px;
 `;
 
-export default class extends React.Component {
-  render() {
-    return (
-      <CategorySection ref={this.props.reactRef}>
-        <Title>{this.props.category.name}</Title>
-        {this.props.category.description ? (
-          <Description>{this.props.category.description}</Description>
-        ) : (
-          <></>
-        )}
-        <DishGrid>
-          <Column>
-            {this.props.dishes
-              .slice(0, Math.ceil(this.props.dishes.length / 2))
-              .map((dish) => (
-                <DishTile key={dish.id} dish={dish} menuHasAllergens={ this.props.menuHasAllergens }/>
-              ))}
-          </Column>
-          <ColumnSeparator />
-          <Column>
-            {this.props.dishes
-              .slice(Math.ceil(this.props.dishes.length / 2))
-              .map((dish) => (
-                <DishTile key={dish.id} dish={dish} menuHasAllergens={ this.props.menuHasAllergens }/>
-              ))}
-          </Column>
-        </DishGrid>
-      </CategorySection>
-    );
-  }
+export default (props) => {
+  return (
+    <CategorySection ref={props.reactRef}>
+      <Title>{props.category.name}</Title>
+      {props.category.description ? (
+        <Description>{props.category.description}</Description>
+      ) : (
+        <></>
+      )}
+      <DishGrid>
+        <Column>
+          {props.dishes
+            .slice(0, Math.ceil(props.dishes.length / 2))
+            .map((dish) => (
+              <DishTile key={dish.id} dish={dish} menuHasAllergens={ props.menuHasAllergens }/>
+            ))}
+        </Column>
+        <ColumnSeparator />
+        <Column>
+          {props.dishes
+            .slice(Math.ceil(props.dishes.length / 2))
+            .map((dish) => (
+              <DishTile key={dish.id} dish={dish} menuHasAllergens={ props.menuHasAllergens }/>
+            ))}
+        </Column>
+      </DishGrid>
+    </CategorySection>
+  );
 }

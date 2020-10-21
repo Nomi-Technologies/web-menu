@@ -40,6 +40,7 @@ const DishName = styled.div`
   height: 100%;
   font-weight: bold;
   font-size: 28px;
+  font-family: 'Source Serif Pro';
   line-height: 1.5em;
   margin-top: auto;
   margin-bottom: 15px;

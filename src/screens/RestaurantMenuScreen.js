@@ -1,66 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
 import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
-import { withRouter } from 'react-router-dom';
-import { withUserAgent } from 'react-useragent';
+import { useParams } from 'react-router-dom';
 import { getRestaurant, getDishesOfMenu, parseMenu } from 'utils';
 
-class RestaurantMenuScreen extends React.Component {
+export default () => {
 
-  constructor(props) {
-    super(props);
-    this.restaurantIdentifier = this.props.match.params.restaurant_identifier;
-  }
+  const { restaurant_identifier } = useParams();
 
-  state = {
-    menus: [],
-    restaurantName: "",
-    restaurantId: "",
-    selectedMenuIndex: 0,
-    dishesByMenu: [],
-    error: null
-  };
+  const [menus, setMenus] = useState([]);
+  const [restaurantName, setRestaurantName] = useState("");
+  const [restaurantId, setRestaurantId] = useState("");
+  const [selectedMenuIndex, setSelecteMenuIndex] = useState(0);
+  const [dishesByMenu, setDishesByMenu] = useState([]);
+  const [error, setError] = useState(null);
 
-  componentDidMount() {
-    getRestaurant(this.restaurantIdentifier)
+  useEffect(() => {
+    getRestaurant(restaurant_identifier)
       .then(restaurant => {
-        this.setState({
-          menus: restaurant.Menus,
-          restaurantName: restaurant.name,
-          restaurantId: restaurant.id,
-        });
+        setMenus(restaurant.Menus);
+        setRestaurantName(restaurant.name);
+        setRestaurantId(restaurant.id);
         
         Promise.all(restaurant.Menus.map(async menu => {
-          let rawMenu = await getDishesOfMenu(this.restaurantIdentifier, menu.id);
+          let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
           return parseMenu(rawMenu);
         })).then(
-          dishesByMenu => { 
-            this.setState({ dishesByMenu: dishesByMenu})
+          dishesByMenu => {
+            setDishesByMenu(dishesByMenu);
           }
         );
       })
       .catch(err => {
-        this.setState({ error: err });
+        setError(err);
       });
-  }
+  }, [restaurant_identifier]);
 
-  onSelectMenu(index) {
-    this.setState({ selectedMenuIndex: index });
-  }
-
-  render() {
-    if (window.innerWidth < 760) {
-      return <MobileRestaurantScreen
-        {...this.state}
-        onSelectMenu={this.onSelectMenu.bind(this)}
-      />;
-    } else {
-      return <WebRestuarantScreen
-        {...this.state}
-        onSelectMenu={this.onSelectMenu.bind(this)}
-      />;
-    }
-  }
-}
-
-export default withRouter(withUserAgent(RestaurantMenuScreen));
+  return window.innerWidth < 760 ?
+    <MobileRestaurantScreen
+      menus={menus}
+      restaurantName={restaurantName}
+      restaurantId={restaurantId}
+      dishesByMenu={dishesByMenu}
+      selectedMenuIndex={selectedMenuIndex}
+      error={error}
+      onSelectMenu={setSelecteMenuIndex}
+    />
+    :
+    <WebRestuarantScreen
+      menus={menus}
+      restaurantName={restaurantName}
+      restaurantId={restaurantId}
+      dishesByMenu={dishesByMenu}
+      selectedMenuIndex={selectedMenuIndex}
+      error={error}
+      onSelectMenu={setSelecteMenuIndex}
+    />;
+};
