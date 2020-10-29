@@ -31,6 +31,31 @@ export const parseMenu = data => {
   return menu;
 }
 
+export const filterMenu = (tags, dishesByTags, selectedFilters) => {
+  let excluded = new Set();
+  let glutenTagId = -1;
+  
+  for (const [id, tag] of Object.entries(tags)) {
+    if(tag.name === 'Gluten') {
+      glutenTagId = tag.id;
+    }
+  }
+
+  selectedFilters.forEach((tagId) =>
+    dishesByTags[tagId].forEach((dish) => {
+      // only exclude dish if not gluten free possible
+      if(tagId === glutenTagId) {
+        if(!dish.gfp) {
+          excluded.add(dish.id)
+        }
+      } else {
+        excluded.add(dish.id)
+      }
+    })
+  );
+  return excluded
+}
+
 export const getRestaurant = async restaurantId => {
   const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}`);
   return res.json();

@@ -5,6 +5,7 @@ import Banner from 'components/Banner';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
+import { filterMenu } from "../../utils"
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -240,15 +241,9 @@ export default (props) => {
     setPanelExpanded(expanded);
   }
 
-  function onApplyFilter(selected) {
-    let excluded = new Set();
-    selected.forEach(t => {
-      let dishesWithTag = props.menu.dishesByTags[t]
-      if(dishesWithTag) {
-        dishesWithTag.forEach(d => excluded.add(d.id))
-      }
-    })
-    
+  function onApplyFilter(selected) {    
+    let excluded = filterMenu(props.menu.tags, props.menu.dishesByTags, selected)
+
     setSelected(selected);
     setExcludedDishes(excluded);
     setTimeout(() => setModalShow(false), 1000);

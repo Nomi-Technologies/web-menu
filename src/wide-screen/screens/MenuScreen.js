@@ -10,6 +10,8 @@ import QRCodeSidePanel from "../components/QRCodeSidePanel";
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
 import styled from "styled-components";
 
+import { filterMenu } from "../../utils"
+
 const ColumnStyle = styled.div`
   padding: 20px 16px;
   overflow: scroll;
@@ -253,12 +255,10 @@ export default (props) => {
   }, [props.menu]);
 
   function onApplyFilter(selected) {
-    let excluded = new Set();
-    selected.forEach((t) =>
-      props.menu.dishesByTags[t].forEach((d) => excluded.add(d.id))
-    );
+    let filteredDishes = filterMenu(props.menu.tags, props.menu.dishesByTags, selected)
+
     setSelected(selected);
-    setExcludedDishes(excluded);
+    setExcludedDishes(filteredDishes);
   }
 
   function onClearFilter() {
