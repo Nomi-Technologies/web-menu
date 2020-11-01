@@ -306,7 +306,7 @@ export default class extends React.Component {
             />
           </a>
         </NomiLogoBar>
-        { 
+        {/* { 
           // hide filtering menu if menu doesn't have allergens
           this.props.menu.hasAllergens ? 
           <SlideUpPanelWrapper>
@@ -319,7 +319,7 @@ export default class extends React.Component {
             />
           </SlideUpPanelWrapper>
           : ""
-        }
+        } */}
 
         <Modal
           className='react-bootstrap-modal'

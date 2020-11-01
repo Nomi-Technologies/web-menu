@@ -100,7 +100,7 @@ function LeftPanel(props) {
           onExpansionChanged={props.onHotScrollPanelExpansionChanged}
         />
       </Panel>
-      { props.menu.hasAllergens ? 
+      {/* { props.menu.hasAllergens ? 
         <Panel>
             <AllergenFiltersSidePanel
               StyledHeader={HeaderStyle}
@@ -113,7 +113,7 @@ function LeftPanel(props) {
               onClearFilter={props.onClearFilter}
             /> 
         </Panel> : "" 
-      }      
+      }       */}
       <Panel>
         <QRCodeSidePanel StyledBody={PanelBodyStyle} />
       </Panel>
