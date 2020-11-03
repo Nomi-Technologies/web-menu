@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import RestaurantContext from '../../restaurant-context';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
@@ -59,6 +60,7 @@ const StyledExpansionArrow = styled(ExpansionArrow)`
 `;
 
 function SlideUpPanelHeader(props) {
+  const context = useContext(RestaurantContext);
   return (
     <PanelHeader>
       <FilterLabel onClick={props.onExpansionChanged}>
@@ -67,17 +69,17 @@ function SlideUpPanelHeader(props) {
       <PanelHeaderElement>
         <Counter
           onClick={props.onExpansionChanged}
-          active={props.selected.size > 0}
+          active={context.activeFilters.size > 0}
         >
-          {props.selected.size}
+          {context.activeFilters.size}
         </Counter>
       </PanelHeaderElement>
       <Spacer onClick={props.onExpansionChanged} />
       <PanelHeaderElement>
         <ClearButton
           variant='primary'
-          disabled={props.selected.size === 0}
-          onClick={props.onClearFilter}
+          disabled={context.activeFilters.size === 0}
+          onClick={() => context.setFilters(new Set())}
         >
           Clear
         </ClearButton>
@@ -121,7 +123,9 @@ const Grid = styled(Container)`
 `;
 
 function TagGrid(props) {
-  const tags = props.tags;
+  const context = useContext(RestaurantContext);
+
+  const tags = context.menu.tags;
   const tag_keys = Object.keys(tags);
 
   const createGrid = () => {
@@ -135,10 +139,10 @@ function TagGrid(props) {
         }
         cols.push(<Col key={j}>
           <GridTagButton
-            selected={props.selected.has(tags[tag_keys[i + j]].id)}
+            selected={context.activeFilters.has(tags[tag_keys[i + j]].id)}
             tag={tags[tag_keys[i + j]]}
-            onSelect={props.onSelect}
-            currentTags={props.selected}
+            onSelect={context.setFilters}
+            currentTags={context.activeFilters}
           />
 
         </Col>);
@@ -197,53 +201,30 @@ const SaveButton = styled(Button)`
   }
 `;
 
-function SlideUpPanelBody(props) {
+function SlideUpPanelBody() {
   return (
     <PanelBody>
       <SectionTitle>Exclude dishes that contain:</SectionTitle>
-      <TagGrid {...props} />
+      <TagGrid />
     </PanelBody>
   )
 }
 
-export default (props) => {
-
-  const [selected, setSelected] = useState(new Set());
+export default () => {
+  const [panelExpanded, setPanelExpanded] = useState(false);
 
   function onExpansionChanged() {
-    const expanded = props.expanded;
-    props.onExpansionChanged(!expanded);
-  }
-
-  function onApplyFilter(selected) {
-    props.onApplyFilter(selected, false);
-  }
-
-  function onClearFilter() {
-    setSelected(new Set());
-    props.onClearFilter();
-  }
-
-  function onSelect(selected) {
-    setSelected(selected);
-    onApplyFilter(selected)
+    setPanelExpanded(!panelExpanded);
   }
 
   return (
     <SlideUpPanel>
       <SlideUpPanelHeader
         onExpansionChanged={onExpansionChanged}
-        onClearFilter={onClearFilter}
-        expanded={props.expanded}
-        selected={selected}
+        expanded={panelExpanded}
       />
-      {props.expanded ?
-        <SlideUpPanelBody
-          tags={props.tags}
-          selected={selected}
-          onSelect={onSelect}
-          onApplyFilter={onApplyFilter}
-        />
+      {panelExpanded ?
+        <SlideUpPanelBody />
         :
         <></>
       }

@@ -5,17 +5,13 @@ Customer facing app built with REACT
 To run locally, create a `.env` file at the root directory of the this project with the following entries:
 ```
 REACT_APP_API_BASE_URL=<local backend address, maybe http://localhost:3000>
+PORT=8001
 ```
 
 Then run in terminal:
 ```
-yarn install
-yarn start
-```
-or
-```
 npm install
-npm start
+npm run start
 ```
 
 ## Project Structure
@@ -34,7 +30,7 @@ npm start
 
 ## Deployment
 ### Production (deployed from production branch)
-https://nomi-smart-menu.netlify.app
+https://nomi.menu/test-restaurant
 
 ### Staging (deployed from master branch)
-https://master--nomi-smart-menu.netlify.app
+https://web-menu-staging.netlify.app/test-restaurant

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
 import styled from 'styled-components';
+import RestaurantContext from '../../restaurant-context';
 
 const GridTagButton = styled(TagButton)`
   margin: 10px;
@@ -72,25 +73,11 @@ const SaveButton = styled(Button)`
 
 export default (props) => {
 
-  const [selected, setSelected] = useState(new Set());
+  const context = useContext(RestaurantContext);
 
   function onExpansionChanged() {
     const expanded = props.expanded;
     props.onExpansionChanged(!expanded);
-  }
-
-  function onApplyFilter() {
-    props.onApplyFilter(selected);
-  }
-
-  function onClearFilter() {
-    setSelected(new Set());
-    props.onClearFilter();
-  }
-
-  function onSelect(selected) {
-    setSelected(selected);
-    props.onApplyFilter(selected);
   }
 
   return (
@@ -109,9 +96,9 @@ export default (props) => {
           minWidth: '50px',
         }}>
           <Counter
-            active={selected.size > 0}
+            active={context.activeFilters.size > 0}
           >
-            {selected.size}
+            {context.activeFilters.size}
           </Counter>
           <props.StyledExpandArrow
             pointingUp={props.expanded}
@@ -121,14 +108,13 @@ export default (props) => {
       {props.expanded?
         <props.StyledBody>
           <TagGrid
-            tags={props.tags}
-            selected={selected}
-            onSelect={onSelect}
-            onApplyFilter={onApplyFilter}
+            tags={context.menu.tags}
+            selected={context.activeFilters}
+            onSelect={context.setFilters}
           />
           <SaveButton
-            disabled={selected.size === 0}
-            onClick={onClearFilter}
+            disabled={context.activeFilters.size === 0}
+            onClick={() => context.setFilters(new Set())}
           >
             Clear All
           </SaveButton>
