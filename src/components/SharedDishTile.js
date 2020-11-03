@@ -57,7 +57,6 @@ const Description = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   line-height:1.3;
-  padding-bottom: 3px;
   margin: 0;
 `;
 
