@@ -1,10 +1,11 @@
-import React, { useState, useLayoutEffect, useContext } from 'react';
+import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import RestaurantContext from '../../restaurant-context';
+import { getMenuBannerImage } from '../../utils'
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -86,6 +87,15 @@ function MenuTabView({ openSideNav }) {
   const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [scrolling, setScrolling] = useState(false);
+  const [menuBanner, setMenuBanner] = useState();
+
+  useEffect(() => {
+    if(context.restaurant && context.selectedMenuIndex !== null) {
+      getMenuBannerImage(context.restaurant.Menus[context.selectedMenuIndex].id).then((banner) => {
+        setMenuBanner(banner)
+      })
+    }
+  }, [context.restaurant, context.selectedMenuIndex])
 
   function getDishByCategoryIdWithFilter(categoryId) {
     const originalDishes = context.menu.dishesByCategory[categoryId];
@@ -118,14 +128,14 @@ function MenuTabView({ openSideNav }) {
     for (const id in categoryToRef) {
       const offset = categoryToRef[id].current.getBoundingClientRect().top - 118;
       // if at the bottom of the menu, set the last category as the active one
-      if(containerRef.current.getBoundingClientRect().bottom - categoryToRef[id].current.getBoundingClientRect().bottom == 150) {
+      if(containerRef.current.getBoundingClientRect().bottom - categoryToRef[id].current.getBoundingClientRect().bottom === 150) {
         activeId = id;
         continue;
       }
 
       if (offset > 0) { continue; }
       if (runningMax < offset) {
-        runningMax = runningMax;
+        runningMax = offset;
         activeId = id;
       }
     }
@@ -156,7 +166,7 @@ function MenuTabView({ openSideNav }) {
         })}
       </CategoryTabList>
       <MenuBody onScroll={onScroll} ref={ containerRef }>
-        <StyledBanner>
+        <StyledBanner src={ menuBanner }>
           <BannerContent>
             <RestaurantName>{ context.restaurant.name }</RestaurantName>
             <MenuName

@@ -1,3 +1,5 @@
+import { ResponsiveEmbed } from "react-bootstrap";
+
 export const parseMenu = data => {
   let menu = {
     categories: [],
@@ -64,4 +66,16 @@ export const getRestaurant = async restaurantId => {
 export const getDishesOfMenu = async (restaurantId, menuName) => {
   const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}/${menuName}`);
   return res.json();
+}
+
+export const getRestaurantLogo = async (restaurantId) => {
+  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${restaurantId}`)
+  let blob = await res.blob();
+  return URL.createObjectURL(blob);
+}
+
+export const getMenuBannerImage = async (menuId) => {
+  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${menuId}`)
+  let blob = await res.blob();
+  return URL.createObjectURL(blob);
 }

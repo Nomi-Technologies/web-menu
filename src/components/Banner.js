@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import BannerImage from "components/web_menu_banner.jpg";
+
 
 const Banner = styled.div`
   font-family: 'Oswald', sans-serif;
@@ -9,7 +9,7 @@ const Banner = styled.div`
   justify-content: center;
   left: 0px;
   top: 0px;
-  background: url(${BannerImage});
+  background: url(${({src}) => src});
   background-color: black;
   background-size: cover;
   z-index: 10;
@@ -30,7 +30,7 @@ const BlackLayer = styled.div`
 
 export default function(props) {
   return (
-    <Banner className={props.className}>
+    <Banner className={props.className} src={ props.src }>
       {props.children}
       <BlackLayer/>
     </Banner>

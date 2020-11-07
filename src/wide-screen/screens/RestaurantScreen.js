@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import MenuScreen from './MenuScreen';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import MenuTabNav from '../components/MenuTabNav';
 import RestaurantContext from '../../restaurant-context';
+import { getRestaurantLogo } from '../../utils'
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -81,6 +82,17 @@ export default () => {
   const context = useContext(RestaurantContext);
   const restaurant = context.restaurant;
 
+  const [restaurantLogo, setRestaurantLogo] = useState();
+
+  useEffect(() => {
+    if(context.restaurant) {
+      getRestaurantLogo(context.restaurant.id).then((logo) => {
+        setRestaurantLogo(logo)
+      })
+    }
+    
+  }, [context.restaurant])
+
   return (
     <RestaurantScreen>
       <Header>
@@ -89,7 +101,7 @@ export default () => {
             restaurant ?
             <RestaurantImgLogo
               alt={`${restaurant.name} logo`}
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${restaurant.id}`}
+              src={ restaurantLogo }
             /> : <></>
           }
         </HeaderColumns>
