@@ -3,6 +3,7 @@ import RestaurantContext from '../../restaurant-context';
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
 import Banner from "components/Banner";
+import { getMenuBannerImage } from '../../utils'
 
 import HotScrollSidePanel from "../components/HotScrollSidePanel";
 import AllergenFiltersSidePanel from "../components/AllergenFiltersSidePanel";
@@ -186,9 +187,18 @@ const NomiBottomLogoImage = styled.a`
 `;
 
 function MainContent({ categoryToRef }) {
-  
   const context = useContext(RestaurantContext);
-  console.log(context);
+  const [menuBanner, setMenuBanner] = useState();
+
+  useEffect(() => {
+    if(context.restaurant && context.selectedMenuIndex !== null) {
+      getMenuBannerImage(context.restaurant.Menus[context.selectedMenuIndex].id).then((banner) => {
+        setMenuBanner(banner)
+      })
+    }
+  }, [context.restaurant, context.selectedMenuIndex])
+
+
   function getDishByCategoryIdWithFilter(categoryId) {
     const originalDishes = context.menu.dishesByCategory[categoryId];
     let filtered = [];
@@ -202,7 +212,7 @@ function MainContent({ categoryToRef }) {
 
   return (
     <MainContentWrapper>
-      <StyledBanner background={`${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${context.menu.id}`}>
+      <StyledBanner src={ menuBanner }>
         <RestaurantName>{context.restaurant.name.toUpperCase()}</RestaurantName>
       </StyledBanner>
       <DishList>

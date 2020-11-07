@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import RestaurantContext from '../../restaurant-context';
 import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
 import MenuListNav from "components/MenuListNav";
 import { Button } from 'react-bootstrap';
+import { getRestaurantLogo } from '../../utils'
 
 const RestaurantScreen = styled.div`
   position: relative;
@@ -69,8 +70,17 @@ const Loading = styled.div`
 
 export default () => {
   const context = useContext(RestaurantContext);
-  console.log(context);
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const [restaurantLogo, setRestaurantLogo] = useState();
+
+  useEffect(() => {
+    if(context.restaurant) {
+      getRestaurantLogo(context.restaurant.id).then((logo) => {
+        setRestaurantLogo(logo)
+      })
+    }
+    
+  }, [context.restaurant])
 
   function onClickHambergerMenu() {
     setHamburgerOpen(!hamburgerOpen);
@@ -87,10 +97,10 @@ export default () => {
         </AllMenusButton>
         {
           context.restaurant ?
-          <RestaurantLogo href="https://www.bacariwadams.com/">
+          <RestaurantLogo href={ context.restaurant.logo }>
             <img
               alt={`${context.restaurant.name} logo`}
-              src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${context.restaurant.id}`}
+              src={ restaurantLogo }
             />
           </RestaurantLogo> : <></>
         }
