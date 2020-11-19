@@ -16,7 +16,6 @@ export default function TagButton(props) {
   return (
     <Button 
       {...props}
-      onClick={props.onClick}
     >
       {props.children}
     </Button>

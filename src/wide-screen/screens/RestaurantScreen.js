@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import MenuScreen from './MenuScreen';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import MenuTabNav from '../components/MenuTabNav';
+import RestaurantContext from '../../restaurant-context';
+import { getRestaurantLogo } from '../../utils'
 
 const RestaurantScreen = styled.div`
   height: 100%;
@@ -75,58 +77,56 @@ const HeaderColumns = styled.div`
   text-align: center;
 `;
 
-export default class extends React.Component {
+export default () => {
 
-  state = {
-    tabIndex: 0,
-  };
+  const context = useContext(RestaurantContext);
+  const restaurant = context.restaurant;
 
-  onSelectTab(index, lastIndex) {
-    if (lastIndex === index) {
-      return;
+  const [restaurantLogo, setRestaurantLogo] = useState();
+
+  useEffect(() => {
+    if(context.restaurant) {
+      getRestaurantLogo(context.restaurant.id).then((logo) => {
+        setRestaurantLogo(logo)
+      })
     }
-    this.setState({ tabIndex: index });
-  }
+    
+  }, [context.restaurant])
 
-  render() {
-    return (
-      <RestaurantScreen>
-        <Header>
-          <HeaderColumns style={{ width: '20%' }}>
-            {
-              this.props.restaurantId ?
-              <RestaurantImgLogo
-                alt={`${this.props.restaurantName} logo`}
-                src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
-              /> : <></>
-            }
-          </HeaderColumns>
-          <HeaderColumns style={{ width: '60%' }}>
-            <MenuTabNav
-              {...this.props}
-            />
-          </HeaderColumns>
-          <HeaderColumns style={{ width: '20%' }}>
-            <NomiLogo
-              width='70px'
-              height='28px'
-            />
-          </HeaderColumns>
-        </Header>
-        {this.props.dishesByMenu.length > 0 ?
-          <MenuScreen
-            onClick={() => this.setState({ hamburgerOpen: false })}
-            restaurantName={this.props.restaurantName}
-            menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
+  return (
+    <RestaurantScreen>
+      <Header>
+        <HeaderColumns style={{ width: '20%' }}>
+          {
+            restaurant ?
+            <RestaurantImgLogo
+              alt={`${restaurant.name} logo`}
+              src={ restaurantLogo }
+            /> : <></>
+          }
+        </HeaderColumns>
+        <HeaderColumns style={{ width: '60%' }}>
+          <MenuTabNav />
+        </HeaderColumns>
+        <HeaderColumns style={{ width: '20%' }}>
+          <NomiLogo
+            width='70px'
+            height='28px'
           />
-          :
-          (
-            this.props.error ?
-            <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
-            <Loading>Restaurant Menu Loading...</Loading>
-          )
-        }
-      </RestaurantScreen>
-    );
-  }
+        </HeaderColumns>
+      </Header>
+      {context.menu?
+        <MenuScreen
+          restaurantName={restaurant.name}
+          menu={context.menu}
+        />
+        :
+        (
+          context.error ?
+          <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
+          <Loading>Restaurant Menu Loading...</Loading>
+        )
+      }
+    </RestaurantScreen>
+  );
 }

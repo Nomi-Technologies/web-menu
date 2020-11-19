@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
-import { Modal } from 'react-bootstrap';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
+import RestaurantContext from '../../restaurant-context';
+import { getMenuBannerImage } from '../../utils'
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -79,25 +80,46 @@ const MenuName = styled.div`
   cursor: pointer;
 `;
 
-function MenuTabView(props) {
+function MenuTabView({ openSideNav }) {
 
+  const context = useContext(RestaurantContext);
   const [categoryToRef, setCategoryToRef] = useState({});
   const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [scrolling, setScrolling] = useState(false);
+  const [menuBanner, setMenuBanner] = useState();
+
+  useEffect(() => {
+    if(context.restaurant && context.selectedMenuIndex !== null) {
+      getMenuBannerImage(context.restaurant.Menus[context.selectedMenuIndex].id).then((banner) => {
+        setMenuBanner(banner)
+      })
+    }
+  }, [context.restaurant, context.selectedMenuIndex])
+
+  function getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = context.menu.dishesByCategory[categoryId];
+    let filtered = [];
+    originalDishes.forEach(d => {
+      if (!context.excludedDishes.has(d.id)) {
+        filtered.push(d);
+      }
+    });
+    return filtered;
+  }
   
   // Must be triggered before render
   useLayoutEffect(() => {
     const newCategoryToRef = {};
-    props.menu.categories.forEach((c) => {
+    context.menu.categories.forEach((c) => {
       const categoryRef = React.createRef();
       newCategoryToRef[c.id] = categoryRef;
     });
 
     setContainerRef(React.createRef)
     setCategoryToRef(newCategoryToRef);
-    setActiveCategoryId(props.menu.categories[0]?.id);
-  }, [props.menu]);
+    setActiveCategoryId(context.menu.categories[0]?.id);
+  }, [context.menu]);
 
   function onScroll() {
     // Find the largest non-positive offset from tab bar.
@@ -106,14 +128,14 @@ function MenuTabView(props) {
     for (const id in categoryToRef) {
       const offset = categoryToRef[id].current.getBoundingClientRect().top - 118;
       // if at the bottom of the menu, set the last category as the active one
-      if(containerRef.current.getBoundingClientRect().bottom - categoryToRef[id].current.getBoundingClientRect().bottom == 150) {
+      if(containerRef.current.getBoundingClientRect().bottom - categoryToRef[id].current.getBoundingClientRect().bottom === 150) {
         activeId = id;
         continue;
       }
 
       if (offset > 0) { continue; }
       if (runningMax < offset) {
-        runningMax = runningMax;
+        runningMax = offset;
         activeId = id;
       }
     }
@@ -122,7 +144,6 @@ function MenuTabView(props) {
 
   function onSelectTab(id) {
     if(!scrolling) {
-      props.onSelectTab(id);
       setScrolling(true)
       categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
       setTimeout(_ => {setScrolling(false)}, 1500)
@@ -132,7 +153,7 @@ function MenuTabView(props) {
   return (
     <>
       <CategoryTabList>
-        {props.menu.categories.map(c => {
+        {context.menu.categories.map(c => {
           const active = c.id === activeCategoryId;
           return <CategoryTab
             key={c.id}
@@ -145,19 +166,19 @@ function MenuTabView(props) {
         })}
       </CategoryTabList>
       <MenuBody onScroll={onScroll} ref={ containerRef }>
-        <StyledBanner>
+        <StyledBanner src={ menuBanner }>
           <BannerContent>
-            <RestaurantName>{ props.restaurantName }</RestaurantName>
+            <RestaurantName>{ context.restaurant.name }</RestaurantName>
             <MenuName
-              onClick={props.openSideNav}
-            >{`${props.menuName} menu`}</MenuName>
+              onClick={openSideNav}
+            >{`${context.restaurant.Menus[context.selectedMenuIndex].name} menu`}</MenuName>
           </BannerContent>
         </StyledBanner>
         {
-          props.menu.categories.map(c => {
-            const dishes = props.getDishByCategoryIdWithFilter(c.id);
+          context.menu.categories.map(c => {
+            const dishes = getDishByCategoryIdWithFilter(c.id);
             return (
-              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} menuHasAllergens={ props.menu.hasAllergens }/>
+              <MenuCategoryPanel key={c.id} dishes={dishes} category={c} categoryRef={categoryToRef[c.id]} menuHasAllergens={ context.menu.hasAllergens }/>
             );
           })
         }
@@ -204,136 +225,37 @@ const SlideUpPanelWrapper = styled.div`
   width: 100%;
 `;
 
-const ApplyFilterModalBody = styled.div`
-  font-size: 22px;
-  font-weight: 500;
-  text-align: center;
-  width: 265px;
-  height: 120px;
-  line-height: 120px;
-  margin: 0 auto;
-  background-color: #E3EDF2;
-  border-radius: 10px;
-  color: #5383EC;
-`;
+export default (props) => {
 
-const ActiveFilterCount = styled.div`
-  display: inline-block;
-  height: 52px;
-  width: 52px;
-  line-height: 52px;
-  border-radius: 26px;
-  margin-right: 15px;
-  color: white;
-  font-weight: bold;
-  background-color: #5383EC;
-`;
+  const [selected, setSelected] = useState(new Set());
+  const [excludedDishes, setExcludedDishes] = useState(new Set());
+  const [panelExpanded, setPanelExpanded] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
+  const context = useContext(RestaurantContext);
 
-export default class extends React.Component {
-
-  state = {
-    tabIndex: 0,
-    selected: new Set(),
-    excludedDishes: new Set(),
-    panelExpanded: false,
-    modalShow: false,
-  };
-
-  onSelectTab(index, lastIndex) {
-    if (lastIndex === index) {
-      return;
-    }
-    this.setState({ tabIndex: index });
-  }
-
-  onPanelExpansionChanged(expanded) {
-    this.setState({ panelExpanded: expanded });
-  }
-
-  onApplyFilter(selected) {
-    let excluded = new Set();
-    selected.forEach(t => {
-      let dishesWithTag = this.props.menu.dishesByTags[t]
-      if(dishesWithTag) {
-        dishesWithTag.forEach(d => excluded.add(d.id))
-      }
-    })
-    
-    this.setState({
-      selected: selected,
-      excludedDishes: excluded
-    });
-    setTimeout(() => this.setState({ modalShow: false }), 1000);
-  }
-
-  onClearFilter() {
-    this.setState({
-      selected: new Set(),
-      excludedDishes: new Set(),
-    });
-  }
-
-  getDishByCategoryIdWithFilter(categoryId) {
-    const originalDishes = this.props.menu.dishesByCategory[categoryId];
-    let filtered = [];
-    originalDishes.forEach(d => {
-      if (!this.state.excludedDishes.has(d.id)) {
-        filtered.push(d);
-      }
-    });
-    return filtered;
-  }
-
-  render() {
-    return (
-      <MenuScreen {...this.props}>
-        <MenuTabView
-          menuName={this.props.menuName}
-          restaurantName={this.props.restaurantName}
-          openSideNav={this.props.openSideNav}
-          {...this.state}
-          menu={this.props.menu}
-          onSelectTab={this.onSelectTab.bind(this)}
-          getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(this)}
-        />
-        <NomiLogoBar>
-          <NomiLogoText>Powered by</NomiLogoText>
-          <a href='https://www.dinewithnomi.com/'>
-            <NomiLogoSVG
-              width='70px'
-              height='16px'
-              fill='#8A9DB7'
-            />
-          </a>
-        </NomiLogoBar>
-        {/* { 
-          // hide filtering menu if menu doesn't have allergens
-          this.props.menu.hasAllergens ? 
-          <SlideUpPanelWrapper>
-            <FilterSlideUpPanel
-              tags={this.props.menu.tags}
-              expanded={this.state.panelExpanded}
-              onExpansionChanged={this.onPanelExpansionChanged.bind(this)}
-              onApplyFilter={this.onApplyFilter.bind(this)}
-              onClearFilter={this.onClearFilter.bind(this)}
-            />
-          </SlideUpPanelWrapper>
-          : ""
-        } */}
-
-        <Modal
-          className='react-bootstrap-modal'
-          show={this.state.modalShow}
-          aria-labelledby="contained-modal-vcenter"
-          centered
-          backdrop={false}
-        >
-          <ApplyFilterModalBody>
-            <ActiveFilterCount>{this.state.selected.size}</ActiveFilterCount>
-            { this.state.selected.size > 1 ? "Filters Applied" : "Filter Applied" }
-          </ApplyFilterModalBody>
-        </Modal>
-      </MenuScreen>
-    );
-  }
+  return (
+    <MenuScreen>
+      <MenuTabView
+        openSideNav={props.openSideNav}
+      />
+      <NomiLogoBar>
+        <NomiLogoText>Powered by</NomiLogoText>
+        <a href='https://www.dinewithnomi.com/'>
+          <NomiLogoSVG
+            width='70px'
+            height='16px'
+            fill='#8A9DB7'
+          />
+        </a>
+      </NomiLogoBar>
+      {/* { 
+        // hide filtering menu if menu doesn't have allergens
+        context.menu.hasAllergens ? 
+        <SlideUpPanelWrapper>
+          <FilterSlideUpPanel />
+        </SlideUpPanelWrapper>
+        : ""
+      } */}
+    </MenuScreen>
+  );
 }

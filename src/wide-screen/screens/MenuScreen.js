@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import RestaurantContext from '../../restaurant-context';
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
 import Banner from "components/Banner";
+import { getMenuBannerImage } from '../../utils'
 
 import HotScrollSidePanel from "../components/HotScrollSidePanel";
 import AllergenFiltersSidePanel from "../components/AllergenFiltersSidePanel";
 import QRCodeSidePanel from "../components/QRCodeSidePanel";
-
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
 import styled from "styled-components";
 
@@ -62,7 +63,7 @@ const HeaderStyle = styled.div`
   display: inline-block;
   font-weight: bold;
   padding-left: 20px;
-  align-itmes: center;
+  align-items: center;
 
   & div {
     display: inline-block;
@@ -86,7 +87,12 @@ const PanelBodyStyle = styled.div`
   padding: 10px 15px 10px 15px;
 `;
 
-function LeftPanel(props) {
+function LeftPanel({ categoryToRef }) {
+  
+  const context = useContext(RestaurantContext);
+  const [hotScrollPanelExpanded, setHotScrollPanelExpanded] = useState(true);
+  const [allergenFiltersPanelExpanded, setAllergenFiltersPanelExpanded] = useState(true);
+
   return (
     <LeftPanelWrapper>
       <Panel>
@@ -94,27 +100,21 @@ function LeftPanel(props) {
           StyledHeader={HeaderStyle}
           StyledExpandArrow={ExpandArrowStyle}
           StyledBody={PanelBodyStyle}
-          categories={props.menu.categories}
-          categoryToRef={props.categoryToRef}
-          expanded={props.hotScrollPanelExpanded}
-          onExpansionChanged={props.onHotScrollPanelExpansionChanged}
+          categoryToRef={categoryToRef}
+          expanded={hotScrollPanelExpanded}
+          onExpansionChanged={setHotScrollPanelExpanded}
         />
-      </Panel>
-      {/* { props.menu.hasAllergens ? 
+        {/* { context.menu.hasAllergens ? 
         <Panel>
-            <AllergenFiltersSidePanel
-              StyledHeader={HeaderStyle}
-              StyledExpandArrow={ExpandArrowStyle}
-              StyledBody={PanelBodyStyle}
-              tags={props.menu.tags}
-              expanded={props.allergenFiltersPanelExpanded}
-              onExpansionChanged={props.onAllergenFiltersPanelExpansionChanged}
-              onApplyFilter={props.onApplyFilter}
-              onClearFilter={props.onClearFilter}
-            /> 
+          <AllergenFiltersSidePanel
+            StyledHeader={HeaderStyle}
+            StyledExpandArrow={ExpandArrowStyle}
+            StyledBody={PanelBodyStyle}
+            expanded={allergenFiltersPanelExpanded}
+            onExpansionChanged={setAllergenFiltersPanelExpanded}
+          />
         </Panel> : "" 
-      }       */}
-      <Panel>
+        } */}
         <QRCodeSidePanel StyledBody={PanelBodyStyle} />
       </Panel>
     </LeftPanelWrapper>
@@ -184,20 +184,42 @@ const NomiBottomLogoImage = styled.a`
   }
 `;
 
-function MainContent(props) {
+function MainContent({ categoryToRef }) {
+  const context = useContext(RestaurantContext);
+  const [menuBanner, setMenuBanner] = useState();
+
+  useEffect(() => {
+    if(context.restaurant && context.selectedMenuIndex !== null) {
+      getMenuBannerImage(context.restaurant.Menus[context.selectedMenuIndex].id).then((banner) => {
+        setMenuBanner(banner)
+      })
+    }
+  }, [context.restaurant, context.selectedMenuIndex])
+
+
+  function getDishByCategoryIdWithFilter(categoryId) {
+    const originalDishes = context.menu.dishesByCategory[categoryId];
+    let filtered = [];
+    originalDishes.forEach((d) => {
+      if (!context.excludedDishes.has(d.id)) {
+        filtered.push(d);
+      }
+    });
+    return filtered;
+  }
+
   return (
     <MainContentWrapper>
-      <StyledBanner>
-        <RestaurantName>{props.restaruantName}</RestaurantName>
+      <StyledBanner src={ menuBanner }>
+        <RestaurantName>{context.restaurant.name.toUpperCase()}</RestaurantName>
       </StyledBanner>
       <DishList>
-        {props.menu.categories.map((c) => {
-          const dishes = props.getDishByCategoryIdWithFilter(c.id);
+        {context.menu.categories.map((c) => {
           return (
             <MenuList
-              menuHasAllergens={ props.menu.hasAllergens }
-              reactRef={props.categoryToRef[c.id]}
-              dishes={dishes}
+              menuHasAllergens={context.menu.hasAllergens}
+              reactRef={categoryToRef[c.id]}
+              dishes={getDishByCategoryIdWithFilter(c.id)}
               category={c}
               key={c.id}
             />
@@ -222,109 +244,38 @@ const MenuScreen = styled.div`
   overflow: hidden;
 `;
 
-export default class extends React.Component {
-  state = {
-    tabIndex: 0,
-    selected: new Set(),
-    excludedDishes: new Set(),
-    hotScrollPanelExpanded: true,
-    allergenFiltersPanelExpanded: true,
-    categoryToRef: {},
-  };
+export default () => {
+  const context = useContext(RestaurantContext);
+  const [categoryToRef, setCategoryToRef] = useState({});
 
-  componentDidMount() {
+  useEffect(() => {
     let categoryToRef = {};
 
-    this.props.menu.categories.forEach((c) => {
+    context.menu.categories.forEach((c) => {
       const categoryRef = React.createRef();
       categoryToRef[c.id] = categoryRef;
     });
 
-    this.setState({
-      categoryToRef: categoryToRef,
+    setCategoryToRef(categoryToRef);
+  }, []);
+
+  useEffect(() => {
+    let categoryToRef = {};
+
+    context.menu.categories.forEach((c) => {
+      const categoryRef = React.createRef();
+      categoryToRef[c.id] = categoryRef;
     });
-  }
 
-  componentDidUpdate(prevProps) {
-    if(this.props.menu != prevProps.menu) {
-      let categoryToRef = {};
+    setCategoryToRef(categoryToRef);
+  }, [context.menu]);
 
-      this.props.menu.categories.forEach((c) => {
-        const categoryRef = React.createRef();
-        categoryToRef[c.id] = categoryRef;
-      });
 
-      this.setState({
-        categoryToRef: categoryToRef,
-      });
-    }
-  }
-
-  onHotScrollPanelExpansionChanged(expanded) {
-    this.setState({ hotScrollPanelExpanded: expanded });
-  }
-
-  onAllergenFiltersPanelExpansionChanged(expanded) {
-    this.setState({ allergenFiltersPanelExpanded: expanded });
-  }
-
-  onApplyFilter(selected) {
-    let excluded = new Set();
-    selected.forEach((t) =>
-      this.props.menu.dishesByTags[t].forEach((d) => excluded.add(d.id))
-    );
-    this.setState({
-      selected: selected,
-      excludedDishes: excluded,
-      panelExpanded: false,
-    });
-    setTimeout(() => this.setState({ modalShow: false }), 1000);
-  }
-
-  onClearFilter() {
-    this.setState({
-      selected: new Set(),
-      excludedDishes: new Set(),
-    });
-  }
-
-  getDishByCategoryIdWithFilter(categoryId) {
-    const originalDishes = this.props.menu.dishesByCategory[categoryId];
-    let filtered = [];
-    originalDishes.forEach((d) => {
-      if (!this.state.excludedDishes.has(d.id)) {
-        filtered.push(d);
-      }
-    });
-    return filtered;
-  }
-
-  // TODO(tony): use restaurant name instead of slug field
-  render() {
-    return (
-      <MenuScreen {...this.props}>
-        <LeftPanel
-          menu={this.props.menu}
-          {...this.state}
-          onHotScrollPanelExpansionChanged={this.onHotScrollPanelExpansionChanged.bind(
-            this
-          )}
-          onAllergenFiltersPanelExpansionChanged={this.onAllergenFiltersPanelExpansionChanged.bind(
-            this
-          )}
-          onApplyFilter={this.onApplyFilter.bind(this)}
-          onClearFilter={this.onClearFilter.bind(this)}
-        />
-        <MainContent
-          menu={this.props.menu}
-          {...this.state}
-          restaruantName={this.props.restaurantName.toUpperCase()}
-          getDishByCategoryIdWithFilter={this.getDishByCategoryIdWithFilter.bind(
-            this
-          )}
-        />
-        <RightPanel />
-      </MenuScreen>
-    );
-  }
+  return (
+    <MenuScreen>
+      <LeftPanel categoryToRef={categoryToRef} />
+      <MainContent categoryToRef={categoryToRef} />
+      <RightPanel />
+    </MenuScreen>
+  );
 }

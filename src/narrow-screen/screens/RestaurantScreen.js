@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
+import RestaurantContext from '../../restaurant-context';
 import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
 import MenuListNav from "components/MenuListNav";
 import { Button } from 'react-bootstrap';
+import { getRestaurantLogo } from '../../utils'
 
 const RestaurantScreen = styled.div`
   position: relative;
@@ -66,56 +68,59 @@ const Loading = styled.div`
   font-weight: bold;
 `;
 
-export default class extends React.Component {
-  state = {
-    hamburgerOpen: false,
-  };
+export default () => {
+  const context = useContext(RestaurantContext);
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const [restaurantLogo, setRestaurantLogo] = useState();
 
-  onClickHambergerMenu() {
-    this.setState({ hamburgerOpen: !this.state.hamburgerOpen });
+  useEffect(() => {
+    if(context.restaurant) {
+      getRestaurantLogo(context.restaurant.id).then((logo) => {
+        setRestaurantLogo(logo)
+      })
+    }
+    
+  }, [context.restaurant])
+
+  function onClickHambergerMenu() {
+    setHamburgerOpen(!hamburgerOpen);
   }
 
-  render() {
-    return (
-      <RestaurantScreen>
-        <Header>
-          <AllMenusButton
-            variant="link"
-            onClick={this.onClickHambergerMenu.bind(this)}
-          >
-            SEE MENUS
-          </AllMenusButton>
-          {
-            this.props.restaurantId ?
-            <RestaurantLogo href="https://www.bacariwadams.com/">
-              <img
-                alt={`${this.props.restaurantName} logo`}
-                src={`${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${this.props.restaurantId}`}
-              />
-            </RestaurantLogo> : <></>
-          }
-        </Header>
-        <MenuListNav
-          onClose={() => this.setState({ hamburgerOpen: false })}
-          open={this.state.hamburgerOpen} 
-          {...this.props}
+  return (
+    <RestaurantScreen>
+      <Header>
+        <AllMenusButton
+          variant="link"
+          onClick={onClickHambergerMenu}
+        >
+          SEE MENUS
+        </AllMenusButton>
+        {
+          context.restaurant ?
+          <RestaurantLogo href={ context.restaurant.logo }>
+            <img
+              alt={`${context.restaurant.name} logo`}
+              src={ restaurantLogo }
+            />
+          </RestaurantLogo> : <></>
+        }
+      </Header>
+      <MenuListNav
+        onClose={() => setHamburgerOpen(false)}
+        open={hamburgerOpen} 
+      />
+      {context.menu ? (
+        <MenuScreen
+          openSideNav={() => setHamburgerOpen(true)}
         />
-        {this.props.dishesByMenu.length > 0 ? (
-          <MenuScreen
-            openSideNav={() => this.setState({ hamburgerOpen: true })}
-            restaurantName={this.props.restaurantName}
-            menu={this.props.dishesByMenu[this.props.selectedMenuIndex]}
-            menuName={this.props.menus[this.props.selectedMenuIndex].name}
-          />
-        ) : this.props.error ? (
-          <PageError>
-            There was an error loading this page. Please try reloading the page
-            or contact the Nomi team by filling out a form at dinewithnomi.com
-          </PageError>
-        ) : (
-          <Loading>Restaurant Menu Loading...</Loading>
-        )}
-      </RestaurantScreen>
-    );
-  }
+      ) : context.error ? (
+        <PageError>
+          There was an error loading this page. Please try reloading the page
+          or contact the Nomi team by filling out a form at dinewithnomi.com
+        </PageError>
+      ) : (
+        <Loading>Restaurant Menu Loading...</Loading>
+      )}
+    </RestaurantScreen>
+  );
 }

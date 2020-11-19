@@ -64,7 +64,7 @@ export default function (props) {
   return (
     <DishTile className={props.className} onClick={props.onClick}>
       <TileTitle>
-        <Name>{props.dish.name}</Name>
+        <Name>{props.dish.name} {props.dish.gfp ? 'GFP' : ''}</Name>
         {
           props.dish.price ?
           <TitleTrailing>{'$' + props.dish.price}</TitleTrailing> : <></>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
 import styled from 'styled-components';
+import RestaurantContext from '../../restaurant-context';
 
 const GridTagButton = styled(TagButton)`
   margin: 10px;
@@ -70,76 +71,57 @@ const SaveButton = styled(Button)`
   }
 `;
 
-export default class AllergenFiltersSidePanel extends React.Component {
+export default (props) => {
 
-  state = {
-    selected: new Set(),
-  };
+  const context = useContext(RestaurantContext);
 
-  onExpansionChanged() {
-    const expanded = this.props.expanded;
-    this.props.onExpansionChanged(!expanded);
+  function onExpansionChanged() {
+    const expanded = props.expanded;
+    props.onExpansionChanged(!expanded);
   }
 
-  onApplyFilter() {
-    this.props.onApplyFilter(this.state.selected);
-  }
-
-  onClearFilter() {
-    this.setState({ selected: new Set() });
-    this.props.onClearFilter();
-  }
-
-  onSelect(selected) {
-    this.setState({ selected: selected });
-    this.props.onApplyFilter(selected);
-  }
-
-  render() {
-    return (
-      <>
-        <this.props.StyledHeader
-          onClick={this.onExpansionChanged.bind(this)}
-        >
-          <div className={'text'}>
-            Allergen Filters
-          </div>
-          <div style={{
-            position: 'absolute', 
-            right: '0px',
-            width: 'max-content',
-            margin: '0 25px',
-            minWidth: '50px',
-          }}>
-            <Counter
-              active={this.state.selected.size > 0}
-            >
-              {this.state.selected.size}
-            </Counter>
-            <this.props.StyledExpandArrow
-              pointingUp={this.props.expanded}
-            />
-          </div>
-        </this.props.StyledHeader>
-        {this.props.expanded?
-          <this.props.StyledBody>
-            <TagGrid
-              tags={this.props.tags}
-              selected={this.state.selected}
-              onSelect={this.onSelect.bind(this)}
-              onApplyFilter={this.onApplyFilter.bind(this)}
-            />
-            <SaveButton
-              disabled={this.state.selected.size === 0}
-              onClick={this.onClearFilter.bind(this)}
-            >
-              Clear All
-            </SaveButton>
-          </this.props.StyledBody>
-          :
-          <></>
-        }
-      </>
-    );
-  }
+  return (
+    <>
+      <props.StyledHeader
+        onClick={onExpansionChanged}
+      >
+        <div className={'text'}>
+          Allergen Filters
+        </div>
+        <div style={{
+          position: 'absolute', 
+          right: '0px',
+          width: 'max-content',
+          margin: '0 25px',
+          minWidth: '50px',
+        }}>
+          <Counter
+            active={context.activeFilters.size > 0}
+          >
+            {context.activeFilters.size}
+          </Counter>
+          <props.StyledExpandArrow
+            pointingUp={props.expanded}
+          />
+        </div>
+      </props.StyledHeader>
+      {props.expanded?
+        <props.StyledBody>
+          <TagGrid
+            tags={context.menu.tags}
+            selected={context.activeFilters}
+            onSelect={context.setFilters}
+          />
+          <SaveButton
+            disabled={context.activeFilters.size === 0}
+            onClick={() => context.setFilters(new Set())}
+          >
+            Clear All
+          </SaveButton>
+        </props.StyledBody>
+        :
+        <></>
+      }
+    </>
+  );
 }

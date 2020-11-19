@@ -1,66 +1,72 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
 import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
-import { withRouter } from 'react-router-dom';
-import { withUserAgent } from 'react-useragent';
+import { useParams } from 'react-router-dom';
 import { getRestaurant, getDishesOfMenu, parseMenu } from 'utils';
+import RestaurantContext from '../restaurant-context';
+import { filterMenu } from "../utils"
 
-class RestaurantMenuScreen extends React.Component {
+export default () => {
+  const { restaurant_identifier } = useParams();
+  const [restaurant, setRestaurant] = useState(null);
+  const [activeFiltersByMenu, setActiveFiltersByMenu] = useState([]);
+  const [excludedDishesByMenu, setExcludedDishesByMenu] = useState([]);
+  const [selectedMenuIndex, setSelecteMenuIndex] = useState(0);
+  const [dishesByMenu, setDishesByMenu] = useState([]);
+  const [error, setError] = useState(null);
 
-  constructor(props) {
-    super(props);
-    this.restaurantIdentifier = this.props.match.params.restaurant_identifier;
-  }
-
-  state = {
-    menus: [],
-    restaurantName: "",
-    restaurantId: "",
-    selectedMenuIndex: 0,
-    dishesByMenu: [],
-    error: null
-  };
-
-  componentDidMount() {
-    getRestaurant(this.restaurantIdentifier)
+  useEffect(() => {
+    getRestaurant(restaurant_identifier)
       .then(restaurant => {
-        this.setState({
-          menus: restaurant.Menus,
-          restaurantName: restaurant.name,
-          restaurantId: restaurant.id,
-        });
+        setRestaurant(restaurant);
         
         Promise.all(restaurant.Menus.map(async menu => {
-          let rawMenu = await getDishesOfMenu(this.restaurantIdentifier, menu.id);
+          let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
           return parseMenu(rawMenu);
         })).then(
-          dishesByMenu => { 
-            this.setState({ dishesByMenu: dishesByMenu})
+          dishesByMenu => {
+            setActiveFiltersByMenu(dishesByMenu.map(() => new Set()));
+            setExcludedDishesByMenu(dishesByMenu.map(() => new Set()));
+            setDishesByMenu(dishesByMenu);
           }
         );
       })
       .catch(err => {
-        this.setState({ error: err });
+        setError(err);
       });
-  }
+  }, [restaurant_identifier]);
+  return (
+    <RestaurantContext.Provider value={{
+      restaurant: restaurant,
+      selectedMenuIndex: selectedMenuIndex,
+      menu: dishesByMenu[selectedMenuIndex],
+      activeFilters: activeFiltersByMenu[selectedMenuIndex],
+      excludedDishes: excludedDishesByMenu[selectedMenuIndex],
+      error: error,
+      setFilters: (filters) => {
+        let filtersByMenu = activeFiltersByMenu.slice(0);
+        filtersByMenu[selectedMenuIndex] = filters;
+        setActiveFiltersByMenu(filtersByMenu);
 
-  onSelectMenu(index) {
-    this.setState({ selectedMenuIndex: index });
-  }
-
-  render() {
-    if (window.innerWidth < 760) {
-      return <MobileRestaurantScreen
-        {...this.state}
-        onSelectMenu={this.onSelectMenu.bind(this)}
-      />;
-    } else {
-      return <WebRestuarantScreen
-        {...this.state}
-        onSelectMenu={this.onSelectMenu.bind(this)}
-      />;
-    }
-  }
-}
-
-export default withRouter(withUserAgent(RestaurantMenuScreen));
+        const menu = dishesByMenu[selectedMenuIndex];
+        // let excluded = new Set();
+        // filters.forEach((t) =>
+        //   menu.dishesByTags[t].forEach((dish) => excluded.add(dish.id))
+        // );
+        let excluded = filterMenu(menu.tags, menu.dishesByTags, filters)
+        
+        const excludedDishes = excludedDishesByMenu.slice(0);
+        excludedDishes[selectedMenuIndex] = excluded;
+        setExcludedDishesByMenu(excludedDishes);
+      },
+      setSelectedMenu: setSelecteMenuIndex,
+    }}>
+      {
+        window.innerWidth < 760 ?
+        <MobileRestaurantScreen />
+        :
+        <WebRestuarantScreen />
+      }
+    </RestaurantContext.Provider>
+  );
+};
