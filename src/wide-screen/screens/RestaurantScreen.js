@@ -3,7 +3,7 @@ import MenuScreen from './MenuScreen';
 import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
 import styled from 'styled-components';
 import MenuTabNav from '../components/MenuTabNav';
-import RestaurantContext from '../../restaurant-context';
+import RestaurantContext from '../../RestaurantContext';
 import { getRestaurantLogo } from '../../utils'
 
 const RestaurantScreen = styled.div`

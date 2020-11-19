@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import RestaurantContext from '../../restaurant-context';
+import RestaurantContext from '../../RestaurantContext'
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
 import Banner from "components/Banner";
-import { getMenuBannerImage } from '../../utils'
+import { getMenuBannerImage } from 'utils'
+import RemovableNotice from 'components/RemovableNotice';
 
 import HotScrollSidePanel from "../components/HotScrollSidePanel";
 import AllergenFiltersSidePanel from "../components/AllergenFiltersSidePanel";
@@ -144,7 +145,6 @@ const MainContentWrapper = styled(ColumnStyle)`
 
 const StyledBanner = styled(Banner)`
   height: 250px;
-  border-radius: 5px;
 `;
 
 const RestaurantName = styled.div`
@@ -216,6 +216,10 @@ function MainContent({ categoryToRef }) {
         <RestaurantName>{context.restaurant.name.toUpperCase()}</RestaurantName>
       </StyledBanner>
       <DishList>
+        {
+          context.menu.hasRemovables ?
+          <RemovableNotice /> : null
+        }
         {context.menu.categories.map((c) => {
           return (
             <MenuList

@@ -7,7 +7,8 @@ export const parseMenu = data => {
     dishesByCategory: {},
     dishesByTags: {},
     tags: {},
-    hasAllergens: false
+    hasAllergens: false,
+    hasRemovables: false,
   };
 
   data.forEach(dish => {
@@ -33,29 +34,27 @@ export const parseMenu = data => {
   return menu;
 }
 
-export const filterMenu = (tags, dishesByTags, selectedFilters) => {
+export const filterMenu = (dishesByTags, selectedFilters) => {
   let excluded = new Set();
-  let glutenTagId = -1;
-  
-  for (const [id, tag] of Object.entries(tags)) {
-    if(tag.name === 'Gluten') {
-      glutenTagId = tag.id;
-    }
-  }
+  let onlyHasRemovables = new Set();
 
   selectedFilters.forEach((tagId) =>
     dishesByTags[tagId].forEach((dish) => {
-      // only exclude dish if not gluten free possible
-      if(tagId === glutenTagId) {
-        if(!dish.gfp) {
-          excluded.add(dish.id)
+      if (dish.Tags.some((tag) => tag.id === tagId && tag.DishTag.removable )) {
+        // This dish-tag is removable
+        if (!excluded.has(dish.id)) {
+          // if excluded => the dish has been filtered out by another unremovable allergen
+          // Do not add to removable in that case.
+          onlyHasRemovables.add(dish.id);
         }
       } else {
-        excluded.add(dish.id)
+        // Saw an unremovable allergen, remove from onlyHasRemovables
+        excluded.add(dish.id);
+        onlyHasRemovables.delete(dish.id);
       }
     })
   );
-  return excluded
+  return { excluded, hasRemovables: onlyHasRemovables.size > 0 };
 }
 
 export const getRestaurant = async restaurantId => {

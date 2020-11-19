@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as Exit } from 'components/exit-button.svg';
 import AllergenIcon from 'components/AllergenIconWithName';
+import RemovableNotice from './RemovableNotice';
+import RestaurantContext from '../RestaurantContext';
 
 const ModalContainer = styled.div`
   color: black;
@@ -79,7 +81,7 @@ const SectionTitle = styled.div`
 
 const SectionBody = styled.div`
   color: #8A9DB7;
-  padding-top: 18px;
+  padding-top: 14px;
   font-weight: 500;
   font-size: 14px;
 `;
@@ -92,7 +94,17 @@ const Price = styled.span`
   font-weight: 500;
 `;
 
+const StyledRemovableNotice = styled(RemovableNotice)`
+  margin-bottom: 10px;
+`;
+
 export default function(props) {
+  const context = useContext(RestaurantContext);
+
+  // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
+  let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
+  || props.dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
+
   return (
     <Modal
       // className='react-bootstrap-modal'
@@ -127,9 +139,13 @@ export default function(props) {
             <SectionTitle>ALLERGENS</SectionTitle>
             <SectionBody>
               {
+                showRemovableNotice ?
+                <StyledRemovableNotice /> : null
+              }
+              {
                 props.dish.Tags.length > 0 ?
                 (
-                  props.dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t}/>)
+                  props.dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.has(t.id) }/>)
                 )
                 :
                 "No Allergy Info"
@@ -137,7 +153,6 @@ export default function(props) {
             </SectionBody>
           </>  : ""
           }
-
           {
             props.dish.price.length > 0 ?
             <>
