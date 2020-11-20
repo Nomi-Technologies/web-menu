@@ -7,6 +7,8 @@ import {
 } from 'react-router-dom';
 import 'index.css';
 
+import { googleAnalyticsPageView } from "utils"
+
 /******
  * App is restricted to the window's size to be compatible with mobile version
  * #root generally does not respond to the changes in size in .App
@@ -25,6 +27,9 @@ export default () => {
       });
     }
     window.addEventListener('resize', handleResize);
+
+    googleAnalyticsPageView()
+
     return () => window.removeEventListener('resize', handleResize);
   }, []); // [] to trigger only on first render
 
