@@ -6,7 +6,6 @@ import {
   Route,
 } from 'react-router-dom';
 import 'index.css';
-
 import ReactGA from 'react-ga';
 
 /******
@@ -14,18 +13,11 @@ import ReactGA from 'react-ga';
  * #root generally does not respond to the changes in size in .App
  */
 export default () => {
-
   const [windowSize, setWindowSize] = React.useState({
     height: window.innerHeight,
     width: window.innerWidth
   })
-
-  // if (process.env.NODE_ENV === "production") {
-    console.log("initializing google analytics")
-    ReactGA.initialize('G-1V27CCNXDJ');
-    ReactGA.pageview(window.location.pathname + window.location.search);
-  // }
-
+  
   React.useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -34,6 +26,18 @@ export default () => {
       });
     }
     window.addEventListener('resize', handleResize);
+
+    let gaID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
+    if (gaID) {
+      console.log("initializing google analytics")
+      ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
+      ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+
+    ReactGA.event({
+      category: "Restaurant Load",
+      action: "Visit Menu"
+    })
 
     return () => window.removeEventListener('resize', handleResize);
   }, []); // [] to trigger only on first render
