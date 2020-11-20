@@ -83,6 +83,6 @@ export const getMenuBannerImage = async (menuId) => {
 export const googleAnalyticsPageView = () => {
 
   if(process.env.NODE_ENV === 'production') {
-    window.gtag('config', 'G-1V27CCNXDJ', { 'page_title': document.title, page_path: window.location.pathname })
+    window.gtag('config', 'G-1V27CCNXDJ', { 'page_title': document.title, 'page_path': window.location.pathname })
   }
 }
