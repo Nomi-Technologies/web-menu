@@ -79,3 +79,13 @@ export const getMenuBannerImage = async (menuId) => {
   let blob = await res.blob();
   return URL.createObjectURL(blob);
 }
+
+export const googleAnalyticsPageView = (restaurant) => {
+
+  if(process.env.NODE_ENV === 'production') {
+    window.gtag('config', 'G-1V27CCNXDJ', { 'page_title': document.title, 'page_path': window.location.pathname })
+    if(restaurant) {
+      window.gtag('event', 'load_restaurant', { restaurant_name: restaurant })
+    }
+  }
+}
