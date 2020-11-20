@@ -27,9 +27,6 @@ export default () => {
       });
     }
     window.addEventListener('resize', handleResize);
-
-    googleAnalyticsPageView()
-
     return () => window.removeEventListener('resize', handleResize);
   }, []); // [] to trigger only on first render
 
