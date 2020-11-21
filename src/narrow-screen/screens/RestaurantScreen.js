@@ -3,10 +3,6 @@ import RestaurantContext from '../../restaurant-context';
 import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
 
-const RestaurantScreen = styled.div`
-  position: relative;
-`;
-
 const PageError = styled.div`
   position: relative;
   text-align: center;
@@ -28,7 +24,7 @@ export default () => {
   const context = useContext(RestaurantContext);
 
   return (
-    <RestaurantScreen>
+    <>
       {context.menu ?
       <MenuScreen /> : context.error ? (
         <PageError>
@@ -38,6 +34,6 @@ export default () => {
       ) : (
         <Loading>Restaurant Menu Loading...</Loading>
       )}
-    </RestaurantScreen>
+    </>
   );
 }

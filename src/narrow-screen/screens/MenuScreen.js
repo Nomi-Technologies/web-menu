@@ -81,6 +81,7 @@ const MenuName = styled.div`
 `;
 
 const MenuScreen = styled.div`
+  position: relative;
   background-color: transparent;
 `;
 
