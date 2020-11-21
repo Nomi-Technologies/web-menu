@@ -5,6 +5,7 @@ export default createContext({
   selectedMenuIndex: 0,
   menu: null,
   activeFilters: null,
+  allergens: {}, // name to allergen id
   excludedDishes: null,
   error: null,
   setFilters: () => {},

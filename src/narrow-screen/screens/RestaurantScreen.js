@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import RestaurantContext from '../../restaurant-context';
+import RestaurantContext from '../../RestaurantContext';
 import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
 import MenuListNav from "components/MenuListNav";
