@@ -5,8 +5,6 @@ import styled from "styled-components";
 
 const RestaurantScreen = styled.div`
   position: relative;
-  height: 100%;
-  background-color: #d8e2f8;
 `;
 
 const PageError = styled.div`
