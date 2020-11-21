@@ -26,7 +26,7 @@ const OrangeDot = styled.div`
 
 export default ({ className }) => {
   return <Banner className={className}>
-    contains <span style={{ fontWeight: 'bold' }}>removable allergens</span>. Discuss with your waiter for modifiable ingredients.
+    This dish can be modified to meet your dietary needs.  Please ask your waiter.
     <OrangeDot />
   </Banner>
 }
