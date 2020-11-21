@@ -6,10 +6,6 @@ import MenuTabNav from '../components/MenuTabNav';
 import RestaurantContext from '../../restaurant-context';
 import { getRestaurantLogo } from '../../utils'
 
-const RestaurantScreen = styled.div`
-  height: 100%;
-`;
-
 const Header = styled.div`
   position: fixed;
   top: 0;
@@ -92,7 +88,7 @@ export default () => {
   }, [context.restaurant])
 
   return (
-    <RestaurantScreen>
+    <>
       <Header>
         <HeaderColumns style={{ width: '20%' }}>
           {
@@ -125,6 +121,6 @@ export default () => {
           <Loading>Restaurant Menu Loading...</Loading>
         )
       }
-    </RestaurantScreen>
+    </>
   );
 }
