@@ -62,7 +62,7 @@ export default () => {
       setSelectedMenu: setSelecteMenuIndex,
     }}>
       {
-        window.innerWidth < 760 ?
+        window.innerWidth < 1000 ?
         <MobileRestaurantScreen />
         :
         <WebRestuarantScreen />
