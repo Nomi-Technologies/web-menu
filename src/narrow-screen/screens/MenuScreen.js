@@ -223,6 +223,7 @@ const SlideUpPanelWrapper = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
+  z-index: 100;
 `;
 
 export default (props) => {
