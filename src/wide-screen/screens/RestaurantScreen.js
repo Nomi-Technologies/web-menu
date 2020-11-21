@@ -8,15 +8,14 @@ import { getRestaurantLogo } from '../../utils'
 
 const RestaurantScreen = styled.div`
   height: 100%;
-  display: flex;
-  flex-flow: column;
-  flex: 1 1 auto;
 `;
 
 const Header = styled.div`
-  position: relative;
-  flex: 0 0 auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
   height: 50px;
+  z-index: 100;
   display: flex;
   align-items: center;
   /* White */
