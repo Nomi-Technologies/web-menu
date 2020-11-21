@@ -6,6 +6,9 @@ import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import RestaurantContext from '../../restaurant-context';
 import { getMenuBannerImage } from '../../utils'
+import MenuListNav from "../components/MenuListNav";
+import { getRestaurantLogo } from '../../utils'
+import { Button } from 'react-bootstrap';
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -33,21 +36,18 @@ const CategoryTabList = styled.div`
   padding: 20px 5px 0 5px;
   overflow: auto;
   white-space: nowrap;
-  position: sticky;
   background-color: #F8F8F8;
-  z-index: 10;
+  z-index: 100;
+  width: 100%;
   height: 58px;
 `;
 
 const MenuBody = styled.div`
   width: 100%;
   display: block;
-  position: absolute;
   /* 50px for header; 80px for expansion strip + 70px for nomi logo */
   padding: 0 0 150px 0;
-  margin-top: 58px;
-  top: 0;
-  bottom: 0;
+  margin-top: 118px; /* 58px + 60px */
   overflow: auto;
 `;
 
@@ -80,9 +80,87 @@ const MenuName = styled.div`
   cursor: pointer;
 `;
 
-function MenuTabView({ openSideNav }) {
+const MenuScreen = styled.div`
+  background-color: transparent;
+`;
 
+const NomiLogoBar = styled.div`
+  height: 22px;
+  position: absolute;
+  display: block;
+  bottom: 105px; /* 25px from the bottom slide up panel */
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #C4CEDB;
+  font-weight: 500;
+  z-index: 0;
+`;
+
+const NomiLogoText = styled.div`
+  display: inline-block;
+  margin-right: 5px;
+`;
+
+const NomiLogoSVG = styled(NomiLogo)`
+  position: relative;
+  bottom: 4px;
+  display: inline-block;
+  filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg) brightness(78%) contrast(78%);
+`;
+
+const SlideUpPanelWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+`;
+
+const Header = styled.div`
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+`;
+
+const LogoBar = styled.div`
+  background-color: white;
+  height: 60px; /* LOGO's 50px + 5px*2 */
+  padding: 5px 0;
+  position: relative;
+  text-align: center;
+`;
+
+const RestaurantLogo = styled.a`
+  display: inline-block;
+  padding-top: 5px;
+  & img {
+    height: 35px;
+  }
+`;
+
+const AllMenusButton = styled(Button)`
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: 5px;
+  margin: auto 0;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: #628deb;
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+`;
+
+export default () => {
   const context = useContext(RestaurantContext);
+
+  const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
   const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
@@ -150,27 +228,63 @@ function MenuTabView({ openSideNav }) {
     }
   }
 
+  useEffect(() => {
+    if(context.restaurant) {
+      getRestaurantLogo(context.restaurant.id).then((logo) => {
+        setRestaurantLogo(logo)
+      })
+    }
+    
+  }, [context.restaurant])
+
+  function onClickHambergerMenu() {
+    setHamburgerOpen(!hamburgerOpen);
+  }
+
   return (
-    <>
-      <CategoryTabList>
-        {context.menu.categories.map(c => {
-          const active = c.id === activeCategoryId;
-          return <CategoryTab
-            key={c.id}
-            active={active}
-            onClick={() => onSelectTab(c.id)}
-          >
-            {c.name}
-            {active ? <BlueDot /> : <></>}
-          </CategoryTab>;
-        })}
-      </CategoryTabList>
+    <MenuScreen>
+      <MenuListNav
+        onClose={() => setHamburgerOpen(false)}
+        open={hamburgerOpen} 
+      />
+      <Header>
+        <LogoBar>
+          <AllMenusButton
+            variant="link"
+            onClick={onClickHambergerMenu}
+            >
+            SEE MENUS
+          </AllMenusButton>
+          {
+            context.restaurant ?
+            <RestaurantLogo href={ context.restaurant.logo }>
+              <img
+                alt={`${context.restaurant.name} logo`}
+                src={ restaurantLogo }
+                />
+            </RestaurantLogo> : <></>
+          }
+        </LogoBar>
+        <CategoryTabList>
+          {context.menu.categories.map(c => {
+            const active = c.id === activeCategoryId;
+            return <CategoryTab
+              key={c.id}
+              active={active}
+              onClick={() => onSelectTab(c.id)}
+            >
+              {c.name}
+              {active ? <BlueDot /> : <></>}
+            </CategoryTab>;
+          })}
+        </CategoryTabList>
+      </Header>
       <MenuBody onScroll={onScroll} ref={ containerRef }>
         <StyledBanner src={ menuBanner }>
           <BannerContent>
             <RestaurantName>{ context.restaurant.name }</RestaurantName>
             <MenuName
-              onClick={openSideNav}
+              onClick={() => setHamburgerOpen(true)}
             >{`${context.restaurant.Menus[context.selectedMenuIndex].name} menu`}</MenuName>
           </BannerContent>
         </StyledBanner>
@@ -183,62 +297,6 @@ function MenuTabView({ openSideNav }) {
           })
         }
       </MenuBody>
-    </>
-  );
-}
-
-const MenuScreen = styled.div`
-  position: relative;
-  flex-flow: column;
-  flex: 1 1 auto;
-  background-color: transparent;
-`;
-
-const NomiLogoBar = styled.div`
-  height: 22px;
-  position: absolute;
-  display: block;
-  bottom: 105px; /* 25px from the bottom slide up panel */
-  left: 0;
-  right: 0;
-  text-align: center;
-  color: #C4CEDB;
-  font-weight: 500;
-  z-index: 0;
-`;
-
-const NomiLogoText = styled.div`
-  display: inline-block;
-  margin-right: 5px;
-`;
-
-const NomiLogoSVG = styled(NomiLogo)`
-  position: relative;
-  bottom: 4px;
-  display: inline-block;
-  filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg) brightness(78%) contrast(78%);
-`;
-
-const SlideUpPanelWrapper = styled.div`
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  z-index: 100;
-`;
-
-export default (props) => {
-
-  const [selected, setSelected] = useState(new Set());
-  const [excludedDishes, setExcludedDishes] = useState(new Set());
-  const [panelExpanded, setPanelExpanded] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
-  const context = useContext(RestaurantContext);
-
-  return (
-    <MenuScreen>
-      <MenuTabView
-        openSideNav={props.openSideNav}
-      />
       <NomiLogoBar>
         <NomiLogoText>Powered by</NomiLogoText>
         <a href='https://www.dinewithnomi.com/'>

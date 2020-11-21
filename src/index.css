@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  height: 100%;
   font-family: 'HK Grotesk';
   font-size: 18px;
   -webkit-font-smoothing: antialiased;
@@ -11,10 +10,4 @@ body {
 
 #root {
   overflow: show;
-}
-
-.app {
-  display: flex;
-  flex-flow: column;
-  overflow: hidden;
 }

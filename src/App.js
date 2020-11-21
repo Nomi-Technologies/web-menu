@@ -13,19 +13,8 @@ import ReactGA from 'react-ga';
  * #root generally does not respond to the changes in size in .App
  */
 export default () => {
-  const [windowSize, setWindowSize] = React.useState({
-    height: window.innerHeight,
-    width: window.innerWidth
-  })
   
   React.useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        height: window.innerHeight,
-        width: window.innerWidth
-      });
-    }
-    window.addEventListener('resize', handleResize);
 
     let gaID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
     if (gaID) {
@@ -39,32 +28,24 @@ export default () => {
       action: "Visit Menu"
     })
 
-    return () => window.removeEventListener('resize', handleResize);
   }, []); // [] to trigger only on first render
 
 
   return (
     <BrowserRouter>
-      <div className='app'
-        style={{
-          height: `${windowSize.height}px`,
-          width: `${windowSize.width}px`
-        }}
-      >
-        <Switch>
-          <Route path='/:restaurant_identifier'>
-            <RestaurantMenuScreen/>
-          </Route>
-          <Route path='/' render={() => {
-            window.location = 'https://www.dinewithnomi.com/';
-          }}>
-            {
-              process.env.NODE_ENV === 'production' ?
-              null : 'A list of restaurants'
-            }
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path='/:restaurant_identifier'>
+          <RestaurantMenuScreen/>
+        </Route>
+        <Route path='/' render={() => {
+          window.location = 'https://www.dinewithnomi.com/';
+        }}>
+          {
+            process.env.NODE_ENV === 'production' ?
+            null : 'A list of restaurants'
+          }
+        </Route>
+      </Switch>
     </BrowserRouter>
   )
 
