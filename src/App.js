@@ -14,12 +14,26 @@ import ReactGA from 'react-ga';
  */
 export default () => {
   
+  const [dimensions, setDimensions] = React.useState({});
+
+  React.useLayoutEffect(() => {
+    const resizeListener = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+    resizeListener();
+    window.addEventListener('resize', resizeListener);
+    return () => window.removeEventListener('resize', resizeListener);
+  }, []);
+
   React.useEffect(() => {
 
     let gaID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
     if (gaID) {
       console.log("initializing google analytics")
-      ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
+      ReactGA.initialize(gaID);
       ReactGA.pageview(window.location.pathname + window.location.search);
     }
 

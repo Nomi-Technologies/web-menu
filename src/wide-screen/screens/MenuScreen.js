@@ -142,6 +142,7 @@ function RightPanel() {
 
 const MainContentWrapper = styled.div`
   margin: 0 auto;
+  padding: 0 10px;
   width: 60%;
   @media (max-width: 1440px) {
     width: 75%;
