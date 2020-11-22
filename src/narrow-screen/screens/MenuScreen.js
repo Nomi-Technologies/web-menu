@@ -4,17 +4,12 @@ import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
-<<<<<<< HEAD
-import RestaurantContext from '../../restaurant-context';
-import { getMenuBannerImage } from '../../utils'
+import RestaurantContext from 'RestaurantContext';
+import { getMenuBannerImage } from 'utils'
 import MenuListNav from "../components/MenuListNav";
-import { getRestaurantLogo } from '../../utils'
+import { getRestaurantLogo } from 'utils'
 import { Button } from 'react-bootstrap';
-=======
-import RestaurantContext from '../../RestaurantContext'
-import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
->>>>>>> 418736e036a89241d1dc0a480c38bc7bf99711eb
 
 const CategoryTab = styled.div`
   display: inline-block;
