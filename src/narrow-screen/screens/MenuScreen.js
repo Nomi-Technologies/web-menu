@@ -4,11 +4,17 @@ import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
+<<<<<<< HEAD
 import RestaurantContext from '../../restaurant-context';
 import { getMenuBannerImage } from '../../utils'
 import MenuListNav from "../components/MenuListNav";
 import { getRestaurantLogo } from '../../utils'
 import { Button } from 'react-bootstrap';
+=======
+import RestaurantContext from '../../RestaurantContext'
+import { getMenuBannerImage } from 'utils';
+import RemovableNotice from 'components/RemovableNotice';
+>>>>>>> 418736e036a89241d1dc0a480c38bc7bf99711eb
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -289,6 +295,10 @@ export default () => {
             >{`${context.restaurant.Menus[context.selectedMenuIndex].name} menu`}</MenuName>
           </BannerContent>
         </StyledBanner>
+        {
+          context.menu.hasRemovables ?
+          <RemovableNotice /> : null
+        }
         {
           context.menu.categories.map(c => {
             const dishes = getDishByCategoryIdWithFilter(c.id);

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import RestaurantContext from '../../restaurant-context';
+import RestaurantContext from '../RestaurantContext';
 import styled from 'styled-components';
 
 const SideNav = styled.div`

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import RestaurantContext from '../../restaurant-context';
+import RestaurantContext from '../../RestaurantContext';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
