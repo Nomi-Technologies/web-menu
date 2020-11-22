@@ -8,6 +8,7 @@ const Banner = styled.div`
   padding: 16px;
   padding-left: 40px;
   background-color: #ebeef5;
+  border-radius: 6px;
   position: relative;
   letter-spacing: 0.02em;
   line-height: 18px;

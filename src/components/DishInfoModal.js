@@ -67,6 +67,7 @@ const ModalBody = styled(Modal.Body)`
 
 const Description = styled.div`
   font-size: 14px;
+  line-height: 1.3;
 `;
 
 const Divider = styled.div`
