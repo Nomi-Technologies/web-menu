@@ -3,7 +3,7 @@ import { Button, Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
 import styled from 'styled-components';
-import RestaurantContext from '../../restaurant-context';
+import RestaurantContext from '../../RestaurantContext';
 
 const GridTagButton = styled(TagButton)`
   margin: 10px;

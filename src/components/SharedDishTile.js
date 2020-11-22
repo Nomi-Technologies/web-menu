@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from 'react';
 import styled from "styled-components";
+import RestaurantContext from '../RestaurantContext';
 
 const DishTile = styled.div`
   font-family: "Source Serif Pro";
@@ -19,7 +20,9 @@ const TileTitle = styled.div`
 `;
 
 const Name = styled.div`
-  display: inline-block;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
   flex: 1 1 auto;
   font-style: normal;
   font-weight: bold;
@@ -60,11 +63,28 @@ const Description = styled.p`
   margin: 0;
 `;
 
+const OrangeDot = styled.div`
+  /* position: absolute; */
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  background-color: #f3a35c;
+  margin-left: 8px;
+  display: inline-block;
+`;
+
 export default function (props) {
+  let context = useContext(RestaurantContext)
+  let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
+  || props.dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
+
   return (
     <DishTile className={props.className} onClick={props.onClick}>
       <TileTitle>
-        <Name>{props.dish.name} {props.dish.gfp ? 'GFP' : ''}</Name>
+        <Name>
+          { props.dish.name }
+          { showRemovableNotice ? <OrangeDot/> : "" }
+        </Name>
         {
           props.dish.price ?
           <TitleTrailing>{'$' + props.dish.price}</TitleTrailing> : <></>
