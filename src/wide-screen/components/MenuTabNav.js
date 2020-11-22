@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import RestaurantContext from '../../restaurant-context';
+import RestaurantContext from '../../RestaurantContext';
 
 const MenuTab = styled.div`
   display: inline-block;

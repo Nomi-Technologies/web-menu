@@ -4,8 +4,9 @@ import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
-import RestaurantContext from '../../restaurant-context';
-import { getMenuBannerImage } from '../../utils'
+import RestaurantContext from '../../RestaurantContext'
+import { getMenuBannerImage } from 'utils';
+import RemovableNotice from 'components/RemovableNotice';
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -175,6 +176,10 @@ function MenuTabView({ openSideNav }) {
           </BannerContent>
         </StyledBanner>
         {
+          context.menu.hasRemovables ?
+          <RemovableNotice /> : null
+        }
+        {
           context.menu.categories.map(c => {
             const dishes = getDishByCategoryIdWithFilter(c.id);
             return (
@@ -227,10 +232,6 @@ const SlideUpPanelWrapper = styled.div`
 
 export default (props) => {
 
-  const [selected, setSelected] = useState(new Set());
-  const [excludedDishes, setExcludedDishes] = useState(new Set());
-  const [panelExpanded, setPanelExpanded] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
   const context = useContext(RestaurantContext);
 
   return (
