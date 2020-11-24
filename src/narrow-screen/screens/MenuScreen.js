@@ -207,6 +207,10 @@ export default () => {
     setActiveCategoryId(context.menu.categories[0]?.id);
   }, [context.menu]);
 
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [context.selectedMenuIndex]);
+
   // Triggered by mouse wheel or panning (swiping up/down) on mobile
   function onWheel() {
 
