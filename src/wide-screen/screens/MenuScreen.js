@@ -251,7 +251,8 @@ function MainContent({ categoryToRef }) {
 }
 
 const MenuScreen = styled.div`
-  margin-top: 70px;
+  margin-top: 50px;
+  padding-top: 20px;
 `;
 
 export default () => {
