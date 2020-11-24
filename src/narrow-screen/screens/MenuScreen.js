@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
@@ -49,7 +49,7 @@ const MenuBody = styled.div`
   /* 50px for header; 80px for expansion strip + 70px for nomi logo */
   padding: 0 0 150px 0;
   margin-top: 118px; /* 58px + 60px */
-  overflow: auto;
+  overflow: scroll;
 `;
 
 const StyledBanner = styled(Banner)`
@@ -166,8 +166,14 @@ export default () => {
   const [categoryToRef, setCategoryToRef] = useState({});
   const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
-  const [scrolling, setScrolling] = useState(false);
   const [menuBanner, setMenuBanner] = useState();
+
+  // For window's event listener to get the states in this React component
+  const stateRef = useRef();
+  stateRef.current = {
+    categoryToRef,
+    activeCategoryId,
+  };
 
   useEffect(() => {
     if(context.restaurant && context.selectedMenuIndex !== null) {
@@ -201,18 +207,18 @@ export default () => {
     setActiveCategoryId(context.menu.categories[0]?.id);
   }, [context.menu]);
 
+  // Triggered by mouse wheel or panning (swiping up/down) on mobile
+  function onWheel() {
+
+  }
+  
+  // Triggered when the entire document scrolls
   function onScroll() {
     // Find the largest non-positive offset from tab bar.
     let runningMax = Number.MIN_SAFE_INTEGER;
-    let activeId = activeCategoryId;
-    for (const id in categoryToRef) {
-      const offset = categoryToRef[id].current.getBoundingClientRect().top - 118;
-      // if at the bottom of the menu, set the last category as the active one
-      if(containerRef.current.getBoundingClientRect().bottom - categoryToRef[id].current.getBoundingClientRect().bottom === 150) {
-        activeId = id;
-        continue;
-      }
-
+    let activeId = stateRef.current.activeCategoryId;
+    for (const id in stateRef.current.categoryToRef) {
+      const offset = stateRef.current.categoryToRef[id].current.getBoundingClientRect().top - 118;
       if (offset > 0) { continue; }
       if (runningMax < offset) {
         runningMax = offset;
@@ -221,13 +227,16 @@ export default () => {
     }
     setActiveCategoryId(activeId);
   }
+    
+  useLayoutEffect(() => {
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   function onSelectTab(id) {
-    if(!scrolling) {
-      setScrolling(true)
-      categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(_ => {setScrolling(false)}, 1500)
-    }
+    const category = categoryToRef[id].current;
+    const scrollAmount = category.getBoundingClientRect().top - 118;
+    window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
   }
 
   useEffect(() => {
@@ -236,7 +245,6 @@ export default () => {
         setRestaurantLogo(logo)
       })
     }
-    
   }, [context.restaurant])
 
   function onClickHambergerMenu() {
@@ -244,7 +252,10 @@ export default () => {
   }
 
   return (
-    <MenuScreen>
+    <MenuScreen
+      onWheel={onWheel}
+      onTouchMove={onWheel}
+    >
       <MenuListNav
         onClose={() => setHamburgerOpen(false)}
         open={hamburgerOpen} 
@@ -281,7 +292,7 @@ export default () => {
           })}
         </CategoryTabList>
       </Header>
-      <MenuBody onScroll={onScroll} ref={ containerRef }>
+      <MenuBody ref={ containerRef }>
         <StyledBanner src={ menuBanner }>
           <BannerContent>
             <RestaurantName>{ context.restaurant.name }</RestaurantName>
