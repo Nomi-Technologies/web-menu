@@ -175,6 +175,7 @@ export default () => {
         setMenuBanner(banner)
       })
     }
+    window.scrollTo(0,0);
   }, [context.restaurant, context.selectedMenuIndex])
 
   function getDishByCategoryIdWithFilter(categoryId) {
@@ -187,7 +188,7 @@ export default () => {
     });
     return filtered;
   }
-  
+
   // Must be triggered before render
   useLayoutEffect(() => {
     const newCategoryToRef = {};
@@ -225,7 +226,8 @@ export default () => {
   function onSelectTab(id) {
     if(!scrolling) {
       setScrolling(true)
-      categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
+      categoryToRef[id].current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setActiveCategoryId(id);
       setTimeout(_ => {setScrolling(false)}, 1500)
     }
   }
@@ -236,7 +238,7 @@ export default () => {
         setRestaurantLogo(logo)
       })
     }
-    
+
   }, [context.restaurant])
 
   function onClickHambergerMenu() {
@@ -247,7 +249,7 @@ export default () => {
     <MenuScreen>
       <MenuListNav
         onClose={() => setHamburgerOpen(false)}
-        open={hamburgerOpen} 
+        open={hamburgerOpen}
       />
       <Header>
         <LogoBar>
@@ -313,9 +315,9 @@ export default () => {
           />
         </a>
       </NomiLogoBar>
-      { 
+      {
         // hide filtering menu if menu doesn't have allergens
-        context.menu.hasAllergens ? 
+        context.menu.hasAllergens ?
         <SlideUpPanelWrapper>
           <FilterSlideUpPanel />
         </SlideUpPanelWrapper>
