@@ -49,7 +49,6 @@ const MenuBody = styled.div`
   /* 50px for header; 80px for expansion strip + 70px for nomi logo */
   padding: 0 0 150px 0;
   margin-top: 118px; /* 58px + 60px */
-  overflow: scroll;
 `;
 
 const StyledBanner = styled(Banner)`
