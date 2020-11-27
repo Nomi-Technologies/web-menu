@@ -163,7 +163,6 @@ export default () => {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
-  const [containerRef, setContainerRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [menuBanner, setMenuBanner] = useState();
 
@@ -295,7 +294,7 @@ export default () => {
           })}
         </CategoryTabList>
       </Header>
-      <MenuBody ref={ containerRef }>
+      <MenuBody>
         <StyledBanner src={ menuBanner }>
           <BannerContent>
             <RestaurantName>{ context.restaurant.name }</RestaurantName>
