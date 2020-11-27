@@ -163,6 +163,8 @@ export default () => {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
+  const [categoryToTabRef, setCategoryToTabRef] = useState({});
+  const [tabBarRef, setTabBarRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [menuBanner, setMenuBanner] = useState();
 
@@ -195,13 +197,14 @@ export default () => {
   // Must be triggered before render
   useLayoutEffect(() => {
     const newCategoryToRef = {};
+    const newCategoryToTabRef = {};
     context.menu.categories.forEach((c) => {
-      const categoryRef = React.createRef();
-      newCategoryToRef[c.id] = categoryRef;
+      newCategoryToRef[c.id] = React.createRef();
+      newCategoryToTabRef[c.id] = React.createRef();
     });
-
-    setContainerRef(React.createRef)
+    setTabBarRef(React.createRef());
     setCategoryToRef(newCategoryToRef);
+    setCategoryToTabRef(newCategoryToTabRef);
     setActiveCategoryId(context.menu.categories[0]?.id);
   }, [context.menu]);
 
@@ -229,7 +232,20 @@ export default () => {
     }
     setActiveCategoryId(activeId);
   }
-    
+
+  useLayoutEffect(() => {
+    if (activeCategoryId) {
+      const tabRef = categoryToTabRef[activeCategoryId];
+      const rect = tabRef.current.getBoundingClientRect();
+      const left = rect.left + tabBarRef.current.scrollLeft 
+          - window.innerWidth / 2 + rect.width;
+      tabBarRef.current.scrollTo({
+        behavior: 'smooth',
+        left: left,
+      })
+    }
+  }, [activeCategoryId]);
+
   useLayoutEffect(() => {
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
@@ -280,13 +296,14 @@ export default () => {
             </RestaurantLogo> : <></>
           }
         </LogoBar>
-        <CategoryTabList>
+        <CategoryTabList ref={tabBarRef}>
           {context.menu.categories.map(c => {
             const active = c.id === activeCategoryId;
             return <CategoryTab
               key={c.id}
               active={active}
               onClick={() => onSelectTab(c.id)}
+              ref={categoryToTabRef[c.id]}
             >
               {c.name}
               {active ? <BlueDot /> : <></>}
