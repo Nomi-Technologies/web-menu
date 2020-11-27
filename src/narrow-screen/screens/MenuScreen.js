@@ -238,7 +238,7 @@ export default () => {
       const tabRef = categoryToTabRef[activeCategoryId];
       const rect = tabRef.current.getBoundingClientRect();
       const left = rect.left + tabBarRef.current.scrollLeft 
-          - window.innerWidth / 2 + rect.width;
+          - window.innerWidth / 2 + rect.width / 2;
       tabBarRef.current.scrollTo({
         behavior: 'smooth',
         left: left,
