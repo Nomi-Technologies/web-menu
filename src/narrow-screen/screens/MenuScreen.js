@@ -212,11 +212,6 @@ export default () => {
     window.scrollTo({ top: 0 });
   }, [context.selectedMenuIndex]);
 
-  // Triggered by mouse wheel or panning (swiping up/down) on mobile
-  function onWheel() {
-
-  }
-  
   // Triggered when the entire document scrolls
   function onScroll() {
     // Find the largest non-positive offset from tab bar.
@@ -269,10 +264,7 @@ export default () => {
   }
 
   return (
-    <MenuScreen
-      onWheel={onWheel}
-      onTouchMove={onWheel}
-    >
+    <MenuScreen>
       <MenuListNav
         onClose={() => setHamburgerOpen(false)}
         open={hamburgerOpen} 
