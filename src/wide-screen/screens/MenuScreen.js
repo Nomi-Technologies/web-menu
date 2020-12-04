@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import RestaurantContext from '../../RestaurantContext'
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
@@ -251,7 +251,8 @@ function MainContent({ categoryToRef }) {
 }
 
 const MenuScreen = styled.div`
-  margin-top: 70px;
+  margin-top: 50px;
+  padding-top: 20px;
 `;
 
 export default () => {
@@ -268,6 +269,11 @@ export default () => {
 
     setCategoryToRef(categoryToRef);
   }, []);
+
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [context.selectedMenuIndex]);
 
   useEffect(() => {
     let categoryToRef = {};

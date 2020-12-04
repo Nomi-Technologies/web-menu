@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
+import React, { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
 import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
 import Banner from 'components/Banner';
@@ -49,7 +49,6 @@ const MenuBody = styled.div`
   /* 50px for header; 80px for expansion strip + 70px for nomi logo */
   padding: 0 0 150px 0;
   margin-top: 118px; /* 58px + 60px */
-  overflow: auto;
 `;
 
 const StyledBanner = styled(Banner)`
@@ -164,10 +163,17 @@ export default () => {
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
-  const [containerRef, setContainerRef] = useState();
+  const [categoryToTabRef, setCategoryToTabRef] = useState({});
+  const [tabBarRef, setTabBarRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
-  const [scrolling, setScrolling] = useState(false);
   const [menuBanner, setMenuBanner] = useState();
+
+  // For window's event listener to get the states in this React component
+  const stateRef = useRef();
+  stateRef.current = {
+    categoryToRef,
+    activeCategoryId,
+  };
 
   useEffect(() => {
     if(context.restaurant && context.selectedMenuIndex !== null) {
@@ -191,28 +197,28 @@ export default () => {
   // Must be triggered before render
   useLayoutEffect(() => {
     const newCategoryToRef = {};
+    const newCategoryToTabRef = {};
     context.menu.categories.forEach((c) => {
-      const categoryRef = React.createRef();
-      newCategoryToRef[c.id] = categoryRef;
+      newCategoryToRef[c.id] = React.createRef();
+      newCategoryToTabRef[c.id] = React.createRef();
     });
-
-    setContainerRef(React.createRef)
+    setTabBarRef(React.createRef());
     setCategoryToRef(newCategoryToRef);
+    setCategoryToTabRef(newCategoryToTabRef);
     setActiveCategoryId(context.menu.categories[0]?.id);
   }, [context.menu]);
 
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [context.selectedMenuIndex]);
+
+  // Triggered when the entire document scrolls
   function onScroll() {
     // Find the largest non-positive offset from tab bar.
     let runningMax = Number.MIN_SAFE_INTEGER;
-    let activeId = activeCategoryId;
-    for (const id in categoryToRef) {
-      const offset = categoryToRef[id].current.getBoundingClientRect().top - 118;
-      // if at the bottom of the menu, set the last category as the active one
-      if(containerRef.current.getBoundingClientRect().bottom - categoryToRef[id].current.getBoundingClientRect().bottom === 150) {
-        activeId = id;
-        continue;
-      }
-
+    let activeId = stateRef.current.activeCategoryId;
+    for (const id in stateRef.current.categoryToRef) {
+      const offset = stateRef.current.categoryToRef[id].current.getBoundingClientRect().top - 118;
       if (offset > 0) { continue; }
       if (runningMax < offset) {
         runningMax = offset;
@@ -222,12 +228,27 @@ export default () => {
     setActiveCategoryId(activeId);
   }
 
-  function onSelectTab(id) {
-    if(!scrolling) {
-      setScrolling(true)
-      categoryToRef[id].current.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(_ => {setScrolling(false)}, 1500)
+  useLayoutEffect(() => {
+    if (activeCategoryId) {
+      const tabRef = categoryToTabRef[activeCategoryId];
+      const rect = tabRef.current.getBoundingClientRect();
+      const left = rect.left - window.innerWidth / 2 + rect.width / 2;
+      tabBarRef.current.scrollBy({
+        behavior: 'smooth',
+        left: left,
+      })
     }
+  }, [activeCategoryId]);
+
+  useLayoutEffect(() => {
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  function onSelectTab(id) {
+    const category = categoryToRef[id].current;
+    const scrollAmount = category.getBoundingClientRect().top - 118;
+    window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
   }
 
   useEffect(() => {
@@ -236,7 +257,6 @@ export default () => {
         setRestaurantLogo(logo)
       })
     }
-    
   }, [context.restaurant])
 
   function onClickHambergerMenu() {
@@ -267,13 +287,14 @@ export default () => {
             </RestaurantLogo> : <></>
           }
         </LogoBar>
-        <CategoryTabList>
+        <CategoryTabList ref={tabBarRef}>
           {context.menu.categories.map(c => {
             const active = c.id === activeCategoryId;
             return <CategoryTab
               key={c.id}
               active={active}
               onClick={() => onSelectTab(c.id)}
+              ref={categoryToTabRef[c.id]}
             >
               {c.name}
               {active ? <BlueDot /> : <></>}
@@ -281,7 +302,7 @@ export default () => {
           })}
         </CategoryTabList>
       </Header>
-      <MenuBody onScroll={onScroll} ref={ containerRef }>
+      <MenuBody>
         <StyledBanner src={ menuBanner }>
           <BannerContent>
             <RestaurantName>{ context.restaurant.name }</RestaurantName>
