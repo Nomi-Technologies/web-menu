@@ -33,10 +33,7 @@ const NomiLogo = styled(NomiTopBottomLogo)`
 
 const RestaurantImgLogo = styled.img`
   display: inline-block;
-
-  
-  height: 28px;
-  width: 84px;
+  height: 45px;
 `;
 
 const FilterToggleSwitch = styled.div`
