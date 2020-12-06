@@ -15,7 +15,7 @@ const ModalContainer = styled.div`
   width: 400px;
   max-height: 80vh;
   margin: 0 auto;
-  overflow: scroll;
+  overflow: auto;
   position: relative;
   padding-bottom: 30px;
 
