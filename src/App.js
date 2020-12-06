@@ -7,6 +7,8 @@ import {
 } from 'react-router-dom';
 import 'index.css';
 
+import ReactGA from 'react-ga'
+
 /******
  * App is restricted to the window's size to be compatible with mobile version
  * #root generally does not respond to the changes in size in .App
