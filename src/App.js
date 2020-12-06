@@ -13,24 +13,27 @@ import ReactGA from 'react-ga';
  * #root generally does not respond to the changes in size in .App
  */
 export default () => {
-  const [windowSize, setWindowSize] = React.useState({
-    height: window.innerHeight,
-    width: window.innerWidth
-  })
   
-  React.useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
+  const [dimensions, setDimensions] = React.useState({});
+
+  React.useLayoutEffect(() => {
+    const resizeListener = () => {
+      setDimensions({
+        width: window.innerWidth,
         height: window.innerHeight,
-        width: window.innerWidth
       });
     }
-    window.addEventListener('resize', handleResize);
+    resizeListener();
+    window.addEventListener('resize', resizeListener);
+    return () => window.removeEventListener('resize', resizeListener);
+  }, []);
+
+  React.useEffect(() => {
 
     let gaID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
     if (gaID) {
       console.log("initializing google analytics")
-      ReactGA.initialize(process.env.GOOGLE_ANALYTICS_ID);
+      ReactGA.initialize(gaID);
       ReactGA.pageview(window.location.pathname + window.location.search);
     }
 
@@ -39,32 +42,24 @@ export default () => {
       action: "Visit Menu"
     })
 
-    return () => window.removeEventListener('resize', handleResize);
   }, []); // [] to trigger only on first render
 
 
   return (
     <BrowserRouter>
-      <div className='app'
-        style={{
-          height: `${windowSize.height}px`,
-          width: `${windowSize.width}px`
-        }}
-      >
-        <Switch>
-          <Route path='/:restaurant_identifier'>
-            <RestaurantMenuScreen/>
-          </Route>
-          <Route path='/' render={() => {
-            window.location = 'https://www.dinewithnomi.com/';
-          }}>
-            {
-              process.env.NODE_ENV === 'production' ?
-              null : 'A list of restaurants'
-            }
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path='/:restaurant_identifier'>
+          <RestaurantMenuScreen/>
+        </Route>
+        <Route path='/' render={() => {
+          window.location = 'https://www.dinewithnomi.com/';
+        }}>
+          {
+            process.env.NODE_ENV === 'production' ?
+            null : 'A list of restaurants'
+          }
+        </Route>
+      </Switch>
     </BrowserRouter>
   )
 

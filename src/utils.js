@@ -78,3 +78,9 @@ export const getMenuBannerImage = async (menuId) => {
   let blob = await res.blob();
   return URL.createObjectURL(blob);
 }
+
+export const getDishImage = async (dishId) => {
+  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/images/dishes/${dishId}`)
+  let blob = await res.blob();
+  return URL.createObjectURL(blob);
+}

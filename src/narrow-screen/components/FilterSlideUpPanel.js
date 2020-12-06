@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import RestaurantContext from '../../RestaurantContext';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
@@ -212,13 +212,25 @@ function SlideUpPanelBody() {
 
 export default () => {
   const [panelExpanded, setPanelExpanded] = useState(false);
+  const myRef = useRef();
+
+  const handleClickOutside = e => {
+      if (!myRef.current.contains(e.target)) {
+          setPanelExpanded(false);
+      }
+  };
+
+  useEffect(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+  });
 
   function onExpansionChanged() {
     setPanelExpanded(!panelExpanded);
   }
 
   return (
-    <SlideUpPanel>
+    <SlideUpPanel ref={myRef}>
       <SlideUpPanelHeader
         onExpansionChanged={onExpansionChanged}
         expanded={panelExpanded}

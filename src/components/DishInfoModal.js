@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Modal } from 'react-bootstrap';
 import { ReactComponent as Exit } from 'components/exit-button.svg';
 import AllergenIcon from 'components/AllergenIconWithName';
 import RemovableNotice from './RemovableNotice';
 import RestaurantContext from '../RestaurantContext';
+import { getDishImage } from 'utils';
+import Banner from 'components/Banner';
 
 const ModalContainer = styled.div`
   color: black;
@@ -99,8 +101,22 @@ const StyledRemovableNotice = styled(RemovableNotice)`
   margin-bottom: 10px;
 `;
 
+const StyledBanner = styled(Banner)`
+  border-radius: 6px;
+  height: 200px;
+`;
+
 export default function(props) {
   const context = useContext(RestaurantContext);
+  const [dishImage, setDishImage] = useState();
+
+  useEffect(() => {
+    if(context.restaurant && context.selectedMenuIndex !== null) {
+      getDishImage(props.dish.id).then((banner) => {
+        setDishImage(banner)
+      })
+    }
+  }, [context.restaurant])
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
   let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
@@ -114,6 +130,7 @@ export default function(props) {
       onHide={props.onHide}
       centered
     >
+      <StyledBanner src={ dishImage } />
       <ModalContainer>
         <ModalHeader>
           <DishName>{props.dish.name}</DishName>
@@ -134,7 +151,7 @@ export default function(props) {
               </> : <></>
             }
           </SectionBody>
-          { props.menuHasAllergens ? 
+          { props.menuHasAllergens ?
           <>
             <Divider/>
             <SectionTitle>ALLERGENS</SectionTitle>
