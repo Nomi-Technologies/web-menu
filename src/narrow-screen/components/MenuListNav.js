@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import RestaurantContext from '../RestaurantContext';
+import React, { useContext, useEffect, useRef } from 'react';
+import RestaurantContext from 'RestaurantContext';
 import styled from 'styled-components';
 
 const SideNav = styled.div`
@@ -7,9 +7,9 @@ const SideNav = styled.div`
   background: #F2F3F5;
   transform: ${props => props.open ? 'translateX(0)' : 'translateX(-100%)'};
   height: 100%;
-  z-index: 16;
+  z-index: 150;
   text-align: left;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   transition: transform 0.3s ease-in-out;
@@ -49,11 +49,23 @@ const CloseButton = styled(Tile)`
   color: #628DEB;
 `;
 
-export default function(props) {
+const MenuListNav = (props) =>{
   const context = useContext(RestaurantContext);
+  const myRef = useRef();
+
+  const handleClickOutside = e => {
+      if (!myRef.current.contains(e.target)) {
+          props.onClose();
+      }
+  };
+
+  useEffect(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+  });
   
   return (
-    <SideNav open={props.open}>
+    <SideNav ref={myRef} open={props.open}>
       <CloseButton onClick={props.onClose}>
         CLOSE
       </CloseButton>
@@ -70,4 +82,6 @@ export default function(props) {
         </MenuTile>)}
     </SideNav>
   )
-};
+}
+
+export default MenuListNav;

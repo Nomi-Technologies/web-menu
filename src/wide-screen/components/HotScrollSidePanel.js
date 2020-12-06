@@ -24,9 +24,8 @@ export default (props) => {
   const context = useContext(RestaurantContext);
 
   function scrollToCategory(categoryRef) {
-    categoryRef.current.scrollIntoView({ 
-      behavior: 'smooth' 
-    });
+    const scrollAmount = categoryRef.current.getBoundingClientRect().top - 50;
+    window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
   }
 
   function onExpansionChanged() {
