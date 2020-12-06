@@ -19,6 +19,7 @@ export default () => {
     getRestaurant(restaurant_identifier)
       .then(restaurant => {
         setRestaurant(restaurant);
+        console.log(restaurant)
         
         Promise.all(restaurant.Menus.map(async menu => {
           let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
