@@ -110,7 +110,7 @@ function LeftPanel({ categoryToRef }) {
           onExpansionChanged={setHotScrollPanelExpanded}
         />
       </Panel>
-      { context.menu.hasAllergens ? 
+      { context.menu.hasAllergens && context.menu.enableFiltering ? 
         <Panel>
           <AllergenFiltersSidePanel
             StyledHeader={HeaderStyle}

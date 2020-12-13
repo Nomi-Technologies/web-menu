@@ -72,7 +72,6 @@ export default () => {
 
   const context = useContext(RestaurantContext);
   const restaurant = context.restaurant;
-
   const [restaurantLogo, setRestaurantLogo] = useState();
 
   useEffect(() => {
