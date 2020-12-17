@@ -84,7 +84,7 @@ export const getMenuBannerImage = async (menuId) => {
 export const googleAnalyticsPageView = (restaurant) => {
 
   if(process.env.NODE_ENV === 'production') {
-    if(window && typeof window !== undefined) {
+    if(window && typeof window !== undefined && typeof window.gtag !== undefined) {
       window.gtag('config', 'G-1V27CCNXDJ', { 'page_title': document.title, 'page_path': window.location.pathname })
       if(restaurant) {
         window.gtag('event', 'load_restaurant', { restaurant_name: restaurant })
