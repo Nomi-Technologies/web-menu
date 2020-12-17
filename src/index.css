@@ -1,20 +1,14 @@
 body {
   margin: 0;
-  height: 100%;
   font-family: 'HK Grotesk';
   font-size: 18px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1; /* offseting bootstrap's 1.5 */
   color: black; /* offseting bootstrap's custom color */
+  background-color: #d8e2f8;
 }
 
 #root {
   overflow: show;
-}
-
-.app {
-  display: flex;
-  flex-flow: column;
-  overflow: hidden;
 }

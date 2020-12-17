@@ -6,18 +6,12 @@ import MenuTabNav from '../components/MenuTabNav';
 import RestaurantContext from '../../RestaurantContext';
 import { getRestaurantLogo } from '../../utils'
 
-const RestaurantScreen = styled.div`
-  height: 100%;
-  display: flex;
-  flex-flow: column;
-  flex: 1 1 auto;
-  background-color: #d8e2f8;
-`;
-
 const Header = styled.div`
-  position: relative;
-  flex: 0 0 auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
   height: 50px;
+  z-index: 100;
   display: flex;
   align-items: center;
   /* White */
@@ -33,10 +27,7 @@ const NomiLogo = styled(NomiTopBottomLogo)`
 
 const RestaurantImgLogo = styled.img`
   display: inline-block;
-
-  
-  height: 28px;
-  width: 84px;
+  height: 45px;
 `;
 
 const FilterToggleSwitch = styled.div`
@@ -81,7 +72,6 @@ export default () => {
 
   const context = useContext(RestaurantContext);
   const restaurant = context.restaurant;
-
   const [restaurantLogo, setRestaurantLogo] = useState();
 
   useEffect(() => {
@@ -94,7 +84,7 @@ export default () => {
   }, [context.restaurant])
 
   return (
-    <RestaurantScreen>
+    <>
       <Header>
         <HeaderColumns style={{ width: '20%' }}>
           {
@@ -127,6 +117,6 @@ export default () => {
           <Loading>Restaurant Menu Loading...</Loading>
         )
       }
-    </RestaurantScreen>
+    </>
   );
 }

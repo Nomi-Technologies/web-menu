@@ -12,7 +12,7 @@
     "react-animation": "^1.2.2",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.8",
-    "react-ga": "^3.2.0",
+    "react-ga": "^3.3.0",
     "react-is": "^16.8",
     "react-overlays": "^3.2.0",
     "react-router-dom": "^5.2.0",
@@ -24,7 +24,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build"
+    "build": "CI=false react-scripts build",
+    "windows-start": "set PORT=8000 && react-scripts start"
+
   },
   "homepage": ".",
   "eslintConfig": {

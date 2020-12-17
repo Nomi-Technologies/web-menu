@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import RestaurantContext from '../../RestaurantContext'
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
@@ -13,7 +13,11 @@ import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
 import styled from "styled-components";
 
 const ColumnStyle = styled.div`
-  padding: 20px 16px;
+  position: fixed;
+  top: 0;
+  padding: 0 32px;
+  padding-top: 70px; /* align: same as MenuScreen's margin-top */
+  height: 100vh;
   overflow: scroll;
   &::-webkit-scrollbar {
     width: 10px;
@@ -51,7 +55,7 @@ const Panel = styled.div`
 
   flex: none;
   order: 0;
-  margin: 15px 15px;
+  margin-bottom: 15px;
 `;
 
 const HeaderStyle = styled.div`
@@ -105,7 +109,8 @@ function LeftPanel({ categoryToRef }) {
           expanded={hotScrollPanelExpanded}
           onExpansionChanged={setHotScrollPanelExpanded}
         />
-        {/* { context.menu.hasAllergens ? 
+      </Panel>
+      { context.menu.hasAllergens && context.menu.enableFiltering ? 
         <Panel>
           <AllergenFiltersSidePanel
             StyledHeader={HeaderStyle}
@@ -115,7 +120,8 @@ function LeftPanel({ categoryToRef }) {
             onExpansionChanged={setAllergenFiltersPanelExpanded}
           />
         </Panel> : "" 
-        } */}
+      }
+      <Panel>
         <QRCodeSidePanel StyledBody={PanelBodyStyle} />
       </Panel>
     </LeftPanelWrapper>
@@ -123,6 +129,7 @@ function LeftPanel({ categoryToRef }) {
 }
 
 const RightPanelWrapper = styled(ColumnStyle)`
+  right: 0;
   width: 20%;
   @media (max-width: 1440px) {
     display: none;
@@ -133,10 +140,13 @@ function RightPanel() {
   return <RightPanelWrapper></RightPanelWrapper>;
 }
 
-const MainContentWrapper = styled(ColumnStyle)`
+const MainContentWrapper = styled.div`
+  margin: 0 auto;
+  padding: 0 10px;
   width: 60%;
   @media (max-width: 1440px) {
     width: 75%;
+    margin: 0 0 0 25%;
   }
 `;
 
@@ -241,11 +251,8 @@ function MainContent({ categoryToRef }) {
 }
 
 const MenuScreen = styled.div`
-  position: relative;
-  display: flex;
-  flex-flow: row;
-  flex: 1 1 auto;
-  overflow: hidden;
+  margin-top: 50px;
+  padding-top: 20px;
 `;
 
 export default () => {
@@ -262,6 +269,11 @@ export default () => {
 
     setCategoryToRef(categoryToRef);
   }, []);
+
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [context.selectedMenuIndex]);
 
   useEffect(() => {
     let categoryToRef = {};

@@ -1,6 +1,6 @@
 import { ResponsiveEmbed } from "react-bootstrap";
 
-export const parseMenu = data => {
+export const parseMenu = (data, enableFiltering) => {
   let menu = {
     categories: [],
     dishes: [],
@@ -9,6 +9,7 @@ export const parseMenu = data => {
     tags: {},
     hasAllergens: false,
     hasRemovables: false,
+    enableFiltering: enableFiltering,
   };
 
   data.forEach(dish => {
@@ -30,6 +31,7 @@ export const parseMenu = data => {
       }
       menu.dishesByTags[tag.id].push(dish);
     });
+    // menu.enableFiltering = dish.enableFiltering
   });
   return menu;
 }
@@ -82,9 +84,16 @@ export const getMenuBannerImage = async (menuId) => {
 export const googleAnalyticsPageView = (restaurant) => {
 
   if(process.env.NODE_ENV === 'production') {
-    window.gtag('config', 'G-1V27CCNXDJ', { 'page_title': document.title, 'page_path': window.location.pathname })
-    if(restaurant) {
-      window.gtag('event', 'load_restaurant', { restaurant_name: restaurant })
+    if(window && typeof window !== undefined && window.gtag) {
+      window.gtag('config', 'G-1V27CCNXDJ', { 'page_title': document.title, 'page_path': window.location.pathname })
+      if(restaurant) {
+        window.gtag('event', 'load_restaurant', { restaurant_name: restaurant })
+      }
     }
   }
+}
+export const getDishImage = async (dishId) => {
+  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/images/dishes/${dishId}`)
+  let blob = await res.blob();
+  return URL.createObjectURL(blob);
 }

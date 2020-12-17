@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
 import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
 import { useParams } from 'react-router-dom';
@@ -20,10 +20,11 @@ export default () => {
     getRestaurant(restaurant_identifier)
       .then(restaurant => {
         setRestaurant(restaurant);
+        console.log(restaurant)
         
         Promise.all(restaurant.Menus.map(async menu => {
           let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
-          return parseMenu(rawMenu);
+          return parseMenu(rawMenu, menu.enableFiltering);
         })).then(
           dishesByMenu => {
             setActiveFiltersByMenu(dishesByMenu.map(() => new Set()));
@@ -71,7 +72,7 @@ export default () => {
       setSelectedMenu: setSelecteMenuIndex,
     }}>
       {
-        window.innerWidth < 760 ?
+        window.innerWidth < 1000 ?
         <MobileRestaurantScreen />
         :
         <WebRestuarantScreen />
