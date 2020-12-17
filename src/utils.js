@@ -1,6 +1,6 @@
 import { ResponsiveEmbed } from "react-bootstrap";
 
-export const parseMenu = data => {
+export const parseMenu = (data, enableFiltering) => {
   let menu = {
     categories: [],
     dishes: [],
@@ -9,6 +9,7 @@ export const parseMenu = data => {
     tags: {},
     hasAllergens: false,
     hasRemovables: false,
+    enableFiltering: enableFiltering,
   };
 
   data.forEach(dish => {
@@ -30,6 +31,7 @@ export const parseMenu = data => {
       }
       menu.dishesByTags[tag.id].push(dish);
     });
+    // menu.enableFiltering = dish.enableFiltering
   });
   return menu;
 }

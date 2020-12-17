@@ -24,7 +24,7 @@ export default () => {
         
         Promise.all(restaurant.Menus.map(async menu => {
           let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
-          return parseMenu(rawMenu);
+          return parseMenu(rawMenu, menu.enableFiltering);
         })).then(
           dishesByMenu => {
             setActiveFiltersByMenu(dishesByMenu.map(() => new Set()));
