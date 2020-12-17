@@ -130,7 +130,11 @@ export default function(props) {
       onHide={props.onHide}
       centered
     >
-      <StyledBanner src={ dishImage } />
+      {
+        dishImage ? 
+        <StyledBanner src={ dishImage } /> 
+        : ""
+      }
       <ModalContainer>
         <ModalHeader>
           <DishName>{props.dish.name}</DishName>
