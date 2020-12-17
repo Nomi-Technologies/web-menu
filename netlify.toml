@@ -8,7 +8,7 @@ NODE_ENV = "production"
 REACT_APP_API_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com"
 
 [context.master.environment]
-NODE_ENV = "production"
+NODE_ENV = "staging"
 REACT_APP_API_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com"
 GOOGLE_ANALYTICS_ID="G-1V27CCNXDJ"
 
