@@ -98,6 +98,20 @@ const Price = styled.span`
 const StyledRemovableNotice = styled(RemovableNotice)`
   margin-bottom: 10px;
 `;
+const AddOn = styled.div`
+  margin-bottom:10px;
+`;
+const AddOnName = styled.span`
+  font-weight: 500;
+  color: black;
+  font-weight: bold;
+`;
+
+const AddOnNotes = styled.span`
+  font-weight: 500;
+  color: #8A9DB7;
+`;
+
 
 export default function(props) {
   const context = useContext(RestaurantContext);
@@ -160,6 +174,21 @@ export default function(props) {
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
               <SectionBody><Price>{props.dish.price}</Price></SectionBody>
+            </> : <></>
+          }
+          {
+            props.dish.Modifications.length > 0 ?
+            <>
+              <Divider/>
+              <SectionTitle>ADD ONS</SectionTitle>
+              <SectionBody>
+              { props.dish.Modifications.map(t => 
+                <AddOn key={t.id}>
+                  <AddOnName>{t.name}</AddOnName>
+                  { t.price !=="0" ? <AddOnNotes> ({t.price})</AddOnNotes> : <></>}
+                </AddOn>
+              ) }
+              </SectionBody> 
             </> : <></>
           }
         </ModalBody>
