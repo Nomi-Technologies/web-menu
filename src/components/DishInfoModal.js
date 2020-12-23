@@ -105,6 +105,7 @@ const AddOnName = styled.span`
   font-weight: 500;
   color: black;
   font-weight: bold;
+  margin-right: 4px;
 `;
 
 const AddOnNotes = styled.span`
