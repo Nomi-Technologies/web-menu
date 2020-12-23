@@ -120,6 +120,7 @@ export default function(props) {
   let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
   || props.dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
 
+  console.log(props.dish.Modifications);
   return (
     <Modal
       // className='react-bootstrap-modal'
@@ -185,6 +186,7 @@ export default function(props) {
               { props.dish.Modifications.map(t => 
                 <AddOn key={t.id}>
                   <AddOnName>{t.name}</AddOnName>
+                  { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
                   { t.price !=="0" ? <AddOnNotes> ({t.price})</AddOnNotes> : <></>}
                 </AddOn>
               ) }
