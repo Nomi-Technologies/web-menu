@@ -120,7 +120,6 @@ export default function(props) {
   let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
   || props.dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
 
-  console.log(props.dish.Modifications);
   return (
     <Modal
       // className='react-bootstrap-modal'
