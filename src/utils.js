@@ -77,8 +77,12 @@ export const getRestaurantLogo = async (restaurantId) => {
 
 export const getMenuBannerImage = async (menuId) => {
   const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${menuId}`)
-  let blob = await res.blob();
-  return URL.createObjectURL(blob);
+  if(res.ok) {
+    let blob = await res.blob();
+    return URL.createObjectURL(blob);
+  } else {
+    return null
+  }
 }
 
 export const googleAnalyticsPageView = (restaurant) => {
@@ -94,6 +98,10 @@ export const googleAnalyticsPageView = (restaurant) => {
 }
 export const getDishImage = async (dishId) => {
   const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/api/images/dishes/${dishId}`)
-  let blob = await res.blob();
-  return URL.createObjectURL(blob);
+  if(res.ok) {
+    let blob = await res.blob();
+    return URL.createObjectURL(blob);
+  } else {
+    return null
+  }
 }

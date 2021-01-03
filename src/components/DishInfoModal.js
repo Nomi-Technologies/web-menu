@@ -111,12 +111,12 @@ export default function(props) {
   const [dishImage, setDishImage] = useState();
 
   useEffect(() => {
-    if(context.restaurant && context.selectedMenuIndex !== null) {
+    if(props.show && context.restaurant && context.selectedMenuIndex !== null) {
       getDishImage(props.dish.id).then((banner) => {
         setDishImage(banner)
       })
     }
-  }, [context.restaurant])
+  }, [context.restaurant, props.show])
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
   let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
