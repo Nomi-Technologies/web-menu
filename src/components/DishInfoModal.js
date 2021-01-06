@@ -17,9 +17,9 @@ const ModalContainer = styled.div`
   position: relative;
   padding-bottom: 30px;
 
-  @media (max-width: 400px) {
-    width: auto;
-    margin: 0 15px;
+  @media (max-width: 1000px) {
+    width: 90%;
+    margin: 0 5%;
     box-sizing: border-box;
   }
 `;
