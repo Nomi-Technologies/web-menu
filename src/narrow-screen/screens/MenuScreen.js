@@ -157,6 +157,23 @@ const AllMenusButton = styled(Button)`
   }
 `;
 
+const FilteringButton = styled(Button)`
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  right: 1px;
+  margin: auto 0;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: #628deb;
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+`;
+
 export default () => {
   const context = useContext(RestaurantContext);
 
@@ -286,7 +303,16 @@ export default () => {
                 />
             </RestaurantLogo> : <></>
           }
+          <FilteringButton
+            variant="link">
+            {
+            context.menu.hasAllergens ? 
+              <FilterSlideUpPanel />
+            : ""
+            }
+          </FilteringButton>
         </LogoBar>
+        
         <CategoryTabList ref={tabBarRef}>
           {context.menu.categories.map(c => {
             const active = c.id === activeCategoryId;
@@ -334,14 +360,14 @@ export default () => {
           />
         </a>
       </NomiLogoBar>
-      { 
+      {/* { 
         // hide filtering menu if menu doesn't have allergens
         context.menu.hasAllergens ? 
         <SlideUpPanelWrapper>
           <FilterSlideUpPanel />
         </SlideUpPanelWrapper>
         : ""
-      }
+      } */}
     </MenuScreen>
   );
 }

@@ -9,19 +9,23 @@ import styled from 'styled-components';
 const SlideUpPanel = styled.div`
   position: relative;
   z-index: 11;
-  background-color: white;
-  border-radius: 12px 12px 0px 0px;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0px 0px 20px rgba(136, 146, 158, 0.15);
-  
+  background-color: yellow;
+  top: 0px;
+  right: 0px;
+
+  // unused b4 or after
+  // border-radius: 12px 12px 0px 0px;
+  // width: 100%;
+  // height: 100%;
+  // box-shadow: 0px 0px 20px rgba(136, 146, 158, 0.15);
 `;
 
 const PanelHeader = styled.div`
-  height: 80px;
+  height: 40px;
   width: 100%;
   position: relative;
-  line-height: 80px; /* vertically center stuff */
+  
+  //line-height: 80px; /* vertically center stuff */
   display: flex;
   flex-direction: row;
 `;
@@ -33,7 +37,7 @@ const PanelHeaderElement = styled.div`
 `;
 
 const FilterLabel = styled(PanelHeaderElement)`
-  margin-left: 38px;
+  margin-left: 8px;
 `;
 
 const Spacer = styled(PanelHeaderElement)`
@@ -64,7 +68,7 @@ function SlideUpPanelHeader(props) {
   return (
     <PanelHeader>
       <FilterLabel onClick={props.onExpansionChanged}>
-        Filters
+        FILTERS
       </FilterLabel>
       <PanelHeaderElement>
         <Counter
@@ -73,23 +77,26 @@ function SlideUpPanelHeader(props) {
         >
           {context.activeFilters.size}
         </Counter>
-      </PanelHeaderElement>
+      {/* </PanelHeaderElement> 
       <Spacer onClick={props.onExpansionChanged} />
-      <PanelHeaderElement>
-        <ClearButton
+      <PanelHeaderElement> */}
+  
+
+        {/* <ClearButton
           variant='primary'
           disabled={context.activeFilters.size === 0}
           onClick={() => context.setFilters(new Set())}
         >
           Clear
-        </ClearButton>
+        </ClearButton> */}
+      
       </PanelHeaderElement>
-      <PanelHeaderElement>
+      {/* <PanelHeaderElement>
         <StyledExpansionArrow
           onClick={props.onExpansionChanged}
           pointingUp={!props.expanded ? 1 : 0}
         />
-      </PanelHeaderElement>
+      </PanelHeaderElement> */}
     </PanelHeader>
   );
 }
@@ -158,18 +165,70 @@ function TagGrid(props) {
 }
 
 const PanelBody = styled.div`
-  max-height: 600px;
-  width: 100%;
-  padding: 10px 15px 20px 15px;
-`;
+  // max-height: 600px;
+  // width: 100%;
+  // padding: 10px 15px 20px 15px;
+  // background: yellow;
 
-const SectionTitle = styled.i`
-  margin-left: 23px;  /* Align with Filters label */
-  margin-bottom: 5px;
-  display: block;
+  //new changed panel body
+  //transition: left 0.5s ease;
+  //transform: translateX(-50px);
+  transition: transform 3s ease;
+
+  position: relative;
+  width: 300px;
+  height: 800px;
+  left: 25px;
+  top: 340px;
+  //overflow-y: scroll;
+  //border: 3px solid red;
+  background: white;
+  z-index: 120;
+`
+
+const FilterHeader = styled.div`
+  position: absolute;
+  width: 300px;
+  height: 50px;
+  left: 0px;
+  top: 20px;
+
+  border: 3px solid blue;
+`
+
+const AllergenTitle = styled.p`
+  position: relative;
+
+  margin-left: 20px;  /* Align with Filters label */
+  padding-top: 60px;  
+  font-family: HK Grotesk;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 24px;
+
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
+  color: #000000;
+`
+
+const SectionTitle = styled.p`
+  margin-left: 20px;  /* Align with Filters label */
+  // margin-bottom: 5px;
+  // display: block;
+  // font-size: 14px;
+  // font-weight: 500;
+  // color: #8A9DB7;
+
+  font-family: HK Grotesk;
+  font-style: normal;
+  font-weight: normal;
   font-size: 14px;
-  font-weight: 500;
-  color: #8A9DB7;
+  line-height: 18px;
+  display: flex;
+  align-items: center;
+  color: #606060;
 `;
 
 const SaveButton = styled(Button)`
@@ -204,6 +263,8 @@ const SaveButton = styled(Button)`
 function SlideUpPanelBody() {
   return (
     <PanelBody>
+      <FilterHeader>clear filter done</FilterHeader>
+      <AllergenTitle>Allergens</AllergenTitle>
       <SectionTitle>Exclude dishes that contain:</SectionTitle>
       <TagGrid />
     </PanelBody>
