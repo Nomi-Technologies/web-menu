@@ -23,7 +23,7 @@
     "websocket-extensions": "^0.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "CI=false react-scripts build",
     "windows-start": "set PORT=8000 && react-scripts start"
 
