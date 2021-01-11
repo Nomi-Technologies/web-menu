@@ -9,15 +9,9 @@ import styled from 'styled-components';
 const SlideUpPanel = styled.div`
   position: relative;
   z-index: 11;
-  background-color: yellow;
+  // background-color: yellow;
   top: 0px;
   right: 0px;
-
-  // unused b4 or after
-  // border-radius: 12px 12px 0px 0px;
-  // width: 100%;
-  // height: 100%;
-  // box-shadow: 0px 0px 20px rgba(136, 146, 158, 0.15);
 `;
 
 const PanelHeader = styled.div`
@@ -44,19 +38,12 @@ const Spacer = styled(PanelHeaderElement)`
   flex: 1 1 auto;
 `;
 
-const ClearButton = styled(Button)`
-  width: 96px;
-  height: 44px;
+const ClearButton = styled.div`
   font-weight: 700;
   font-size: 18px;
-  border-radius: 22px;
-  z-index: 25;
-  border: none;
-  
-  &:disabled {
-    background: #628DEB;
-    opacity: 0.5;
-  }
+  color: #EF5454;
+  left:20px;
+  position:absolute;
 `;
 
 const StyledExpansionArrow = styled(ExpansionArrow)`
@@ -73,7 +60,7 @@ function SlideUpPanelHeader(props) {
       <PanelHeaderElement>
         <Counter
           onClick={props.onExpansionChanged}
-          active={context.activeFilters.size > 0}
+          homeActive={context.activeFilters.size > 0}
         >
           {context.activeFilters.size}
         </Counter>
@@ -104,6 +91,15 @@ function SlideUpPanelHeader(props) {
 const StyledGridTagButton = styled(TagButton)`
   margin: 10px;
   cursor: default;
+  color: #000000;
+  font-family: HK Grotesk;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 23px;
+  letter-spacing: 0.02em;
+  
+  padding-top: 6px; /* vertically center */
+  background-color: ${props => props.selected ? '#00807F' : '#EBEEF5'};
 `;
 
 
@@ -120,9 +116,7 @@ const GridTagButton = (props) => {
       { props.tag.name}
     </StyledGridTagButton>
   )
-
 }
-
 
 const Grid = styled(Container)`
   margin-bottom: 20px;
@@ -137,9 +131,9 @@ function TagGrid(props) {
 
   const createGrid = () => {
     let rows = [];
-    for (let i = 0; i < tag_keys.length; i += 3) {
+    for (let i = 0; i < tag_keys.length; i += 2) {
       let cols = [];
-      for (let j = 0; j < 3; ++j) {
+      for (let j = 0; j < 2; ++j) {
         if (i + j >= tag_keys.length) {
           cols.push(<Col key={j}></Col>);
           continue;
@@ -165,42 +159,42 @@ function TagGrid(props) {
 }
 
 const PanelBody = styled.div`
-  // max-height: 600px;
-  // width: 100%;
-  // padding: 10px 15px 20px 15px;
-  // background: yellow;
-
-  //new changed panel body
-  //transition: left 0.5s ease;
-  //transform: translateX(-50px);
-  transition: transform 3s ease;
-
-  position: relative;
+  position: absolute;
+  top: -10px;
+  right: -20px;
   width: 300px;
-  height: 800px;
-  left: 25px;
-  top: 340px;
-  //overflow-y: scroll;
-  //border: 3px solid red;
+  height: 1500px;
+  // overflow-y: scroll;
   background: white;
-  z-index: 120;
+
+  border: 2px solid pink;
 `
 
 const FilterHeader = styled.div`
-  position: absolute;
-  width: 300px;
+  position: relative;
   height: 50px;
   left: 0px;
-  top: 20px;
+  margin-top: 20px;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+`
 
-  border: 3px solid blue;
+const FilterButton = styled.p`
+  color: black;
+`
+
+const FilterDoneButton = styled.div`
+  right:20px;
+  position:absolute;
+  color:#00807F;
 `
 
 const AllergenTitle = styled.p`
   position: relative;
 
   margin-left: 20px;  /* Align with Filters label */
-  padding-top: 60px;  
+  padding-top: 10px;  
   font-family: HK Grotesk;
   font-style: normal;
   font-weight: bold;
@@ -215,12 +209,6 @@ const AllergenTitle = styled.p`
 
 const SectionTitle = styled.p`
   margin-left: 20px;  /* Align with Filters label */
-  // margin-bottom: 5px;
-  // display: block;
-  // font-size: 14px;
-  // font-weight: 500;
-  // color: #8A9DB7;
-
   font-family: HK Grotesk;
   font-style: normal;
   font-weight: normal;
@@ -260,20 +248,39 @@ const SaveButton = styled(Button)`
   }
 `;
 
-function SlideUpPanelBody() {
-  return (
-    <PanelBody>
-      <FilterHeader>clear filter done</FilterHeader>
-      <AllergenTitle>Allergens</AllergenTitle>
-      <SectionTitle>Exclude dishes that contain:</SectionTitle>
-      <TagGrid />
-    </PanelBody>
-  )
-}
+// function SlideUpPanelBody(props) {
+//   const context = useContext(RestaurantContext);
 
-export default () => {
+//   return (
+//     <PanelBody>
+//       <FilterHeader>
+//         <ClearButton
+//           style={{
+//             color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
+//           }}
+//           onClick={() => context.setFilters(new Set())}>
+//           CLEAR
+//         </ClearButton>
+
+//         <FilterButton>
+//           FILTERS 
+//           <Counter onClick={props.onExpansionChanged} active={context.activeFilters.size > 0}>
+//             {context.activeFilters.size}
+//           </Counter>
+//         </FilterButton>
+//         <FilterDoneButton>DONE</FilterDoneButton>
+//        </FilterHeader>
+//       <AllergenTitle>Allergens</AllergenTitle>
+//       <SectionTitle>Exclude dishes that contain:</SectionTitle>
+//       <TagGrid />
+//     </PanelBody>
+//   )
+// }
+
+export default (props) => {
   const [panelExpanded, setPanelExpanded] = useState(false);
   const myRef = useRef();
+  const context = useContext(RestaurantContext);
 
   const handleClickOutside = e => {
       if (!myRef.current.contains(e.target)) {
@@ -297,7 +304,28 @@ export default () => {
         expanded={panelExpanded}
       />
       {panelExpanded ?
-        <SlideUpPanelBody />
+        <PanelBody>
+        <FilterHeader>
+          <ClearButton
+            style={{
+              color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
+            }}
+            onClick={() => context.setFilters(new Set())}>
+            CLEAR
+          </ClearButton>
+  
+          <FilterButton>
+            FILTERS 
+            <Counter onClick={props.onExpansionChanged} active={context.activeFilters.size > 0}>
+              {context.activeFilters.size}
+            </Counter>
+          </FilterButton>
+          <FilterDoneButton onClick={onExpansionChanged}>DONE</FilterDoneButton>
+         </FilterHeader>
+        <AllergenTitle>Allergens</AllergenTitle>
+        <SectionTitle>Exclude dishes that contain:</SectionTitle>
+        <TagGrid />
+      </PanelBody>
         :
         <></>
       }
