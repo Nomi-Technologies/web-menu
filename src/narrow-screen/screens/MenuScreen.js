@@ -10,6 +10,8 @@ import { Button } from 'react-bootstrap';
 import RestaurantContext from 'RestaurantContext'
 import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
+import Counter from '../../components/Counter';
+import {Animated} from "react-animated-css";
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -33,7 +35,7 @@ const BlueDot = styled.div`
 
 const CategoryTabList = styled.div`
   list-style-type: none;
-  margin: 0;
+  margin-top: 60px;
   padding: 20px 5px 0 5px;
   overflow: auto;
   white-space: nowrap;
@@ -125,16 +127,46 @@ const Header = styled.div`
 `;
 
 const LogoBar = styled.div`
-  background-color: white;
-  height: 60px; /* LOGO's 50px + 5px*2 */
-  padding: 5px 0;
-  position: relative;
-  text-align: center;
+  // background-color: red;
+  // height: 30px; /* LOGO's 50px + 5px*2 */
+  // position: relative;
+
+  // border:2px solid green;
+  // display:flex;
+  // justify-content:center;
+
+  // text-align:center;
 `;
 
+//1+ filter applied
+const NotificationBanner = styled.div`
+  background-color: #628DEB  ;
+  height: 60px; /* LOGO's 50px + 5px*2 */
+  padding: 5px 0;
+  position:absolute;
+  top:0px;
+  left:0px;
+  width:100%;
+  text-align: center;
+
+  animation: FadeAnimation 1.5s ease-in 1s forwards;
+  @keyframes FadeAnimation {
+    0% {
+      opacity: 1;
+    }
+  
+    100% {
+      opacity: 0;
+    }
+  }
+`;
+
+
+
 const RestaurantLogo = styled.a`
-  display: inline-block;
-  padding-top: 5px;
+  position: absolute;
+  left:25%;
+  border:green solid 2px;
   & img {
     height: 35px;
   }
@@ -142,7 +174,8 @@ const RestaurantLogo = styled.a`
 
 const AllMenusButton = styled(Button)`
   position: absolute;
-  top: 50%;
+  top: 0px;
+  padding-top: 60px;
   transform: translate(0, -50%);
   left: 5px;
   margin: auto 0;
@@ -157,9 +190,10 @@ const AllMenusButton = styled(Button)`
   }
 `;
 
-const FilteringButton = styled(Button)`
+const FilteringButton = styled.p`
   position: absolute;
-  top: 50%;
+  top: 0px;
+  padding-top: 60px;
   transform: translate(0, -50%);
   right: 1px;
   margin: auto 0;
@@ -174,10 +208,11 @@ const FilteringButton = styled(Button)`
   }
 `;
 
-export default () => {
+export default (props) => {
   const context = useContext(RestaurantContext);
 
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
   const [categoryToTabRef, setCategoryToTabRef] = useState({});
@@ -280,39 +315,50 @@ export default () => {
     setHamburgerOpen(!hamburgerOpen);
   }
 
+  // function onClickFilterMenu() {
+  //   // setFilterOpen(!filterOpen);
+  //   setFilterOpen(true);
+  //   console.log("filter open value is",filterOpen)
+  // }
+  
   return (
     <MenuScreen>
-      <MenuListNav
-        onClose={() => setHamburgerOpen(false)}
-        open={hamburgerOpen} 
-      />
+      <MenuListNav onClose={() => {setHamburgerOpen(false); console.log("setting hamburger false"); }} open={hamburgerOpen}/>
       <Header>
-        <LogoBar>
+        <NotificationBanner style={context.activeFilters.size > 0 /*&& !filterOpen)*/ ? null : { display: "none" }}> 
+          <Counter active={context.activeFilters.size > 0} >
+            {context.activeFilters.size}
+          </Counter>
+          FILTER APPLIED
+        </NotificationBanner>
+        
+        <LogoBar /*style={context.activeFilters.size === 0 ? null : { display: "none" }}*/>
           <AllMenusButton
             variant="link"
-            onClick={onClickHambergerMenu}
+            onClick={()=>{onClickHambergerMenu();console.log("hamburger open",hamburgerOpen); }}
             >
             SEE MENUS
           </AllMenusButton>
           {
             context.restaurant ?
-            <RestaurantLogo href={ context.restaurant.logo }>
+            <RestaurantLogo href={ context.restaurant.logo} /*onClick={hideMe}*/>
               <img
                 alt={`${context.restaurant.name} logo`}
                 src={ restaurantLogo }
                 />
             </RestaurantLogo> : <></>
           }
-          <FilteringButton
-            variant="link">
+          <FilteringButton /*variant="link"*/ 
+          
+          onClick={()=>{console.log("before", filterOpen); setFilterOpen(true);console.log("after", filterOpen)}} onClose={() => {setFilterOpen(false); console.log("closing filter")}}>
             {
             context.menu.hasAllergens ? 
-              <FilterSlideUpPanel />
+              <FilterSlideUpPanel onClick={()=>{console.log("expand",props.panelExpanded)}}/>
             : ""
             }
           </FilteringButton>
         </LogoBar>
-        
+      
         <CategoryTabList ref={tabBarRef}>
           {context.menu.categories.map(c => {
             const active = c.id === activeCategoryId;
@@ -360,14 +406,6 @@ export default () => {
           />
         </a>
       </NomiLogoBar>
-      {/* { 
-        // hide filtering menu if menu doesn't have allergens
-        context.menu.hasAllergens ? 
-        <SlideUpPanelWrapper>
-          <FilterSlideUpPanel />
-        </SlideUpPanelWrapper>
-        : ""
-      } */}
     </MenuScreen>
   );
 }

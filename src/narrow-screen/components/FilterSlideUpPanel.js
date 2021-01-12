@@ -158,6 +158,16 @@ function TagGrid(props) {
   );
 }
 
+// const GreyOutBackground = styled.div`
+//   position: absolute;
+//   top: 0px;
+//   left: 0px;
+//   width: 800px;
+//   height: 100%;
+//   background-color: rgba(10, 10, 10, 0.5);
+//   // z-index: 100;
+// `
+
 const PanelBody = styled.div`
   position: absolute;
   top: -10px;
@@ -167,7 +177,7 @@ const PanelBody = styled.div`
   // overflow-y: scroll;
   background: white;
 
-  border: 2px solid pink;
+  // border: 2px solid pink;
 `
 
 const FilterHeader = styled.div`
@@ -285,6 +295,7 @@ export default (props) => {
   const handleClickOutside = e => {
       if (!myRef.current.contains(e.target)) {
           setPanelExpanded(false);
+          // props.onClose();
       }
   };
 
@@ -304,28 +315,30 @@ export default (props) => {
         expanded={panelExpanded}
       />
       {panelExpanded ?
-        <PanelBody>
-        <FilterHeader>
-          <ClearButton
-            style={{
-              color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
-            }}
-            onClick={() => context.setFilters(new Set())}>
-            CLEAR
-          </ClearButton>
-  
-          <FilterButton>
-            FILTERS 
-            <Counter onClick={props.onExpansionChanged} active={context.activeFilters.size > 0}>
-              {context.activeFilters.size}
-            </Counter>
-          </FilterButton>
-          <FilterDoneButton onClick={onExpansionChanged}>DONE</FilterDoneButton>
-         </FilterHeader>
-        <AllergenTitle>Allergens</AllergenTitle>
-        <SectionTitle>Exclude dishes that contain:</SectionTitle>
-        <TagGrid />
-      </PanelBody>
+      <>
+          <PanelBody>
+            <FilterHeader>
+              <ClearButton
+                style={{
+                  color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
+                }}
+                onClick={() => context.setFilters(new Set())}>
+                CLEAR
+              </ClearButton>
+      
+              <FilterButton>
+                FILTERS 
+                <Counter onClick={props.onExpansionChanged} active={context.activeFilters.size > 0}>
+                  {context.activeFilters.size}
+                </Counter>
+              </FilterButton>
+              <FilterDoneButton onClick={() => {onExpansionChanged(); /*props.onClose();*/ console.log("filter done button")}} >DONE</FilterDoneButton>
+            </FilterHeader>
+            <AllergenTitle>Allergens</AllergenTitle>
+            <SectionTitle>Exclude dishes that contain:</SectionTitle>
+            <TagGrid />
+          </PanelBody>
+      </>
         :
         <></>
       }
