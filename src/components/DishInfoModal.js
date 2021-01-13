@@ -11,7 +11,6 @@ const ModalContainer = styled.div`
   border-radius: 6px;
   background-color: white;
   width: 400px;
-  max-height: 80vh;
   margin: 0 auto;
   overflow: scroll;
   position: relative;
@@ -191,6 +190,7 @@ const QuantitySelector = styled.span`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  max-width: 170px;
 `;
 
 const SaveDishButton = styled(Button)`
@@ -205,6 +205,7 @@ const SaveDishButton = styled(Button)`
   border-radius: 100px;
   width: 50%;
   align-items: center;
+  max-width: 300px;
 `;
 
 const Quantity = styled.span`
@@ -341,7 +342,7 @@ export default function(props) {
             </QuantitySelector>
             <SaveDishButton onClick={saveDish}> 
               <span>Save Dish</span>
-              <span>${  props.dish.price.length > 0 ? totalPrice  : null }</span>
+              <span>${  props.dish.price.length > 0 ? totalPrice : null }</span>
             </SaveDishButton>
           </SectionBody>
         </ModalBody>
