@@ -220,6 +220,7 @@ export default function(props) {
   const context = useContext(RestaurantContext);
   const [activeModifications, setActiveModifications] = React.useState([]);
   const [quantity, setQuantity] = React.useState(1);
+  const [totalPrice, setTotalPrice] = React.useState(parseInt(props.dish.price));
 
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
@@ -232,10 +233,14 @@ export default function(props) {
       arr = activeModifications;
       arr.push(modification);
     } else {
-      arr = activeModifications.filter(item => item !== modification);
+      var index = activeModifications.indexOf(modification);
+      arr = activeModifications;
+      arr.splice(index, 1);
     }
 
     setActiveModifications(arr);
+    const newPrice = activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(props.dish.price));
+    setTotalPrice(newPrice);
   }
 
   function saveDish() {
@@ -299,7 +304,7 @@ export default function(props) {
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
               <SectionBody><Price>
-                { activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(props.dish.price)) } 
+                { totalPrice } 
               </Price></SectionBody>
             </> : <></>
           }
@@ -308,13 +313,13 @@ export default function(props) {
             <>
               <Divider/>
               <SectionTitle>OPTIONS</SectionTitle>
-              <SectionBody>
+              <SectionBody style={{ flexDirection: "column", alignItems: "flex-start"}}>
               { props.dish.Modifications.map(t => 
                 <AddOn key={t.id}>
                   <label className="container"> 
                     <AddOnName>{t.name} </AddOnName>
                     { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
-                    { t.price !=="0" ? <AddOnNotes> ({t.price})</AddOnNotes> : <></>}
+                    { t.price !=="0" ? <AddOnNotes> (${t.price})</AddOnNotes> : <></>}
                     <input type="checkbox" onClick={() => toggleModification(t)}/>
                     <span className="checkmark"></span>
                   </label>
@@ -336,7 +341,7 @@ export default function(props) {
             </QuantitySelector>
             <SaveDishButton onClick={saveDish}> 
               <span>Save Dish</span>
-              <span>${  props.dish.price.length > 0 ? activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(props.dish.price))  : null }</span>
+              <span>${  props.dish.price.length > 0 ? totalPrice  : null }</span>
             </SaveDishButton>
           </SectionBody>
         </ModalBody>
