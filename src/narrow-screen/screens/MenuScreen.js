@@ -111,13 +111,6 @@ const NomiLogoSVG = styled(NomiLogo)`
   filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg) brightness(78%) contrast(78%);
 `;
 
-const SlideUpPanelWrapper = styled.div`
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  z-index: 100;
-`;
-
 const Header = styled.div`
   position: fixed;
   top: 0;
@@ -125,27 +118,15 @@ const Header = styled.div`
   width: 100%;
 `;
 
-const LogoBar = styled.div`
-  // background-color: red;
-  // height: 30px; /* LOGO's 50px + 5px*2 */
-  // position: relative;
-
-  // border:2px solid green;
-  // display:flex;
-  // justify-content:center;
-
-  // text-align:center;
-`;
-
-//1+ filter applied
+//Notification flashes for 4 second when 1+ filter is applied  
 const NotificationBanner = styled.div`
   background-color: #628DEB  ;
   height: 60px; /* LOGO's 50px + 5px*2 */
   padding: 5px 0;
-  position:absolute;
-  top:0px;
-  left:0px;
-  width:100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
   text-align: center;
 
   font-family: HK Grotesk;
@@ -154,17 +135,18 @@ const NotificationBanner = styled.div`
   font-size: 14px;
   line-height: 50px; 
   color:white;
-  
-  animation: FadeAnimation 2.5s ease-in 0s forwards;
+
+  animation: FadeAnimation 4s ease-in forwards; /*using forwards retains the last keyframe*/
   @keyframes FadeAnimation {
     0% {
-      opacity: 1;
-      z-index: 2; /*temporarily stack on top of restaurant logo
+      opacity: 0;
     }
-  
+    30%{
+      opacity: 1;
+      z-index: 2; /*temporarily cover restaurant logo*/
+    }
     100% {
       opacity: 0;
-      z-index: 0;
     }
   }
 `;
@@ -172,8 +154,8 @@ const NotificationBanner = styled.div`
 const RestaurantLogo = styled.a`
   position: absolute;
   top: 0px;
-  left:25%;
-  line-height:50px;
+  left: 30%;
+  line-height: 50px;
   & img {
     height: 35px;
   }
@@ -330,25 +312,23 @@ export default () => {
           FILTER APPLIED
         </NotificationBanner>
         
-        <LogoBar>
-          <AllMenusButton variant="link" onClick={onClickHambergerMenu}> 
-            SEE MENUS
-          </AllMenusButton>
+        <AllMenusButton variant="link" onClick={onClickHambergerMenu}> 
+          SEE MENUS
+        </AllMenusButton>
+        {
+          context.restaurant ?
+          <RestaurantLogo href={ context.restaurant.logo}>
+            <img
+              alt={`${context.restaurant.name} logo`}
+              src={ restaurantLogo }
+              />
+          </RestaurantLogo> : <></>
+        }
+        <FilteringButton onClick={()=>{setFilterOpen(true);}} >
           {
-            context.restaurant ?
-            <RestaurantLogo href={ context.restaurant.logo}>
-              <img
-                alt={`${context.restaurant.name} logo`}
-                src={ restaurantLogo }
-                />
-            </RestaurantLogo> : <></>
+          context.menu.hasAllergens ? <FilterSlideUpPanel onClose={() => {setFilterOpen(false);}}/>: ""
           }
-          <FilteringButton onClick={()=>{setFilterOpen(true);}} >
-            {
-            context.menu.hasAllergens ? <FilterSlideUpPanel onClose={() => {setFilterOpen(false);}}/>: ""
-            }
-          </FilteringButton>
-        </LogoBar>
+        </FilteringButton>
       
         <CategoryTabList ref={tabBarRef}>
           {context.menu.categories.map(c => {
