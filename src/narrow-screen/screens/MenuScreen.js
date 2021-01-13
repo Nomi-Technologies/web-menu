@@ -11,7 +11,6 @@ import RestaurantContext from 'RestaurantContext'
 import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
 import Counter from '../../components/Counter';
-import {Animated} from "react-animated-css";
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -149,24 +148,32 @@ const NotificationBanner = styled.div`
   width:100%;
   text-align: center;
 
-  animation: FadeAnimation 1.5s ease-in 1s forwards;
+  font-family: HK Grotesk;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 50px; 
+  color:white;
+  
+  animation: FadeAnimation 2.5s ease-in 0s forwards;
   @keyframes FadeAnimation {
     0% {
       opacity: 1;
+      z-index: 2; /*temporarily stack on top of restaurant logo
     }
   
     100% {
       opacity: 0;
+      z-index: 0;
     }
   }
 `;
 
-
-
 const RestaurantLogo = styled.a`
   position: absolute;
+  top: 0px;
   left:25%;
-  border:green solid 2px;
+  line-height:50px;
   & img {
     height: 35px;
   }
@@ -178,7 +185,6 @@ const AllMenusButton = styled(Button)`
   padding-top: 60px;
   transform: translate(0, -50%);
   left: 5px;
-  margin: auto 0;
   font-weight: bold;
   font-size: 12px;
   letter-spacing: 0.1em;
@@ -196,7 +202,6 @@ const FilteringButton = styled.p`
   padding-top: 60px;
   transform: translate(0, -50%);
   right: 1px;
-  margin: auto 0;
   font-weight: bold;
   font-size: 12px;
   letter-spacing: 0.1em;
@@ -208,9 +213,8 @@ const FilteringButton = styled.p`
   }
 `;
 
-export default (props) => {
+export default () => {
   const context = useContext(RestaurantContext);
-
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
@@ -314,47 +318,34 @@ export default (props) => {
   function onClickHambergerMenu() {
     setHamburgerOpen(!hamburgerOpen);
   }
-
-  // function onClickFilterMenu() {
-  //   // setFilterOpen(!filterOpen);
-  //   setFilterOpen(true);
-  //   console.log("filter open value is",filterOpen)
-  // }
   
   return (
     <MenuScreen>
-      <MenuListNav onClose={() => {setHamburgerOpen(false); console.log("setting hamburger false"); }} open={hamburgerOpen}/>
+      <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
       <Header>
-        <NotificationBanner style={context.activeFilters.size > 0 /*&& !filterOpen)*/ ? null : { display: "none" }}> 
-          <Counter active={context.activeFilters.size > 0} >
+        <NotificationBanner style={(context.activeFilters.size > 0 && !filterOpen) ? null : { display: "none" }}> 
+          <Counter active={context.activeFilters.size > 0} style={{backgroundColor: "white", color:"#628DEB"}}>
             {context.activeFilters.size}
           </Counter>
           FILTER APPLIED
         </NotificationBanner>
         
-        <LogoBar /*style={context.activeFilters.size === 0 ? null : { display: "none" }}*/>
-          <AllMenusButton
-            variant="link"
-            onClick={()=>{onClickHambergerMenu();console.log("hamburger open",hamburgerOpen); }}
-            >
+        <LogoBar>
+          <AllMenusButton variant="link" onClick={onClickHambergerMenu}> 
             SEE MENUS
           </AllMenusButton>
           {
             context.restaurant ?
-            <RestaurantLogo href={ context.restaurant.logo} /*onClick={hideMe}*/>
+            <RestaurantLogo href={ context.restaurant.logo}>
               <img
                 alt={`${context.restaurant.name} logo`}
                 src={ restaurantLogo }
                 />
             </RestaurantLogo> : <></>
           }
-          <FilteringButton /*variant="link"*/ 
-          
-          onClick={()=>{console.log("before", filterOpen); setFilterOpen(true);console.log("after", filterOpen)}} onClose={() => {setFilterOpen(false); console.log("closing filter")}}>
+          <FilteringButton onClick={()=>{setFilterOpen(true);}} >
             {
-            context.menu.hasAllergens ? 
-              <FilterSlideUpPanel onClick={()=>{console.log("expand",props.panelExpanded)}}/>
-            : ""
+            context.menu.hasAllergens ? <FilterSlideUpPanel onClose={() => {setFilterOpen(false);}}/>: ""
             }
           </FilteringButton>
         </LogoBar>
