@@ -19,9 +19,9 @@ const ModalContainer = styled.div`
   position: relative;
   padding-bottom: 30px;
 
-  @media (max-width: 400px) {
-    width: auto;
-    margin: 0 15px;
+  @media (max-width: 1000px) {
+    width: 90%;
+    margin: 0 5%;
     box-sizing: border-box;
   }
 `;
@@ -100,6 +100,21 @@ const Price = styled.span`
 const StyledRemovableNotice = styled(RemovableNotice)`
   margin-bottom: 10px;
 `;
+const AddOn = styled.div`
+  margin-bottom:10px;
+`;
+const AddOnName = styled.span`
+  font-weight: 500;
+  color: black;
+  font-weight: bold;
+  margin-right: 4px;
+`;
+
+const AddOnNotes = styled.span`
+  font-weight: 500;
+  color: #8A9DB7;
+`;
+
 
 const StyledBanner = styled(Banner)`
   border-radius: 6px;
@@ -181,6 +196,22 @@ export default function(props) {
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
               <SectionBody><Price>{props.dish.price}</Price></SectionBody>
+            </> : <></>
+          }
+          {
+            props.dish.Modifications.length > 0 ?
+            <>
+              <Divider/>
+              <SectionTitle>ADD ONS</SectionTitle>
+              <SectionBody>
+              { props.dish.Modifications.map(t => 
+                <AddOn key={t.id}>
+                  <AddOnName>{t.name}</AddOnName>
+                  { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
+                  { t.price !=="0" ? <AddOnNotes> ({t.price})</AddOnNotes> : <></>}
+                </AddOn>
+              ) }
+              </SectionBody> 
             </> : <></>
           }
         </ModalBody>
