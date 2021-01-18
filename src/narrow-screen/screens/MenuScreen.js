@@ -334,14 +334,14 @@ export default () => {
           />
         </a>
       </NomiLogoBar>
-      {/* { 
+      { 
         // hide filtering menu if menu doesn't have allergens
         context.menu.hasAllergens ? 
         <SlideUpPanelWrapper>
           <FilterSlideUpPanel />
         </SlideUpPanelWrapper>
         : ""
-      } */}
+      }
     </MenuScreen>
   );
 }
