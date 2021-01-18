@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import RestaurantContext from '../../RestaurantContext';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
 import styled from 'styled-components';
 
-const SlideUpPanel = styled.div`
+const RightSidePanel = styled.div`
   position: relative;
   z-index: 11;
   top: 0px;
@@ -204,7 +204,7 @@ export default (props) => {
   }
 
   return (
-    <SlideUpPanel ref={myRef}>
+    <RightSidePanel ref={myRef}>
       <SlideUpPanelHeader
         onExpansionChanged={onExpansionChanged}
         expanded={panelExpanded}
@@ -227,7 +227,7 @@ export default (props) => {
                   {context.activeFilters.size}
                 </Counter>
               </FilterButton>
-              <FilterDoneButton onClick={() => {onExpansionChanged(); /*props.onClose();*/ console.log("filter done button")}} >DONE</FilterDoneButton>
+              <FilterDoneButton onClick={() => {onExpansionChanged(); props.onClose(); console.log("filter done button")}} >DONE</FilterDoneButton>
             </FilterHeader>
             <AllergenTitle>Allergens</AllergenTitle>
             <SectionTitle>Exclude dishes that contain:</SectionTitle>
@@ -237,6 +237,6 @@ export default (props) => {
         :
         <></>
       }
-    </SlideUpPanel>
+    </RightSidePanel>
   );
 }

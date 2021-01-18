@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
-import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
+import FilterSidePanel from '../components/FilterSidePanel';
 import Banner from 'components/Banner';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
@@ -120,7 +120,7 @@ const Header = styled.div`
 
 //Notification flashes for 4 second when 1+ filter is applied  
 const NotificationBanner = styled.div`
-  background-color: #628DEB  ;
+  background-color: #628DEB;
   height: 60px; /* LOGO's 50px + 5px*2 */
   padding: 5px 0;
   position: absolute;
@@ -178,7 +178,7 @@ const AllMenusButton = styled(Button)`
   }
 `;
 
-const FilteringButton = styled.p`
+const FilteringButton = styled.div`
   position: absolute;
   top: 0px;
   padding-top: 60px;
@@ -326,7 +326,7 @@ export default () => {
         }
         <FilteringButton onClick={()=>{setFilterOpen(true);}} >
           {
-          context.menu.hasAllergens ? <FilterSlideUpPanel onClose={() => {setFilterOpen(false);}}/>: ""
+          context.menu.hasAllergens ? <FilterSidePanel onClose={() => {setFilterOpen(false); console.log("setting filter to be false", filterOpen)}}/>: ""
           }
         </FilteringButton>
       
