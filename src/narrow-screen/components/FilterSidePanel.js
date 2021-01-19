@@ -38,7 +38,7 @@ const ClearButton = styled.div`
   position:absolute;
 `;
 
-function SlideUpPanelHeader({ setFilterOpen }) {
+function PanelToggle({ setFilterOpen }) {
   const context = useContext(RestaurantContext);
   return (
     <PanelHeader onClick={() => setFilterOpen(true)}>
@@ -199,7 +199,7 @@ export default ({ filterOpen, setFilterOpen }) => {
 
   return (
     <RightSidePanel ref={myRef}>
-      <SlideUpPanelHeader
+      <PanelToggle
         setFilterOpen={setFilterOpen}
       />
       {filterOpen ?
