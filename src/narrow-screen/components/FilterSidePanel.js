@@ -9,7 +9,7 @@ const RightSidePanel = styled.div`
   position: relative;
   z-index: 11;
   top: 0px;
-  right: 0px;
+  right: 15px;
 `;
 
 const PanelHeader = styled.div`
