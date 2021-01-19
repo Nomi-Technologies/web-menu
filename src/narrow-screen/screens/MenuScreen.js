@@ -301,6 +301,7 @@ export default () => {
     setHamburgerOpen(!hamburgerOpen);
   }
   
+  console.log(filterOpen);
   return (
     <MenuScreen>
       <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
@@ -324,9 +325,13 @@ export default () => {
               />
           </RestaurantLogo> : <></>
         }
-        <FilteringButton onClick={()=>{setFilterOpen(true);}} >
+        <FilteringButton>
           {
-          context.menu.hasAllergens ? <FilterSidePanel onClose={() => {setFilterOpen(false); console.log("setting filter to be false", filterOpen)}}/>: ""
+          context.menu.hasAllergens ?
+            <FilterSidePanel
+              filterOpen={filterOpen}
+              setFilterOpen={setFilterOpen}
+            /> : ""
           }
         </FilteringButton>
       

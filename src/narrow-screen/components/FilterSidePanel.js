@@ -38,15 +38,15 @@ const ClearButton = styled.div`
   position:absolute;
 `;
 
-function SlideUpPanelHeader(props) {
+function SlideUpPanelHeader({ setFilterOpen }) {
   const context = useContext(RestaurantContext);
   return (
-    <PanelHeader>
-      <FilterLabel onClick={props.onExpansionChanged}>
+    <PanelHeader onClick={() => setFilterOpen(true)}>
+      <FilterLabel>
         FILTERS
       </FilterLabel>
       <PanelHeaderElement>
-        <Counter onClick={props.onExpansionChanged} homeActive={context.activeFilters.size > 0}>
+        <Counter homeActive={context.activeFilters.size > 0}>
           {context.activeFilters.size}
         </Counter>
       </PanelHeaderElement>
@@ -182,15 +182,13 @@ const SectionTitle = styled.p`
   color: #606060;
 `;
 
-export default (props) => {
-  const [panelExpanded, setPanelExpanded] = useState(false);
+export default ({ filterOpen, setFilterOpen }) => {
   const myRef = useRef();
   const context = useContext(RestaurantContext);
 
   const handleClickOutside = e => {
       if (!myRef.current.contains(e.target)) {
-          setPanelExpanded(false);
-          props.onClose();
+          setFilterOpen(false);
       }
   };
 
@@ -199,17 +197,12 @@ export default (props) => {
       return () => document.removeEventListener('mousedown', handleClickOutside);
   });
 
-  function onExpansionChanged() {
-    setPanelExpanded(!panelExpanded);
-  }
-
   return (
     <RightSidePanel ref={myRef}>
       <SlideUpPanelHeader
-        onExpansionChanged={onExpansionChanged}
-        expanded={panelExpanded}
+        setFilterOpen={setFilterOpen}
       />
-      {panelExpanded ?
+      {filterOpen ?
       <>
           <PanelBody>
             <FilterHeader>
@@ -220,14 +213,13 @@ export default (props) => {
                 onClick={() => context.setFilters(new Set())}>
                 CLEAR
               </ClearButton>
-      
               <FilterButton>
                 FILTERS 
-                <Counter onClick={props.onExpansionChanged} active={context.activeFilters.size > 0}>
+                <Counter active={context.activeFilters.size > 0}>
                   {context.activeFilters.size}
                 </Counter>
               </FilterButton>
-              <FilterDoneButton onClick={() => {onExpansionChanged(); props.onClose(); console.log("filter done button")}} >DONE</FilterDoneButton>
+              <FilterDoneButton onClick={() => setFilterOpen(false)} >DONE</FilterDoneButton>
             </FilterHeader>
             <AllergenTitle>Allergens</AllergenTitle>
             <SectionTitle>Exclude dishes that contain:</SectionTitle>
