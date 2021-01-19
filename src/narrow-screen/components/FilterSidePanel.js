@@ -128,7 +128,7 @@ const PanelBody = styled.div`
   position: absolute;
   top: -10px;
   right: -20px;
-  width: 300px;
+  width: 350px;
   height: 1500px;
   background: white;
 `
