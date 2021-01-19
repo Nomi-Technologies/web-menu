@@ -143,7 +143,7 @@ const FilterHeader = styled.div`
   justify-content: center;
 `
 
-const FilterButton = styled.p`
+const FilterButton = styled.div`
   color: black;
 `
 
