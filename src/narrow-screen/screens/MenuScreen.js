@@ -116,6 +116,7 @@ const Header = styled.div`
   top: 0;
   z-index: 100;
   width: 100%;
+  background-color: white;
 `;
 
 //Notification flashes for 4 second when 1+ filter is applied  
