@@ -301,7 +301,6 @@ export default () => {
     setHamburgerOpen(!hamburgerOpen);
   }
   
-  console.log(filterOpen);
   return (
     <MenuScreen>
       <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
