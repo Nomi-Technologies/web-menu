@@ -16,7 +16,9 @@ export default () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    googleAnalyticsPageView(restaurant_identifier)
+    if (process.env.NODE_ENV === 'production') {
+      googleAnalyticsPageView(restaurant_identifier);
+    }
     getRestaurant(restaurant_identifier)
       .then(restaurant => {
         setRestaurant(restaurant);
