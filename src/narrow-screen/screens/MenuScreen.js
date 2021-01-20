@@ -189,11 +189,11 @@ const FilteringButton = styled.div`
   font-size: 12px;
   letter-spacing: 0.1em;
   color: #628deb;
-  text-decoration: none;
   &:hover,
   &:focus {
     text-decoration: none;
   }
+  cursor: default;
 `;
 
 export default () => {
