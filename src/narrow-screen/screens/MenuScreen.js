@@ -11,6 +11,7 @@ import RestaurantContext from 'RestaurantContext'
 import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
 import Counter from '../../components/Counter';
+import SlideUpTray from '../components/SlideUpTray';
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -117,6 +118,13 @@ const Header = styled.div`
   z-index: 100;
   width: 100%;
   background-color: white;
+`;
+
+const SlideUpPanelWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
 `;
 
 //Notification flashes for 4 second when 1+ filter is applied  
@@ -382,6 +390,9 @@ export default () => {
           />
         </a>
       </NomiLogoBar>
+      <SlideUpPanelWrapper>
+        <SlideUpTray />
+      </SlideUpPanelWrapper>
     </MenuScreen>
   );
 }
