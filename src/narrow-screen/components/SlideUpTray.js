@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import RestaurantContext from '../../RestaurantContext';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import TagButton from 'components/TagButton';
 import Counter from 'components/Counter';
 import ExpansionArrow from 'components/ExpansionArrow';
 import styled from 'styled-components';
@@ -70,68 +69,6 @@ function SlideUpPanelHeader(props) {
   );
 }
 
-const StyledGridTagButton = styled(TagButton)`
-  margin: 10px;
-  cursor: default;
-`;
-
-
-const GridTagButton = (props) => {
-  const onClick = () => {
-    let currentTags = new Set(props.currentTags);
-    if (currentTags.has(props.tag.id)) { currentTags.delete(props.tag.id); }
-    else { currentTags.add(props.tag.id); }
-    props.onSelect(currentTags);
-  }
-
-  return (
-    <StyledGridTagButton {...props} onClick={onClick}>
-      { props.tag.name}
-    </StyledGridTagButton>
-  )
-
-}
-
-
-const Grid = styled(Container)`
-  margin-bottom: 20px;
-  padding: 0;
-`;
-
-function TagGrid(props) {
-  const context = useContext(RestaurantContext);
-
-  const tags = context.menu.tags;
-  const tag_keys = Object.keys(tags);
-
-  const createGrid = () => {
-    let rows = [];
-    for (let i = 0; i < tag_keys.length; i += 3) {
-      let cols = [];
-      for (let j = 0; j < 3; ++j) {
-        if (i + j >= tag_keys.length) {
-          cols.push(<Col key={j}></Col>);
-          continue;
-        }
-        cols.push(<Col key={j}>
-          <GridTagButton
-            selected={context.activeFilters.has(tags[tag_keys[i + j]].id)}
-            tag={tags[tag_keys[i + j]]}
-            onSelect={context.setFilters}
-            currentTags={context.activeFilters}
-          />
-
-        </Col>);
-      }
-      rows.push(<Row noGutters={true} key={i}>{cols}</Row>);
-    }
-    return rows
-  }
-
-  return (
-    <Grid>{createGrid()}</Grid>
-  );
-}
 
 const PanelBody = styled.div`
   max-height: 600px;
