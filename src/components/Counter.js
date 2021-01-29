@@ -12,7 +12,7 @@ const Counter = styled.div`
   height: 22px;
   min-width: 22px;
   border-radius: 11px;
-  background-color: ${props => props.active ? '#E9003E' : '#8A9DB7'};
+  background-color: ${props => props.active ? '#00807F' : '#8A9DB7'};
   color: white;
 `;
 

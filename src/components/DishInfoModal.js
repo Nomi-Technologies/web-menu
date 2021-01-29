@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Modal, Button } from 'react-bootstrap';
 import { ReactComponent as Exit } from 'components/exit-button.svg';
 import AllergenIcon from 'components/AllergenIconWithName';
 import RemovableNotice from './RemovableNotice';
 import RestaurantContext from '../RestaurantContext';
+import { getDishImage } from 'utils';
+import Banner from 'components/Banner';
 
 const ModalContainer = styled.div`
   color: black;
@@ -12,7 +14,7 @@ const ModalContainer = styled.div`
   background-color: white;
   width: 400px;
   margin: 0 auto;
-  overflow: scroll;
+  overflow: auto;
   position: relative;
   padding-bottom: 30px;
 
@@ -213,6 +215,11 @@ const ChangeQuantity = styled.span`
 `;
 
 
+const StyledBanner = styled(Banner)`
+  border-radius: 6px;
+  height: 200px;
+`;
+
 export default function(props) {
   const context = useContext(RestaurantContext);
   const [activeModifications, setActiveModifications] = React.useState([]);
@@ -220,6 +227,15 @@ export default function(props) {
   // price of one dish, including mods
   const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(props.dish.price));
 
+  const [dishImage, setDishImage] = useState();
+
+  useEffect(() => {
+    if(props.show && context.restaurant && context.selectedMenuIndex !== null) {
+      getDishImage(props.dish.id).then((banner) => {
+        setDishImage(banner)
+      })
+    }
+  }, [context.restaurant, props.show])
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
   let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
@@ -247,7 +263,6 @@ export default function(props) {
     currRestaurantDishes.push([quantity, props.dish.id, activeModifications]);
     savedDishes[context.restaurant.id] = currRestaurantDishes;
 
-    console.log(savedDishes);
     localStorage.setItem('savedDishes', JSON.stringify(savedDishes));
     props.onHide();
   }
@@ -260,6 +275,11 @@ export default function(props) {
       onHide={props.onHide}
       centered
     >
+      {
+        dishImage ? 
+        <StyledBanner src={ dishImage } /> 
+        : ""
+      }
       <ModalContainer>
         <ModalHeader>
           <DishName>{props.dish.name}</DishName>
@@ -280,7 +300,7 @@ export default function(props) {
               </> : <></>
             }
           </SectionBody>
-          { props.menuHasAllergens ? 
+          { props.menuHasAllergens ?
           <>
             <Divider/>
             <SectionTitle>ALLERGENS</SectionTitle>

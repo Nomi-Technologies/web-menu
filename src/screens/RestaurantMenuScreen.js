@@ -3,8 +3,8 @@ import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
 import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
 import { useParams } from 'react-router-dom';
 import { getRestaurant, getDishesOfMenu, parseMenu } from 'utils';
+import { filterMenu, googleAnalyticsPageView } from "../utils"
 import RestaurantContext from '../RestaurantContext';
-import { filterMenu } from "../utils"
 
 export default () => {
   const { restaurant_identifier } = useParams();
@@ -16,13 +16,15 @@ export default () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    googleAnalyticsPageView(restaurant_identifier)
     getRestaurant(restaurant_identifier)
       .then(restaurant => {
         setRestaurant(restaurant);
+        console.log(restaurant)
         
         Promise.all(restaurant.Menus.map(async menu => {
           let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
-          return parseMenu(rawMenu);
+          return parseMenu(rawMenu, menu.enableFiltering);
         })).then(
           dishesByMenu => {
             setActiveFiltersByMenu(dishesByMenu.map(() => new Set()));

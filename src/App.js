@@ -6,7 +6,8 @@ import {
   Route,
 } from 'react-router-dom';
 import 'index.css';
-import ReactGA from 'react-ga';
+
+import ReactGA from 'react-ga'
 
 /******
  * App is restricted to the window's size to be compatible with mobile version
