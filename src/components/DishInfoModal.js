@@ -170,10 +170,6 @@ const AddOnName = styled.span`
   margin-right: 4px;
 `;
 
-const AddOnSelector = styled.input`
- margin: 0 10px 0 10px;
-`;
-
 const AddOnNotes = styled.span`
   font-weight: 500;
   color: #8A9DB7;
@@ -203,7 +199,7 @@ const SaveDishButton = styled(Button)`
   background-color: #F06441;
   padding: 15px 25px;
   border-radius: 100px;
-  width: 50%;
+  width: 60%;
   align-items: center;
   max-width: 300px;
 `;
@@ -221,7 +217,8 @@ export default function(props) {
   const context = useContext(RestaurantContext);
   const [activeModifications, setActiveModifications] = React.useState([]);
   const [quantity, setQuantity] = React.useState(1);
-  const [totalPrice, setTotalPrice] = React.useState(parseInt(props.dish.price));
+  // price of one dish, including mods
+  const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(props.dish.price));
 
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
@@ -241,13 +238,17 @@ export default function(props) {
 
     setActiveModifications(arr);
     const newPrice = activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(props.dish.price));
-    setTotalPrice(newPrice);
+    setUnitDishPrice(newPrice);
   }
 
   function saveDish() {
-    var savedDishes = localStorage.getItem('savedDishes') ? localStorage.getItem('savedDishes') : [];
-    savedDishes.push([quantity, props.dish.id, activeModifications]);
-    localStorage.setItem('savedDishes', savedDishes);
+    var savedDishes = localStorage.getItem('savedDishes') ? JSON.parse(localStorage.getItem('savedDishes')) : {};
+    var currRestaurantDishes = savedDishes[context.restaurant.id] ? savedDishes[context.restaurant.id] : [];
+    currRestaurantDishes.push([quantity, props.dish.id, activeModifications]);
+    savedDishes[context.restaurant.id] = currRestaurantDishes;
+
+    console.log(savedDishes);
+    localStorage.setItem('savedDishes', JSON.stringify(savedDishes));
     props.onHide();
   }
 
@@ -305,7 +306,7 @@ export default function(props) {
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
               <SectionBody><Price>
-                { totalPrice } 
+                { unitDishPrice * quantity } 
               </Price></SectionBody>
             </> : <></>
           }
@@ -341,8 +342,8 @@ export default function(props) {
               <ChangeQuantity onClick={() => setQuantity(quantity + 1)}> + </ChangeQuantity>
             </QuantitySelector>
             <SaveDishButton onClick={saveDish}> 
-              <span>Save Dish</span>
-              <span>${  props.dish.price.length > 0 ? totalPrice : null }</span>
+              <span>{quantity > 1 ? "Save Dishes" : "Save Dish"}</span>
+              <span>${  props.dish.price.length > 0 ? unitDishPrice * quantity : null }</span>
             </SaveDishButton>
           </SectionBody>
         </ModalBody>
