@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import { ReactComponent as Exit } from 'components/exit-button.svg';
 import AllergenIcon from 'components/AllergenIconWithName';
 import RemovableNotice from './RemovableNotice';
@@ -13,22 +13,22 @@ const ModalContainer = styled.div`
   border-radius: 6px;
   background-color: white;
   width: 400px;
-  max-height: 80vh;
   margin: 0 auto;
   overflow: auto;
   position: relative;
   padding-bottom: 30px;
 
   @media (max-width: 1000px) {
-    width: 90%;
-    margin: 0 5%;
+    width: 100%;
+    height: 100%;
     box-sizing: border-box;
+    max-height: none;
+    border-radius: 0;
   }
 `;
 
 const ModalHeader = styled(Modal.Header)`
   padding: 10px 0 0 20px;
-  height: 100%;
   border-radius: 6px 6px 0px 0px;
   border-bottom: 1px solid #DCE2E9;
   position: sticky;
@@ -87,6 +87,8 @@ const SectionBody = styled.div`
   padding-top: 14px;
   font-weight: 500;
   font-size: 14px;
+  display: flex;
+  flex-direction: row;
 `;
 
 const StyledAllergenIcon = styled(AllergenIcon)`
@@ -102,6 +104,66 @@ const StyledRemovableNotice = styled(RemovableNotice)`
 `;
 const AddOn = styled.div`
   margin-bottom:10px;
+
+  .container {
+    display: flex;
+    height: 100%;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  .container input {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+  
+  .checkmark {
+    position: absolute;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #e1e7ec;
+    border-radius: 5px;
+  }
+  
+  .container:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  .container input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .container input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .container .checkmark:after {
+    left: 7px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 `;
 const AddOnName = styled.span`
   font-weight: 500;
@@ -115,6 +177,43 @@ const AddOnNotes = styled.span`
   color: #8A9DB7;
 `;
 
+const QuantitySelector = styled.span`
+  font-weight: 700;
+  font-size: 18px;
+  padding: 15px 20px;
+  border-radius: 100px;
+  border: none;
+  background-color: #EBEEF5;
+  width: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 170px;
+`;
+
+const SaveDishButton = styled(Button)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 18px;
+  border: none;
+  background-color: #F06441;
+  padding: 15px 25px;
+  border-radius: 100px;
+  width: 60%;
+  align-items: center;
+  max-width: 300px;
+`;
+
+const Quantity = styled.span`
+  color: #000000;
+`;
+const ChangeQuantity = styled.span`
+  color: #8A9DB7;
+  cursor: pointer;
+`;
+
 
 const StyledBanner = styled(Banner)`
   border-radius: 6px;
@@ -123,6 +222,11 @@ const StyledBanner = styled(Banner)`
 
 export default function(props) {
   const context = useContext(RestaurantContext);
+  const [activeModifications, setActiveModifications] = React.useState([]);
+  const [quantity, setQuantity] = React.useState(1);
+  // price of one dish, including mods
+  const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(props.dish.price));
+
   const [dishImage, setDishImage] = useState();
 
   useEffect(() => {
@@ -136,6 +240,32 @@ export default function(props) {
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
   let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
   || props.dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
+
+  function toggleModification(modification) {
+    var arr;
+    if(activeModifications.length === 0 || activeModifications.indexOf(modification) === -1){
+      arr = activeModifications;
+      arr.push(modification);
+    } else {
+      var index = activeModifications.indexOf(modification);
+      arr = activeModifications;
+      arr.splice(index, 1);
+    }
+
+    setActiveModifications(arr);
+    const newPrice = activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(props.dish.price));
+    setUnitDishPrice(newPrice);
+  }
+
+  function saveDish() {
+    var savedDishes = localStorage.getItem('savedDishes') ? JSON.parse(localStorage.getItem('savedDishes')) : {};
+    var currRestaurantDishes = savedDishes[context.restaurant.id] ? savedDishes[context.restaurant.id] : [];
+    currRestaurantDishes.push([quantity, props.dish.id, activeModifications]);
+    savedDishes[context.restaurant.id] = currRestaurantDishes;
+
+    localStorage.setItem('savedDishes', JSON.stringify(savedDishes));
+    props.onHide();
+  }
 
   return (
     <Modal
@@ -195,25 +325,47 @@ export default function(props) {
             <>
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
-              <SectionBody><Price>{props.dish.price}</Price></SectionBody>
+              <SectionBody><Price>
+                { unitDishPrice * quantity } 
+              </Price></SectionBody>
             </> : <></>
           }
           {
             props.dish.Modifications.length > 0 ?
             <>
               <Divider/>
-              <SectionTitle>ADD ONS</SectionTitle>
-              <SectionBody>
+              <SectionTitle>OPTIONS</SectionTitle>
+              <SectionBody style={{ flexDirection: "column", alignItems: "flex-start"}}>
               { props.dish.Modifications.map(t => 
                 <AddOn key={t.id}>
-                  <AddOnName>{t.name}</AddOnName>
-                  { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
-                  { t.price !=="0" ? <AddOnNotes> ({t.price})</AddOnNotes> : <></>}
+                  <label className="container"> 
+                    <AddOnName>{t.name} </AddOnName>
+                    { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
+                    { t.price !=="0" ? <AddOnNotes> (${t.price})</AddOnNotes> : <></>}
+                    <input type="checkbox" onClick={() => toggleModification(t)}/>
+                    <span className="checkmark"></span>
+                  </label>
                 </AddOn>
               ) }
               </SectionBody> 
             </> : <></>
           }
+          <Divider/>
+          <SectionBody style={{justifyContent: "space-evenly" }}>
+            <QuantitySelector> 
+              <ChangeQuantity onClick={() => {
+                if(quantity > 1) {
+                  setQuantity(quantity - 1);
+                }
+              }}> - </ChangeQuantity>
+              <Quantity> {quantity} </Quantity>
+              <ChangeQuantity onClick={() => setQuantity(quantity + 1)}> + </ChangeQuantity>
+            </QuantitySelector>
+            <SaveDishButton onClick={saveDish}> 
+              <span>{quantity > 1 ? "Save Dishes" : "Save Dish"}</span>
+              <span>${  props.dish.price.length > 0 ? unitDishPrice * quantity : null }</span>
+            </SaveDishButton>
+          </SectionBody>
         </ModalBody>
       </ModalContainer>
     </Modal>
