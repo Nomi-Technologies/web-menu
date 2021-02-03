@@ -39,10 +39,10 @@ export default () => {
   }, [restaurant_identifier]);
 
   // create allergen dictionary
-  let allergenDict = {}
+  let allergenLUT = {}
   if(menus[selectedMenuIndex]?.tags) {
-    Object.entries(menus[selectedMenuIndex].tags).forEach(tag => {
-      allergenDict[tag[1].name] = tag[1].id
+    Object.values(menus[selectedMenuIndex].tags).forEach((tag) => {
+      allergenLUT[tag.name] = tag.id
     })
   }
   
@@ -52,7 +52,7 @@ export default () => {
       restaurant: restaurant,
       selectedMenuIndex: selectedMenuIndex,
       menu: menus[selectedMenuIndex],
-      allergens: allergenDict,
+      allergens: allergenLUT,
       activeFilters: activeFiltersByMenu[selectedMenuIndex],
       excludedDishes: excludedDishesByMenu[selectedMenuIndex],
       error: error,
