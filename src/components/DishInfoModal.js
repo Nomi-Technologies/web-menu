@@ -269,7 +269,7 @@ export default function(props) {
 
   return (
     <Modal
-      // className='react-bootstrap-modal'
+      className='react-bootstrap-modal'
       show={props.show}
       aria-labelledby="contained-modal-vcenter"
       onHide={props.onHide}
