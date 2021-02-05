@@ -226,29 +226,29 @@ export default function(props) {
 
   const editMode = props.index >= 0;
   const savedDish = editMode ? context.savedDishes[props.index] : undefined;
-  const dish = editMode ? context.dishesById[savedDish.id] : props.dish;
+  const dishData = editMode ? context.dishesById[savedDish.id] : props.dish;
 
   const [activeModifications, setActiveModifications] = React.useState(
     editMode ?
-    savedDish.modIds.map((id) => dish.Modifications.find((mod) => mod.id === id)) : []
+    savedDish.modIds.map((id) => dishData.Modifications.find((mod) => mod.id === id)) : []
   );
   const [quantity, setQuantity] = React.useState(editMode ? savedDish.quantity : 1);
   // price of one dish, including mods
-  const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(dish.price));
+  const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(dishData.price));
 
   const [dishImage, setDishImage] = useState();
 
   useEffect(() => {
     if(props.show && context.restaurant && context.selectedMenuIndex !== null) {
-      getDishImage(dish.id).then((banner) => {
+      getDishImage(dishData.id).then((banner) => {
         setDishImage(banner)
       })
     }
   }, [context.restaurant, props.show])
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
-  let showRemovableNotice = dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
-  || dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
+  let showRemovableNotice = dishData.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
+  || dishData.gfp && context.activeFilters?.has(context.allergens['Gluten'])
 
   function toggleModification(modification) {
     var arr;
@@ -262,7 +262,7 @@ export default function(props) {
     }
 
     setActiveModifications(arr);
-    const newPrice = activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(dish.price));
+    const newPrice = activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(dishData.price));
     setUnitDishPrice(newPrice);
   }
 
@@ -270,7 +270,7 @@ export default function(props) {
     let savedDishes = [...context.savedDishes];
     const updatedEntry = {
       quantity,
-      id: dish.id,
+      id: dishData.id,
       modIds: activeModifications.map((mod) => mod.id) ?? [],
     };
 
@@ -299,7 +299,7 @@ export default function(props) {
       }
       <ModalContainer>
         <ModalHeader>
-          <DishName>{dish.name}</DishName>
+          <DishName>{dishData.name}</DishName>
           <ExitButtonWrapper
             onClick={props.onHide}
           >
@@ -310,9 +310,9 @@ export default function(props) {
         <SectionTitle>DESCRIPTION</SectionTitle>
           <SectionBody>
             {
-              dish.description.length > 0 ?
+              dishData.description.length > 0 ?
               <>
-                <Description>{dish.description}</Description>
+                <Description>{dishData.description}</Description>
 
               </> : <></>
             }
@@ -327,9 +327,9 @@ export default function(props) {
                 <StyledRemovableNotice /> : null
               }
               {
-                dish.Tags.length > 0 ?
+                dishData.Tags.length > 0 ?
                 (
-                  dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.has(t.id) }/>)
+                  dishData.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.has(t.id) }/>)
                 )
                 :
                 "No Allergy Info"
@@ -338,7 +338,7 @@ export default function(props) {
           </>  : ""
           }
           {
-            dish.price.length > 0 ?
+            dishData.price.length > 0 ?
             <>
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
@@ -348,12 +348,12 @@ export default function(props) {
             </> : <></>
           }
           {
-            dish.Modifications.length > 0 ?
+            dishData.Modifications.length > 0 ?
             <>
               <Divider/>
               <SectionTitle>OPTIONS</SectionTitle>
               <SectionBody style={{ flexDirection: "column", alignItems: "flex-start"}}>
-              { dish.Modifications.map(t => 
+              { dishData.Modifications.map(t => 
                 <AddOn key={t.id}>
                   <label className="container"> 
                     <AddOnName>{t.name} </AddOnName>
@@ -384,7 +384,7 @@ export default function(props) {
             </QuantitySelector>
             <SaveDishButton onClick={saveDish}> 
               <span>{quantity > 1 ? "Save Dishes" : "Save Dish"}</span>
-              <span>${  dish.price.length > 0 ? unitDishPrice * quantity : null }</span>
+              <span>${  dishData.price.length > 0 ? unitDishPrice * quantity : null }</span>
             </SaveDishButton>
           </SectionBody>
         </ModalBody>
