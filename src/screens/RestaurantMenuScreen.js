@@ -38,8 +38,29 @@ export default () => {
               return accumulator;
             }, {});
             setDishesById(dishesLUT);
-            const saved = JSON.parse(localStorage.getItem('savedDishes') ?? '{}');
-            setSavedDishes(saved[restaurant.id] ?? []);
+            const allSavedDishes = JSON.parse(localStorage.getItem('savedDishes') ?? '{}');
+            let savedDishes = allSavedDishes[restaurant.id] ?? [];
+
+            // purge localStorage
+            let removedDishes = [];
+            savedDishes.forEach(({ id, modIds }, index) => {
+              if (!dishesLUT[id]) {
+                removedDishes.push(id);
+                return;
+              }
+              let removedMods = [];
+              modIds.forEach((modId) => {
+                console.log(dishesLUT, modId);
+                if (!dishesLUT[id].Modifications.some((mod) => mod.id === modId)) {
+                  removedMods.push(modId);
+                }
+              });
+              savedDishes[index].modIds = modIds.filter((modId) => removedMods.indexOf(modId) < 0);
+            });
+            savedDishes = savedDishes.filter(({ id }) => removedDishes.indexOf(id) < 0);
+            allSavedDishes[restaurant.id] = savedDishes;
+            localStorage.setItem('savedDishes', JSON.stringify(allSavedDishes));
+            setSavedDishes(savedDishes);
           }
         );
       })
