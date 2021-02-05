@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import RestaurantContext from '../../RestaurantContext';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+import DishInfoModal from 'components/DishInfoModal';
 import Counter from 'components/Counter';
 import ExpansionArrow from 'components/ExpansionArrow';
 import styled from 'styled-components';
@@ -113,13 +113,18 @@ const EditButton = styled.div`
 function SlideUpPanelBody({ dishes }) {
   const { dishesById } = useContext(RestaurantContext);
 
-  return (
+  const [index, setIndex] = useState();
+  const [showModal, setShowModal] = useState(false);
+
+  console.log(index);
+
+  return <>
     <PanelBody>
       {
         dishes.length > 0 ?
         <>
           {
-            dishes.map(([quantity, id, modIds], index) => {
+            dishes.map(({ quantity, id, modIds }, index) => {
               const dish = dishesById[id];
               return <Swipeout
                 key={index}
@@ -161,7 +166,10 @@ function SlideUpPanelBody({ dishes }) {
                     }
                   </DishInfo>
                   <EditButton
-                    onClick={() => console.log('Editing...')}
+                    onClick={() => {
+                      setIndex(index);
+                      setShowModal(true);
+                    }}
                   ><span>edit</span></EditButton>
                 </DishEntry>
               </Swipeout>;
@@ -172,7 +180,16 @@ function SlideUpPanelBody({ dishes }) {
         <span>Your saved items will show up here</span>
       }
     </PanelBody>
-  )
+
+    {
+      index ? 
+      <DishInfoModal
+        index={index}
+        show={showModal}
+        onHide={() => setShowModal(false)}
+      /> : null
+    }
+  </>
 }
 
 export default () => {
