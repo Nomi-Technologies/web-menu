@@ -224,14 +224,15 @@ export default function(props) {
 
   const context = useContext(RestaurantContext);
 
-  const savedDish = props.index ? context.savedDishes[props.index] : undefined;
-  const dish = props.index ? context.dishesById[savedDish.id] : props.dish;
+  const editMode = props.index >= 0;
+  const savedDish = editMode ? context.savedDishes[props.index] : undefined;
+  const dish = editMode ? context.dishesById[savedDish.id] : props.dish;
 
   const [activeModifications, setActiveModifications] = React.useState(
-    props.index ?
+    editMode ?
     savedDish.modIds.map((id) => dish.Modifications.find((mod) => mod.id === id)) : []
   );
-  const [quantity, setQuantity] = React.useState(props.index ? savedDish.quantity : 1);
+  const [quantity, setQuantity] = React.useState(editMode ? savedDish.quantity : 1);
   // price of one dish, including mods
   const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(dish.price));
 
@@ -273,7 +274,7 @@ export default function(props) {
       modIds: activeModifications.map((mod) => mod.id) ?? [],
     };
 
-    if (props.index) {
+    if (editMode) {
       savedDishes[props.index] = updatedEntry;
     } else {
       savedDishes.push(updatedEntry);

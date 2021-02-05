@@ -182,7 +182,7 @@ function SlideUpPanelBody({ dishes }) {
     </PanelBody>
 
     {
-      index ? 
+      typeof index !== 'undefined' ? 
       <DishInfoModal
         index={index}
         show={showModal}
