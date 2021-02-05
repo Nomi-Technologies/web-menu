@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Counter = styled.div`
-  /* includes some hard-coded stuff because text is off-center smh */
   font-size: 14px;
   width: ${props => props.radius ?? '22px'};
   height: ${props => props.radius ?? '22px'};
