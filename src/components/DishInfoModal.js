@@ -5,7 +5,7 @@ import { ReactComponent as Exit } from 'components/exit-button.svg';
 import AllergenIcon from 'components/AllergenIconWithName';
 import RemovableNotice from './RemovableNotice';
 import RestaurantContext from '../RestaurantContext';
-import { getDishImage } from 'utils';
+import { getDishImage, getSavedDishes, setSavedDishes } from 'utils';
 import Banner from 'components/Banner';
 
 const ModalContainer = styled.div`
@@ -258,12 +258,11 @@ export default function(props) {
   }
 
   function saveDish() {
-    var savedDishes = localStorage.getItem('savedDishes') ? JSON.parse(localStorage.getItem('savedDishes')) : {};
-    var currRestaurantDishes = savedDishes[context.restaurant.id] ? savedDishes[context.restaurant.id] : [];
-    currRestaurantDishes.push([quantity, props.dish.id, activeModifications]);
-    savedDishes[context.restaurant.id] = currRestaurantDishes;
-
-    localStorage.setItem('savedDishes', JSON.stringify(savedDishes));
+    let savedDishes = [
+      ...context.savedDishes,
+      [quantity, props.dish.id, activeModifications.map((mod) => mod.id)],
+    ];
+    context.setSavedDishes(savedDishes);
     props.onHide();
   }
 

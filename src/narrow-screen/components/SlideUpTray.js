@@ -4,6 +4,7 @@ import { Button, Container, Row, Col } from 'react-bootstrap';
 import Counter from 'components/Counter';
 import ExpansionArrow from 'components/ExpansionArrow';
 import styled from 'styled-components';
+import { getSavedDishes } from 'utils';
 
 const SlideUpPanel = styled.div`
   position: relative;
@@ -44,7 +45,6 @@ const StyledExpansionArrow = styled(ExpansionArrow)`
 `;
 
 function SlideUpPanelHeader(props) {
-  const context = useContext(RestaurantContext);
   return (
     <PanelHeader>
       <FilterLabel onClick={props.onExpansionChanged}>
@@ -53,9 +53,9 @@ function SlideUpPanelHeader(props) {
       <PanelHeaderElement>
         <Counter
           onClick={props.onExpansionChanged}
-          active={context.activeFilters.size > 0}
+          active={props.count > 0}
         >
-          {context.activeFilters.size}
+          {props.count}
         </Counter>
       </PanelHeaderElement>
       <Spacer onClick={props.onExpansionChanged} />
@@ -114,14 +114,27 @@ const SaveButton = styled(Button)`
   }
 `;
 
-function SlideUpPanelBody() {
+function SlideUpPanelBody({ dishes }) {
+  const { dishesById } = useContext(RestaurantContext);
+
   return (
     <PanelBody>
+      {
+        dishes.length > 0 ?
+        <>
+          {
+            dishes.map(([quantity, id, mods]) => JSON.stringify([quantity, id, mods]))
+          }
+        </>
+        :
+        <span>Your saved items will show up here</span>
+      }
     </PanelBody>
   )
 }
 
 export default () => {
+  const { savedDishes } = useContext(RestaurantContext);
   const [panelExpanded, setPanelExpanded] = useState(false);
 
   function onExpansionChanged() {
@@ -131,11 +144,12 @@ export default () => {
   return (
     <SlideUpPanel>
       <SlideUpPanelHeader
+        count={savedDishes.length}
         onExpansionChanged={onExpansionChanged}
         expanded={panelExpanded}
       />
       {panelExpanded ?
-        <SlideUpPanelBody />
+        <SlideUpPanelBody dishes={savedDishes} />
         :
         <></>
       }
