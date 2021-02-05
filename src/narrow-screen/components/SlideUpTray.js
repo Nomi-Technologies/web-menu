@@ -177,6 +177,7 @@ function SlideUpPanelBody({ dishes }) {
           <Notice>Ready to order? Call your waiter over.</Notice>
           {
             dishes.map(({ quantity, id, modIds }, index) => {
+              // Getting actual dish data
               const dish = dishesById[id];
               return <Swipeout
                 key={index}

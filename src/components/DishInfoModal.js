@@ -224,10 +224,11 @@ export default function(props) {
 
   const context = useContext(RestaurantContext);
 
-  const editMode = props.index >= 0;
+  const editMode = typeof props.index !== 'undefined';
   const savedDish = editMode ? context.savedDishes[props.index] : undefined;
   const dishData = editMode ? context.dishesById[savedDish.id] : props.dish;
 
+  // set activeModifications to saved data (extracting from dishData with modIds)
   const [activeModifications, setActiveModifications] = React.useState(
     editMode ?
     savedDish.modIds.map((id) => dishData.Modifications.find((mod) => mod.id === id)) : []
