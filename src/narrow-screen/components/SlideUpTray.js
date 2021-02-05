@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
+import { Button } from 'react-bootstrap';
 import RestaurantContext from '../../RestaurantContext';
 import DishInfoModal from 'components/DishInfoModal';
 import Counter from 'components/Counter';
@@ -124,13 +125,49 @@ const NoDishNotice = styled.div`
   text-align: center;
 `;
 
+const ClearButton = styled.div`
+  position: relative;
+  height: 44px;
+  margin-top: 20px;
+
+  & button {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 300px;
+    height: 44px;
+    border-radius: 22px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #F06441;
+    color: white;
+
+    :disabled {
+      background-color: #F8B2A0;
+    }
+  }
+`;
+
 function SlideUpPanelBody({ dishes }) {
-  const { dishesById } = useContext(RestaurantContext);
+  const { dishesById, setSavedDishes } = useContext(RestaurantContext);
 
   const [index, setIndex] = useState();
   const [showModal, setShowModal] = useState(false);
 
-  console.log(index);
+  const onDelete = (index) => {
+    const savedDishes = [...dishes];
+    savedDishes.splice(index, 1);
+    setSavedDishes(savedDishes);
+    if (savedDishes.length === 0) {
+      setIndex();
+    }
+  }
+
+  const onClearTray = () => {
+    setSavedDishes([]);
+    setIndex();
+  }
 
   return <>
     <PanelBody>
@@ -145,7 +182,7 @@ function SlideUpPanelBody({ dishes }) {
                 key={index}
                 right={[{
                   text: <img src={DeleteIcon} />,
-                  onPress: () => {},
+                  onPress: () => onDelete(index),
                   style: { backgroundColor: 'red', width: '60px' },
                 }]}
               >
@@ -194,6 +231,14 @@ function SlideUpPanelBody({ dishes }) {
         :
         <NoDishNotice>Your saved items will show up here</NoDishNotice>
       }
+      <ClearButton>
+        <Button
+          disabled={dishes.length === 0}
+          onClick={onClearTray}
+        >
+          Clear all items
+        </Button>
+      </ClearButton>
     </PanelBody>
 
     {
