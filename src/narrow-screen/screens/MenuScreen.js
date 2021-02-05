@@ -314,11 +314,27 @@ export default () => {
     <MenuScreen>
       <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
       <Header>
-        <NotificationBanner style={(context.activeFilters.size > 0 && !filterOpen) ? null : { display: "none" }}> 
-          <Counter active={context.activeFilters.size > 0} style={{backgroundColor: "white", color:"#628DEB"}}>
+        <NotificationBanner style={(context.activeFilters.size > 0 && !filterOpen) ? null : { display: "none" }}>
+          <div style={{
+            position: 'relative',
+            display: 'inline-block',
+            paddingLeft: '30px',
+          }}>
+          <Counter 
+            active={context.activeFilters.size > 0}
+            style={{
+              backgroundColor: "white",
+              color:"#628DEB",
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              transform: 'translate(0, -50%)',
+            }}
+          >
             {context.activeFilters.size}
           </Counter>
-          FILTER APPLIED
+            FILTER APPLIED
+          </div>
         </NotificationBanner>
         
         <AllMenusButton variant="link" onClick={onClickHambergerMenu}> 

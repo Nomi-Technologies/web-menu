@@ -46,7 +46,10 @@ function PanelToggle({ setFilterOpen }) {
         FILTERS
       </FilterLabel>
       <PanelHeaderElement>
-        <Counter homeActive={context.activeFilters.size > 0}>
+        <Counter
+          style={{ marginLeft: '5px' }}
+          homeActive={context.activeFilters.size > 0}
+        >
           {context.activeFilters.size}
         </Counter>
       </PanelHeaderElement>
@@ -145,6 +148,7 @@ const FilterHeader = styled.div`
 
 const FilterButton = styled.div`
   color: black;
+  position: relative;
 `
 
 const FilterDoneButton = styled.div`
@@ -214,8 +218,12 @@ export default ({ filterOpen, setFilterOpen }) => {
                 CLEAR
               </ClearButton>
               <FilterButton>
-                FILTERS 
-                <Counter active={context.activeFilters.size > 0}>
+                <span style={{ marginRight: '24px'}}>FILTERS</span>
+                <Counter
+                  style={{ position: 'absolute', top: '0', right: '0', fontSize: '12px' }}
+                  radius={'18px'}
+                  active={context.activeFilters.size > 0}
+                >
                   {context.activeFilters.size}
                 </Counter>
               </FilterButton>

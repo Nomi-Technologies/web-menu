@@ -54,8 +54,10 @@ function SlideUpPanelHeader(props) {
       </FilterLabel>
       <PanelHeaderElement>
         <Counter
+          style={{ marginLeft: '5px' }}
           onClick={props.onExpansionChanged}
           active={props.count > 0}
+          activeColor={'#F06441'}
         >
           {props.count}
         </Counter>

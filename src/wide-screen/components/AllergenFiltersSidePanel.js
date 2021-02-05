@@ -96,6 +96,7 @@ export default (props) => {
           minWidth: '50px',
         }}>
           <Counter
+            style={{ marginLeft: '5px' }}
             active={context.activeFilters.size > 0}
           >
             {context.activeFilters.size}
