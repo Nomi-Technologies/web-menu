@@ -86,6 +86,11 @@ const DishEntry = styled.div`
   flex-direction: row;
 `;
 
+const ItemCount = styled.div`
+  flex: 0 1 40px;
+  position: relative;
+`;
+
 const DishInfo = styled.div`
   flex: 1 1 auto;
 `;
@@ -125,6 +130,22 @@ function SlideUpPanelBody({ dishes }) {
                 }]}
               >
                 <DishEntry>
+                  <ItemCount>
+                    <Counter
+                      radius={'20px'}
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: '50%',
+                        transform: 'translate(0, -50%)',
+                        backgroundColor: 'black',
+                        fontWeight: 'bold',
+                        fontSize: '10px',
+                      }}
+                    >
+                      {quantity}
+                    </Counter>
+                  </ItemCount>
                   <DishInfo>
                     <div style={{ fontWeight: 'bold' }}>
                       {dish.name}
