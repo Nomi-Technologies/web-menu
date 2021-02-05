@@ -20,10 +20,9 @@ const SlideUpPanel = styled.div`
 `;
 
 const PanelHeader = styled.div`
-  height: 80px;
+  height: 60px;
   width: 100%;
   position: relative;
-  line-height: 80px; /* vertically center stuff */
   display: flex;
   flex-direction: row;
 `;
@@ -32,10 +31,11 @@ const PanelHeaderElement = styled.div`
   display: inline-flex;
   align-items: center;
   font-weight: 700;
+  height: 100%;
 `;
 
 const FilterLabel = styled(PanelHeaderElement)`
-  margin-left: 38px;
+  margin-left: 20px;
 `;
 
 const Spacer = styled(PanelHeaderElement)`
@@ -54,7 +54,7 @@ function SlideUpPanelHeader(props) {
       </FilterLabel>
       <PanelHeaderElement>
         <Counter
-          style={{ marginLeft: '5px' }}
+          style={{ marginLeft: '10px' }}
           onClick={props.onExpansionChanged}
           active={props.count > 0}
           activeColor={'#F06441'}
@@ -77,6 +77,7 @@ function SlideUpPanelHeader(props) {
 const PanelBody = styled.div`
   max-height: 600px;
   width: 100%;
+  padding-bottom: 20px;
 `;
 
 const DishEntry = styled.div`
@@ -110,6 +111,19 @@ const EditButton = styled.div`
   }
 `;
 
+const Notice = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 20px 10px 20px;
+`;
+
+const NoDishNotice = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  padding: 20px 0;
+  text-align: center;
+`;
+
 function SlideUpPanelBody({ dishes }) {
   const { dishesById } = useContext(RestaurantContext);
 
@@ -123,6 +137,7 @@ function SlideUpPanelBody({ dishes }) {
       {
         dishes.length > 0 ?
         <>
+          <Notice>Ready to order? Call your waiter over.</Notice>
           {
             dishes.map(({ quantity, id, modIds }, index) => {
               const dish = dishesById[id];
@@ -177,7 +192,7 @@ function SlideUpPanelBody({ dishes }) {
           }
         </>
         :
-        <span>Your saved items will show up here</span>
+        <NoDishNotice>Your saved items will show up here</NoDishNotice>
       }
     </PanelBody>
 
