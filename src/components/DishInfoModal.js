@@ -5,7 +5,7 @@ import { ReactComponent as Exit } from 'components/exit-button.svg';
 import AllergenIcon from 'components/AllergenIconWithName';
 import RemovableNotice from './RemovableNotice';
 import RestaurantContext from '../RestaurantContext';
-import { getDishImage, getSavedDishes, setSavedDishes } from 'utils';
+import { getDishImage } from 'utils';
 import Banner from 'components/Banner';
 
 const ModalContainer = styled.div`
