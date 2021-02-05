@@ -4,7 +4,9 @@ import { Button, Container, Row, Col } from 'react-bootstrap';
 import Counter from 'components/Counter';
 import ExpansionArrow from 'components/ExpansionArrow';
 import styled from 'styled-components';
-import { getSavedDishes } from 'utils';
+import Swipeout from '@gem-mine/rc-swipeout';
+import '@gem-mine/rc-swipeout/assets/index.css';
+import DeleteIcon from 'components/Delete.png';
 
 const SlideUpPanel = styled.div`
   position: relative;
@@ -73,44 +75,31 @@ function SlideUpPanelHeader(props) {
 const PanelBody = styled.div`
   max-height: 600px;
   width: 100%;
-  padding: 10px 15px 20px 15px;
 `;
 
-const SectionTitle = styled.i`
-  margin-left: 23px;  /* Align with Filters label */
-  margin-bottom: 5px;
-  display: block;
+const DishEntry = styled.div`
+  display: flex;
+  padding: 20px;
   font-size: 14px;
-  font-weight: 500;
-  color: #8A9DB7;
+  flex-direction: row;
 `;
 
-const SaveButton = styled(Button)`
-  background-color: #F3A35C;
-  color: white;
-  font-weight: bold;
-  margin: 10px auto 0 auto;
-  display: block;
-  width: 85%;
-  height: 44px;
-  border-radius: 22px;
+const DishInfo = styled.div`
+  flex: 1 1 auto;
+`;
 
-  &:hover { 
-    background-color: #F3A35C;
-    opacity: 0.8;
-    color: white;
-  }
+const EditButton = styled.div`
+  position: relative;
+  flex: 0 1 65px;
+  cursor: pointer;
+  text-align: center;
+  color: #00807f;
 
-  &:active {
-    background-color: #F3A35C;
-    opacity: 0.8;
-    color: white;
-  }
-
-  &:disabled {
-    background-color: #F3A35C;
-    opacity: 0.5;
-    color: white;
+  & span {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0, -50%);
   }
 `;
 
@@ -123,7 +112,37 @@ function SlideUpPanelBody({ dishes }) {
         dishes.length > 0 ?
         <>
           {
-            dishes.map(([quantity, id, mods]) => JSON.stringify([quantity, id, mods]))
+            dishes.map(([quantity, id, modIds], index) => {
+              const dish = dishesById[id];
+              return <Swipeout
+                key={index}
+                right={[{
+                  text: <img src={DeleteIcon} />,
+                  onPress: () => {},
+                  style: { backgroundColor: 'red', width: '60px' },
+                }]}
+              >
+                <DishEntry>
+                  <DishInfo>
+                    <div style={{ fontWeight: 'bold' }}>
+                      {dish.name}
+                    </div>
+                    {
+                      modIds.map((id, index) => {
+                        const mod = dish.Modifications.find((mod) => mod.id === id);
+                        return <div
+                          key={index}
+                          style={{marginTop: '5px'}}
+                        >{mod.name}</div>;
+                      })
+                    }
+                  </DishInfo>
+                  <EditButton
+                    onClick={() => console.log('Editing...')}
+                  ><span>edit</span></EditButton>
+                </DishEntry>
+              </Swipeout>;
+            })
           }
         </>
         :
