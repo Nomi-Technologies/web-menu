@@ -11,6 +11,7 @@ import RestaurantContext from 'RestaurantContext'
 import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
 import Counter from '../../components/Counter';
+import SlideUpTray from '../components/SlideUpTray';
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -117,6 +118,13 @@ const Header = styled.div`
   z-index: 100;
   width: 100%;
   background-color: white;
+`;
+
+const SlideUpPanelWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
 `;
 
 //Notification flashes for 4 second when 1+ filter is applied  
@@ -306,11 +314,27 @@ export default () => {
     <MenuScreen>
       <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
       <Header>
-        <NotificationBanner style={(context.activeFilters.size > 0 && !filterOpen) ? null : { display: "none" }}> 
-          <Counter active={context.activeFilters.size > 0} style={{backgroundColor: "white", color:"#628DEB"}}>
+        <NotificationBanner style={(context.activeFilters.size > 0 && !filterOpen) ? null : { display: "none" }}>
+          <div style={{
+            position: 'relative',
+            display: 'inline-block',
+            paddingLeft: '30px',
+          }}>
+          <Counter 
+            active={context.activeFilters.size > 0}
+            style={{
+              backgroundColor: "white",
+              color:"#628DEB",
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              transform: 'translate(0, -50%)',
+            }}
+          >
             {context.activeFilters.size}
           </Counter>
-          FILTER APPLIED
+            FILTER APPLIED
+          </div>
         </NotificationBanner>
         
         <AllMenusButton variant="link" onClick={onClickHambergerMenu}> 
@@ -382,6 +406,9 @@ export default () => {
           />
         </a>
       </NomiLogoBar>
+      <SlideUpPanelWrapper>
+        <SlideUpTray />
+      </SlideUpPanelWrapper>
     </MenuScreen>
   );
 }

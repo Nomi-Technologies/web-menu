@@ -221,25 +221,35 @@ const StyledBanner = styled(Banner)`
 `;
 
 export default function(props) {
+
   const context = useContext(RestaurantContext);
-  const [activeModifications, setActiveModifications] = React.useState([]);
-  const [quantity, setQuantity] = React.useState(1);
+
+  const editMode = typeof props.index !== 'undefined';
+  const savedDish = editMode ? context.savedDishes[props.index] : undefined;
+  const dishData = editMode ? context.dishesById[savedDish.id] : props.dish;
+
+  // set activeModifications to saved data (extracting from dishData with modIds)
+  const [activeModifications, setActiveModifications] = React.useState(
+    editMode ?
+    savedDish.modIds.map((id) => dishData.Modifications.find((mod) => mod.id === id)) : []
+  );
+  const [quantity, setQuantity] = React.useState(editMode ? savedDish.quantity : 1);
   // price of one dish, including mods
-  const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(props.dish.price));
+  const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(dishData.price));
 
   const [dishImage, setDishImage] = useState();
 
   useEffect(() => {
     if(props.show && context.restaurant && context.selectedMenuIndex !== null) {
-      getDishImage(props.dish.id).then((banner) => {
+      getDishImage(dishData.id).then((banner) => {
         setDishImage(banner)
       })
     }
   }, [context.restaurant, props.show])
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
-  let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
-  || props.dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
+  let showRemovableNotice = dishData.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
+  || dishData.gfp && context.activeFilters?.has(context.allergens['Gluten'])
 
   function toggleModification(modification) {
     var arr;
@@ -253,23 +263,31 @@ export default function(props) {
     }
 
     setActiveModifications(arr);
-    const newPrice = activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(props.dish.price));
+    const newPrice = activeModifications.reduce((total, currentMod) => total + parseInt(currentMod.price), parseInt(dishData.price));
     setUnitDishPrice(newPrice);
   }
 
   function saveDish() {
-    var savedDishes = localStorage.getItem('savedDishes') ? JSON.parse(localStorage.getItem('savedDishes')) : {};
-    var currRestaurantDishes = savedDishes[context.restaurant.id] ? savedDishes[context.restaurant.id] : [];
-    currRestaurantDishes.push([quantity, props.dish.id, activeModifications]);
-    savedDishes[context.restaurant.id] = currRestaurantDishes;
+    let savedDishes = [...context.savedDishes];
+    const updatedEntry = {
+      quantity,
+      id: dishData.id,
+      modIds: activeModifications.map((mod) => mod.id) ?? [],
+    };
 
-    localStorage.setItem('savedDishes', JSON.stringify(savedDishes));
+    if (editMode) {
+      savedDishes[props.index] = updatedEntry;
+    } else {
+      savedDishes.push(updatedEntry);
+    }
+    
+    context.setSavedDishes(savedDishes);
     props.onHide();
   }
 
   return (
     <Modal
-      // className='react-bootstrap-modal'
+      className='react-bootstrap-modal'
       show={props.show}
       aria-labelledby="contained-modal-vcenter"
       onHide={props.onHide}
@@ -282,7 +300,7 @@ export default function(props) {
       }
       <ModalContainer>
         <ModalHeader>
-          <DishName>{props.dish.name}</DishName>
+          <DishName>{dishData.name}</DishName>
           <ExitButtonWrapper
             onClick={props.onHide}
           >
@@ -293,9 +311,9 @@ export default function(props) {
         <SectionTitle>DESCRIPTION</SectionTitle>
           <SectionBody>
             {
-              props.dish.description.length > 0 ?
+              dishData.description.length > 0 ?
               <>
-                <Description>{props.dish.description}</Description>
+                <Description>{dishData.description}</Description>
 
               </> : <></>
             }
@@ -310,9 +328,9 @@ export default function(props) {
                 <StyledRemovableNotice /> : null
               }
               {
-                props.dish.Tags.length > 0 ?
+                dishData.Tags.length > 0 ?
                 (
-                  props.dish.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.has(t.id) }/>)
+                  dishData.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.has(t.id) }/>)
                 )
                 :
                 "No Allergy Info"
@@ -321,7 +339,7 @@ export default function(props) {
           </>  : ""
           }
           {
-            props.dish.price.length > 0 ?
+            dishData.price.length > 0 ?
             <>
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
@@ -331,18 +349,22 @@ export default function(props) {
             </> : <></>
           }
           {
-            props.dish.Modifications.length > 0 ?
+            dishData.Modifications.length > 0 ?
             <>
               <Divider/>
               <SectionTitle>OPTIONS</SectionTitle>
               <SectionBody style={{ flexDirection: "column", alignItems: "flex-start"}}>
-              { props.dish.Modifications.map(t => 
+              { dishData.Modifications.map(t => 
                 <AddOn key={t.id}>
                   <label className="container"> 
                     <AddOnName>{t.name} </AddOnName>
                     { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
                     { t.price !=="0" ? <AddOnNotes> (${t.price})</AddOnNotes> : <></>}
-                    <input type="checkbox" onClick={() => toggleModification(t)}/>
+                    <input
+                      checked={activeModifications.some((mod) => mod.id === t.id)}
+                      type="checkbox"
+                      onClick={() => toggleModification(t)}
+                    />
                     <span className="checkmark"></span>
                   </label>
                 </AddOn>
@@ -363,7 +385,7 @@ export default function(props) {
             </QuantitySelector>
             <SaveDishButton onClick={saveDish}> 
               <span>{quantity > 1 ? "Save Dishes" : "Save Dish"}</span>
-              <span>${  props.dish.price.length > 0 ? unitDishPrice * quantity : null }</span>
+              <span>${  dishData.price.length > 0 ? unitDishPrice * quantity : null }</span>
             </SaveDishButton>
           </SectionBody>
         </ModalBody>

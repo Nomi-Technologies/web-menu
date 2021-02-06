@@ -1,5 +1,3 @@
-import { ResponsiveEmbed } from "react-bootstrap";
-
 export const parseMenu = (data, enableFiltering) => {
   let menu = {
     categories: [],

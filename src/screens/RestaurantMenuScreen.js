@@ -13,6 +13,8 @@ export default () => {
   const [excludedDishesByMenu, setExcludedDishesByMenu] = useState([]);
   const [selectedMenuIndex, setSelecteMenuIndex] = useState(0);
   const [menus, setMenus] = useState([]);
+  const [dishesById, setDishesById] = useState({});
+  const [savedDishes, setSavedDishes] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -20,7 +22,6 @@ export default () => {
     getRestaurant(restaurant_identifier)
       .then(restaurant => {
         setRestaurant(restaurant);
-        console.log(restaurant)
         
         Promise.all(restaurant.Menus.map(async menu => {
           let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
@@ -30,6 +31,36 @@ export default () => {
             setActiveFiltersByMenu(dishesByMenu.map(() => new Set()));
             setExcludedDishesByMenu(dishesByMenu.map(() => new Set()));
             setMenus(dishesByMenu);
+            const dishesLUT = dishesByMenu.reduce((accumulator, menu) => {
+              menu.dishes.forEach((dish) => {
+                accumulator[dish.id] = dish;
+              });
+              return accumulator;
+            }, {});
+            setDishesById(dishesLUT);
+            const allSavedDishes = JSON.parse(localStorage.getItem('savedDishes') ?? '{}');
+            let savedDishes = allSavedDishes[restaurant.id] ?? [];
+
+            // purge localStorage
+            let removedDishes = [];
+            savedDishes.forEach(({ id, modIds }, index) => {
+              if (!dishesLUT[id]) {
+                removedDishes.push(id);
+                return;
+              }
+              let removedMods = [];
+              modIds.forEach((modId) => {
+                console.log(dishesLUT, modId);
+                if (!dishesLUT[id].Modifications.some((mod) => mod.id === modId)) {
+                  removedMods.push(modId);
+                }
+              });
+              savedDishes[index].modIds = modIds.filter((modId) => removedMods.indexOf(modId) < 0);
+            });
+            savedDishes = savedDishes.filter(({ id }) => removedDishes.indexOf(id) < 0);
+            allSavedDishes[restaurant.id] = savedDishes;
+            localStorage.setItem('savedDishes', JSON.stringify(allSavedDishes));
+            setSavedDishes(savedDishes);
           }
         );
       })
@@ -39,22 +70,24 @@ export default () => {
   }, [restaurant_identifier]);
 
   // create allergen dictionary
-  let allergenDict = {}
+  let allergenLUT = {}
   if(menus[selectedMenuIndex]?.tags) {
-    Object.entries(menus[selectedMenuIndex].tags).forEach(tag => {
-      allergenDict[tag[1].name] = tag[1].id
+    Object.values(menus[selectedMenuIndex].tags).forEach((tag) => {
+      allergenLUT[tag.name] = tag.id
     })
   }
   
 
   return (
     <RestaurantContext.Provider value={{
-      restaurant: restaurant,
-      selectedMenuIndex: selectedMenuIndex,
+      restaurant,
+      selectedMenuIndex,
       menu: menus[selectedMenuIndex],
-      allergens: allergenDict,
+      allergens: allergenLUT,
       activeFilters: activeFiltersByMenu[selectedMenuIndex],
       excludedDishes: excludedDishesByMenu[selectedMenuIndex],
+      dishesById,
+      savedDishes,
       error: error,
       setFilters: (filters) => {
         let filtersByMenu = activeFiltersByMenu.slice(0);
@@ -70,6 +103,12 @@ export default () => {
         setExcludedDishesByMenu(excludedDishes);
       },
       setSelectedMenu: setSelecteMenuIndex,
+      setSavedDishes: (dishes) => {
+        setSavedDishes(dishes);
+        const saved = JSON.parse(localStorage.getItem('savedDishes') ?? '{}');
+        saved[restaurant.id] = dishes;
+        localStorage.setItem('savedDishes', JSON.stringify(saved));
+      }
     }}>
       {
         window.innerWidth < 1000 ?
