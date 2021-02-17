@@ -27,11 +27,11 @@ export default () => {
           let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
           return parseMenu(rawMenu, menu.enableFiltering);
         })).then(
-          dishesByMenu => {
-            setActiveFiltersByMenu(dishesByMenu.map(() => new FilterSet()));
-            setExcludedDishesByMenu(dishesByMenu.map(() => new Set()));
-            setMenus(dishesByMenu);
-            const dishesLUT = dishesByMenu.reduce((accumulator, menu) => {
+          parsedMenus => {
+            setActiveFiltersByMenu(parsedMenus.map(() => new FilterSet()));
+            setExcludedDishesByMenu(parsedMenus.map(() => new Set()));
+            setMenus(parsedMenus);
+            const dishesLUT = parsedMenus.reduce((accumulator, menu) => {
               menu.dishes.forEach((dish) => {
                 accumulator[dish.id] = dish;
               });
