@@ -10,6 +10,7 @@ export default () => {
   const { restaurant_identifier } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [activeFiltersByMenu, setActiveFiltersByMenu] = useState([]);
+  const [includedDishesByMenu, setIncludedDishesByMenu] = useState([]);
   const [excludedDishesByMenu, setExcludedDishesByMenu] = useState([]);
   const [selectedMenuIndex, setSelectedMenuIndex] = useState(0);
   const [menus, setMenus] = useState([]);
@@ -29,6 +30,7 @@ export default () => {
         })).then(
           parsedMenus => {
             setActiveFiltersByMenu(parsedMenus.map(() => new FilterSet()));
+            setIncludedDishesByMenu(parsedMenus.map(() => new Set()));
             setExcludedDishesByMenu(parsedMenus.map(() => new Set()));
             setMenus(parsedMenus);
             const dishesLUT = parsedMenus.reduce((accumulator, menu) => {
@@ -84,6 +86,7 @@ export default () => {
       menu: menus[selectedMenuIndex],
       allergens: allergenLUT,
       activeFilters: activeFiltersByMenu[selectedMenuIndex],
+      includedDishes: includedDishesByMenu[selectedMenuIndex],
       excludedDishes: excludedDishesByMenu[selectedMenuIndex],
       dishesById,
       savedDishes,
@@ -92,18 +95,26 @@ export default () => {
           allergens = activeFiltersByMenu[selectedMenuIndex].allergens,
           diets = activeFiltersByMenu[selectedMenuIndex].diets,
         }) => {
-          let filtersByMenu = activeFiltersByMenu.slice(0);
+          let filtersByMenu = [...activeFiltersByMenu];
           filtersByMenu[selectedMenuIndex].allergens = allergens;
           filtersByMenu[selectedMenuIndex].diets = diets;
           setActiveFiltersByMenu(filtersByMenu);
-          const menusCopy = menus.slice(0);
+          const menusCopy = [...menus];
           const menu = menusCopy[selectedMenuIndex];
-          let { excluded, hasRemovables } = filterMenu(menu.dishesByFilters,
+          let {
+            included,
+            excluded,
+            hasRemovables
+          } = filterMenu(menu.dishesByFilters,
             { allergens, diets }
           );
           menu.hasRemovables = hasRemovables;
           setMenus(menusCopy);
-          const excludedDishes = excludedDishesByMenu.slice(0);
+
+          const includedDishes = [...includedDishesByMenu];
+          includedDishes[selectedMenuIndex] = included;
+          setIncludedDishesByMenu(includedDishes);
+          const excludedDishes = [...excludedDishesByMenu];
           excludedDishes[selectedMenuIndex] = excluded;
           setExcludedDishesByMenu(excludedDishes);
       },

@@ -59,9 +59,11 @@ export const filterMenu = ({ byAllergens, byDiets }, { allergens, diets }) => {
   );
 
   diets.forEach((dietId) => {
-
+    byDiets[dietId].forEach((dish) => {
+      included.add(dish.id);
+    });
   });
-  return { excluded, hasRemovables: onlyHasRemovables.size > 0 };
+  return { included, excluded, hasRemovables: onlyHasRemovables.size > 0 };
 }
 
 export const getRestaurant = async restaurantId => {
