@@ -94,7 +94,7 @@ const Grid = styled(Container)`
 
 function TagGrid(props) {
   const context = useContext(RestaurantContext);
-  const tags = context.menu.tags;
+  const tags = context.menu.filters.allergens;
   const tag_keys = Object.keys(tags);
 
   const createGrid = () => {

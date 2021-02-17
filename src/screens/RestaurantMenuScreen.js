@@ -70,8 +70,8 @@ export default () => {
 
   // create allergen dictionary
   let allergenLUT = {}
-  if(menus[selectedMenuIndex]?.tags) {
-    Object.values(menus[selectedMenuIndex].tags).forEach((tag) => {
+  if(menus[selectedMenuIndex]?.filters.allergens) {
+    Object.values(menus[selectedMenuIndex].filters.allergens).forEach((tag) => {
       allergenLUT[tag.name] = tag.id
     })
   }
@@ -88,24 +88,23 @@ export default () => {
       dishesById,
       savedDishes,
       error: error,
-      setFilters: ({ allergens, diets }) => {
-        console.log(allergens);
-        let filtersByMenu = activeFiltersByMenu.slice(0);
-        if (allergens) {
-          filtersByMenu[selectedMenuIndex].allergens = allergens;
-        }
-        if (diets) {
-          filtersByMenu[selectedMenuIndex].diets = diets;
-        }
-        setActiveFiltersByMenu(filtersByMenu);
-        const menusCopy = menus.slice(0);
-        const menu = menusCopy[selectedMenuIndex];
-        let { excluded, hasRemovables } = filterMenu(menu.dishesByTags, allergens);
-        menu.hasRemovables = hasRemovables;
-        setMenus(menusCopy);
-        const excludedDishes = excludedDishesByMenu.slice(0);
-        excludedDishes[selectedMenuIndex] = excluded;
-        setExcludedDishesByMenu(excludedDishes);
+      setFilters: (filters = {
+          allergens = activeFiltersByMenu[selectedMenuIndex].allergens,
+          diets = activeFiltersByMenu[selectedMenuIndex].diets,
+        }) => {
+          let filtersByMenu = activeFiltersByMenu.slice(0);
+          filtersByMenu[selectedMenuIndex] = filters;
+          setActiveFiltersByMenu(filtersByMenu);
+          const menusCopy = menus.slice(0);
+          const menu = menusCopy[selectedMenuIndex];
+          let { excluded, hasRemovables } = filterMenu(menu.dishesByFilters,
+            { allergens, diets }
+          );
+          menu.hasRemovables = hasRemovables;
+          setMenus(menusCopy);
+          const excludedDishes = excludedDishesByMenu.slice(0);
+          excludedDishes[selectedMenuIndex] = excluded;
+          setExcludedDishesByMenu(excludedDishes);
       },
       setSelectedMenu: setSelectedMenuIndex,
       setSavedDishes: (dishes) => {

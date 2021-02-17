@@ -17,7 +17,7 @@ const Grid = styled(Container)`
 `;
 
 function TagGrid(props) {
-  const tags = props.tags;
+  const tags = props.filters.allergens;
   const tag_keys = Object.keys(tags);
   let rows = [];
   for (let i = 0; i < tag_keys.length; i += 2) {
@@ -109,7 +109,7 @@ export default (props) => {
       {props.expanded?
         <props.StyledBody>
           <TagGrid
-            tags={context.menu.tags}
+            tags={context.menu.filters.allergens}
             selected={context.activeFilters.allergens}
             onSelect={context.setFilters}
           />
