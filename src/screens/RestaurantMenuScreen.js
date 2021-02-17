@@ -88,12 +88,13 @@ export default () => {
       dishesById,
       savedDishes,
       error: error,
-      setFilters: (filters = {
+      setFilters: ({
           allergens = activeFiltersByMenu[selectedMenuIndex].allergens,
           diets = activeFiltersByMenu[selectedMenuIndex].diets,
         }) => {
           let filtersByMenu = activeFiltersByMenu.slice(0);
-          filtersByMenu[selectedMenuIndex] = filters;
+          filtersByMenu[selectedMenuIndex].allergens = allergens;
+          filtersByMenu[selectedMenuIndex].diets = diets;
           setActiveFiltersByMenu(filtersByMenu);
           const menusCopy = menus.slice(0);
           const menu = menusCopy[selectedMenuIndex];
