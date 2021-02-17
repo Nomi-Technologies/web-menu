@@ -35,7 +35,7 @@ function TagGrid(props) {
             let selected = new Set(props.selected);
             if (selected.has(tag.id)) { selected.delete(tag.id); }
             else { selected.add(tag.id); }
-            props.onSelect(selected);
+            props.onSelect({ allergens: selected });
           }}
         >
           {tags[tag_keys[i+j]].name}
@@ -110,12 +110,12 @@ export default (props) => {
         <props.StyledBody>
           <TagGrid
             tags={context.menu.tags}
-            selected={context.activeFilters}
+            selected={context.activeFilters.allergens}
             onSelect={context.setFilters}
           />
           <SaveButton
             disabled={context.activeFilters.size === 0}
-            onClick={() => context.setFilters(new Set())}
+            onClick={() => context.setFilters({ allergens: new Set() })}
           >
             Clear All
           </SaveButton>

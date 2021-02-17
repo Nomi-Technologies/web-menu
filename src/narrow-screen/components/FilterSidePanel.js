@@ -77,7 +77,7 @@ const GridTagButton = (props) => {
     let currentTags = new Set(props.currentTags);
     if (currentTags.has(props.tag.id)) { currentTags.delete(props.tag.id); }
     else { currentTags.add(props.tag.id); }
-    props.onSelect(currentTags);
+    props.onSelect({ allergens: currentTags });
   }
 
   return (
@@ -94,7 +94,6 @@ const Grid = styled(Container)`
 
 function TagGrid(props) {
   const context = useContext(RestaurantContext);
-
   const tags = context.menu.tags;
   const tag_keys = Object.keys(tags);
 
@@ -109,10 +108,10 @@ function TagGrid(props) {
         }
         cols.push(<Col key={j}>
           <GridTagButton
-            selected={context.activeFilters.has(tags[tag_keys[i + j]].id)}
+            selected={context.activeFilters.allergens.has(tags[tag_keys[i + j]].id)}
             tag={tags[tag_keys[i + j]]}
             onSelect={context.setFilters}
-            currentTags={context.activeFilters}
+            currentTags={context.activeFilters.allergens}
           />
 
         </Col>);
@@ -214,7 +213,7 @@ export default ({ filterOpen, setFilterOpen }) => {
                 style={{
                   color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
                 }}
-                onClick={() => context.setFilters(new Set())}>
+                onClick={() => context.setFilters({ allergens: new Set() })}>
                 CLEAR
               </ClearButton>
               <FilterButton>

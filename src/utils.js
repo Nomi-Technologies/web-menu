@@ -10,6 +10,8 @@ export const parseMenu = (data, enableFiltering) => {
     enableFiltering: enableFiltering,
   };
 
+  menu.hasDiets = true;
+
   data.forEach(dish => {
     // track if a menu has allergens, if not we can hide the slide up bar etc.
     if(dish.Tags.length > 0) {
@@ -101,5 +103,16 @@ export const getDishImage = async (dishId) => {
     return URL.createObjectURL(blob);
   } else {
     return null
+  }
+}
+
+export class FilterSet {
+  constructor() {
+    this.allergens = new Set();
+    this.diets = new Set();
+  }
+
+  get size() {
+    return this.allergens.size + this.diets.size;
   }
 }
