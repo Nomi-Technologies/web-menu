@@ -211,7 +211,8 @@ function MainContent({ categoryToRef }) {
     const originalDishes = context.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach((d) => {
-      if (!context.excludedDishes.has(d.id) && context.includedDishes.has(d.id)) {
+      if (!context.excludedDishes.has(d.id) && 
+          (context.includedDishes.size === 0 || context.includedDishes?.has(d.id))) {
         filtered.push(d);
       }
     });
