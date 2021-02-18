@@ -3,15 +3,16 @@ import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
 import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
 import { useParams } from 'react-router-dom';
 import { getRestaurant, getDishesOfMenu, parseMenu } from 'utils';
-import { filterMenu, googleAnalyticsPageView } from "../utils"
+import { filterMenu, googleAnalyticsPageView, FilterSet } from "../utils"
 import RestaurantContext from '../RestaurantContext';
 
 export default () => {
   const { restaurant_identifier } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [activeFiltersByMenu, setActiveFiltersByMenu] = useState([]);
+  const [includedDishesByMenu, setIncludedDishesByMenu] = useState([]);
   const [excludedDishesByMenu, setExcludedDishesByMenu] = useState([]);
-  const [selectedMenuIndex, setSelecteMenuIndex] = useState(0);
+  const [selectedMenuIndex, setSelectedMenuIndex] = useState(0);
   const [menus, setMenus] = useState([]);
   const [dishesById, setDishesById] = useState({});
   const [savedDishes, setSavedDishes] = useState([]);
@@ -27,11 +28,12 @@ export default () => {
           let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
           return parseMenu(rawMenu, menu.enableFiltering);
         })).then(
-          dishesByMenu => {
-            setActiveFiltersByMenu(dishesByMenu.map(() => new Set()));
-            setExcludedDishesByMenu(dishesByMenu.map(() => new Set()));
-            setMenus(dishesByMenu);
-            const dishesLUT = dishesByMenu.reduce((accumulator, menu) => {
+          parsedMenus => {
+            setActiveFiltersByMenu(parsedMenus.map(() => new FilterSet()));
+            setIncludedDishesByMenu(parsedMenus.map(() => new Set()));
+            setExcludedDishesByMenu(parsedMenus.map(() => new Set()));
+            setMenus(parsedMenus);
+            const dishesLUT = parsedMenus.reduce((accumulator, menu) => {
               menu.dishes.forEach((dish) => {
                 accumulator[dish.id] = dish;
               });
@@ -50,7 +52,6 @@ export default () => {
               }
               let removedMods = [];
               modIds.forEach((modId) => {
-                console.log(dishesLUT, modId);
                 if (!dishesLUT[id].Modifications.some((mod) => mod.id === modId)) {
                   removedMods.push(modId);
                 }
@@ -71,8 +72,8 @@ export default () => {
 
   // create allergen dictionary
   let allergenLUT = {}
-  if(menus[selectedMenuIndex]?.tags) {
-    Object.values(menus[selectedMenuIndex].tags).forEach((tag) => {
+  if(menus[selectedMenuIndex]?.filters.allergens) {
+    Object.values(menus[selectedMenuIndex].filters.allergens).forEach((tag) => {
       allergenLUT[tag.name] = tag.id
     })
   }
@@ -85,24 +86,39 @@ export default () => {
       menu: menus[selectedMenuIndex],
       allergens: allergenLUT,
       activeFilters: activeFiltersByMenu[selectedMenuIndex],
+      includedDishes: includedDishesByMenu[selectedMenuIndex],
       excludedDishes: excludedDishesByMenu[selectedMenuIndex],
       dishesById,
       savedDishes,
       error: error,
-      setFilters: (filters) => {
-        let filtersByMenu = activeFiltersByMenu.slice(0);
-        filtersByMenu[selectedMenuIndex] = filters;
-        setActiveFiltersByMenu(filtersByMenu);
-        const menusCopy = menus.slice(0);
-        const menu = menusCopy[selectedMenuIndex];
-        let { excluded, hasRemovables } = filterMenu(menu.dishesByTags, filters);
-        menu.hasRemovables = hasRemovables;
-        setMenus(menusCopy);
-        const excludedDishes = excludedDishesByMenu.slice(0);
-        excludedDishes[selectedMenuIndex] = excluded;
-        setExcludedDishesByMenu(excludedDishes);
+      setFilters: ({
+          allergens = activeFiltersByMenu[selectedMenuIndex].allergens,
+          diets = activeFiltersByMenu[selectedMenuIndex].diets,
+        }) => {
+          let filtersByMenu = [...activeFiltersByMenu];
+          filtersByMenu[selectedMenuIndex].allergens = allergens;
+          filtersByMenu[selectedMenuIndex].diets = diets;
+          setActiveFiltersByMenu(filtersByMenu);
+          const menusCopy = [...menus];
+          const menu = menusCopy[selectedMenuIndex];
+          let {
+            included,
+            excluded,
+            hasRemovables
+          } = filterMenu(menu.dishesByFilters,
+            { allergens, diets }
+          );
+          menu.hasRemovables = hasRemovables;
+          setMenus(menusCopy);
+
+          const includedDishes = [...includedDishesByMenu];
+          includedDishes[selectedMenuIndex] = included;
+          setIncludedDishesByMenu(includedDishes);
+          const excludedDishes = [...excludedDishesByMenu];
+          excludedDishes[selectedMenuIndex] = excluded;
+          setExcludedDishesByMenu(excludedDishes);
       },
-      setSelectedMenu: setSelecteMenuIndex,
+      setSelectedMenu: setSelectedMenuIndex,
       setSavedDishes: (dishes) => {
         setSavedDishes(dishes);
         const saved = JSON.parse(localStorage.getItem('savedDishes') ?? '{}');

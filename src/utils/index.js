@@ -3,12 +3,14 @@ export const parseMenu = (data, enableFiltering) => {
     categories: [],
     dishes: [],
     dishesByCategory: {},
-    dishesByTags: {},
-    tags: {},
+    dishesByFilters: { byAllergens: {}, byDiets: {} },
+    filters: { allergens: {}, diets: {} },
     hasAllergens: false,
     hasRemovables: false,
     enableFiltering: enableFiltering,
   };
+
+  menu.hasDiets = true;
 
   data.forEach(dish => {
     // track if a menu has allergens, if not we can hide the slide up bar etc.
@@ -23,23 +25,30 @@ export const parseMenu = (data, enableFiltering) => {
     }
     menu.dishesByCategory[dish.Category.id].push(dish);
     dish.Tags.forEach(tag => {
-      if (!(tag.id in menu.tags)) {
-        menu.tags[tag.id] = tag;
-        menu.dishesByTags[tag.id] = [];
+      if (!(tag.id in menu.filters.allergens)) {
+        menu.filters.allergens[tag.id] = tag;
+        menu.dishesByFilters.byAllergens[tag.id] = [];
       }
-      menu.dishesByTags[tag.id].push(dish);
+      menu.dishesByFilters.byAllergens[tag.id].push(dish);
     });
-    // menu.enableFiltering = dish.enableFiltering
+    dish.Diets.forEach((diet) => {
+      if (!(diet.id in menu.filters.diets)) {
+        menu.filters.diets[diet.id] = diet;
+        menu.dishesByFilters.byDiets[diet.id] = [];
+      }
+      menu.dishesByFilters.byDiets[diet.id].push(dish);
+    });
   });
   return menu;
 }
 
-export const filterMenu = (dishesByTags, selectedFilters) => {
+export const filterMenu = ({ byAllergens, byDiets }, { allergens, diets }) => {
+  let included = new Set();
   let excluded = new Set();
   let onlyHasRemovables = new Set();
 
-  selectedFilters.forEach((tagId) =>
-    dishesByTags[tagId].forEach((dish) => {
+  allergens.forEach((tagId) =>
+    byAllergens[tagId].forEach((dish) => {
       if (dish.Tags.some((tag) => tag.id === tagId && tag.DishTag.removable )) {
         // This dish-tag is removable
         if (!excluded.has(dish.id)) {
@@ -54,7 +63,13 @@ export const filterMenu = (dishesByTags, selectedFilters) => {
       }
     })
   );
-  return { excluded, hasRemovables: onlyHasRemovables.size > 0 };
+
+  diets.forEach((dietId) => {
+    byDiets[dietId].forEach((dish) => {
+      included.add(dish.id);
+    });
+  });
+  return { included, excluded, hasRemovables: onlyHasRemovables.size > 0 };
 }
 
 export const getRestaurant = async restaurantId => {
@@ -103,3 +118,5 @@ export const getDishImage = async (dishId) => {
     return null
   }
 }
+
+export * from './filter-set';

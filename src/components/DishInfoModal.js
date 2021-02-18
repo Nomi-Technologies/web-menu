@@ -248,8 +248,8 @@ export default function(props) {
   }, [context.restaurant, props.show])
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
-  let showRemovableNotice = dishData.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
-  || dishData.gfp && context.activeFilters?.has(context.allergens['Gluten'])
+  let showRemovableNotice = dishData.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id))
+  || dishData.gfp && context.activeFilters?.allergens.has(context.allergens['Gluten'])
 
   function toggleModification(modification) {
     var arr;
@@ -330,7 +330,7 @@ export default function(props) {
               {
                 dishData.Tags.length > 0 ?
                 (
-                  dishData.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.has(t.id) }/>)
+                  dishData.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.allergens.has(t.id) }/>)
                 )
                 :
                 "No Allergy Info"

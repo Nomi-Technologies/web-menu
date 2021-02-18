@@ -75,8 +75,8 @@ const OrangeDot = styled.div`
 
 export default function (props) {
   let context = useContext(RestaurantContext)
-  let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.has(tag.id))
-  || props.dish.gfp && context.activeFilters?.has(context.allergens['Gluten'])
+  let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id))
+  || props.dish.gfp && context.activeFilters?.allergens.has(context.allergens['Gluten'])
 
   return (
     <DishTile className={props.className} onClick={props.onClick}>
