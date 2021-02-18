@@ -31,7 +31,13 @@ export const parseMenu = (data, enableFiltering) => {
       }
       menu.dishesByFilters.byAllergens[tag.id].push(dish);
     });
-    // menu.enableFiltering = dish.enableFiltering
+    dish.Diets.forEach((diet) => {
+      if (!(diet.id in menu.filters.diets)) {
+        menu.filters.diets[diet.id] = diet;
+        menu.dishesByFilters.byDiets[diet.id] = [];
+      }
+      menu.dishesByFilters.byDiets[diet.id].push(dish);
+    });
   });
   return menu;
 }
