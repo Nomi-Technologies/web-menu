@@ -162,24 +162,33 @@ const NotificationBanner = styled.div`
 
 const RestaurantLogo = styled.a`
   position: absolute;
-  top: 0px;
-  left: 30%;
-  line-height: 50px;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  line-height: 60px;
   & img {
     height: 35px;
+    width: 100px;
+  }
+
+  & img[alt] {
+    max-height: 35px;
+    max-width: 100px;
+    font-size: 12px;
+    line-height: 12px;
   }
 `;
 
-const AllMenusButton = styled(Button)`
+const AllMenusButton = styled.div`
   position: absolute;
-  top: 0px;
-  padding-top: 60px;
-  transform: translate(0, -50%);
-  left: 5px;
+  top: 0;
+  left: 0;
+  margin-top: 24px;
+  margin-left: 20px;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.1em;
-  color: #628deb;
+  color: #00807F;
   text-decoration: none;
   &:hover,
   &:focus {
@@ -189,14 +198,14 @@ const AllMenusButton = styled(Button)`
 
 const FilteringButton = styled.div`
   position: absolute;
-  top: 0px;
-  padding-top: 60px;
-  transform: translate(0, -50%);
-  right: 1px;
+  top: 0;
+  right: 0;
+  margin-top: 24px;
+  margin-right: 50px;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.1em;
-  color: #628deb;
+  color: #00807F;
   &:hover,
   &:focus {
     text-decoration: none;
@@ -206,7 +215,7 @@ const FilteringButton = styled.div`
 export default () => {
   const context = useContext(RestaurantContext);
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
-  const [filterOpen, setFilterOpen] = useState(true);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
   const [categoryToTabRef, setCategoryToTabRef] = useState({});
@@ -313,7 +322,7 @@ export default () => {
   function onClickFilterButton() {
     setFilterOpen(!filterOpen);
   }
-  
+
   return (
     <MenuScreen>
       <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
@@ -345,19 +354,33 @@ export default () => {
         <AllMenusButton variant="link" onClick={onClickHambergerMenu}> 
           SEE MENUS
         </AllMenusButton>
-        {
-          context.restaurant ?
-          <RestaurantLogo href={ context.restaurant.logo}>
+        <RestaurantLogo href={ context.restaurant?.logo }>
+          {
+            restaurantLogo ?
             <img
               alt={`${context.restaurant.name} logo`}
               src={ restaurantLogo }
-              />
-          </RestaurantLogo> : <></>
-        }
+            /> : 'Loading...'
+          }
+        </RestaurantLogo>
         {
           context.menu.hasAllergens || context.menu.hasDiets ?
           <FilteringButton variant="link" onClick={onClickFilterButton}>
             FILTERS
+            <Counter
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '-30px',
+                fontSize: '14px',
+                transform: 'translate(0, -50%)',
+              }}
+              radius={'22px'}
+              active={context.activeFilters.size > 0}
+              activeColor={'#00807F'}
+            >
+              {context.activeFilters.size}
+            </Counter>
           </FilteringButton> : null
         }
       
