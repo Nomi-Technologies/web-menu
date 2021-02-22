@@ -49,15 +49,18 @@ const StyledGridTagButton = styled(TagButton)`
 
 const GridTagButton = (props) => {
   const onClick = () => {
-    let currentTags = new Set(props.currentTags);
-    if (currentTags.has(props.tag.id)) { currentTags.delete(props.tag.id); }
-    else { currentTags.add(props.tag.id); }
-    props.onSelect({ allergens: currentTags });
+    let activeFilters = new Set(props.activeFilters);
+    if (activeFilters.has(props.filter.id)) {
+      activeFilters.delete(props.filter.id);
+    } else {
+      activeFilters.add(props.filter.id);
+    }
+    props.onSelect(activeFilters);
   }
 
   return (
     <StyledGridTagButton {...props} onClick={onClick}>
-      { props.tag.name}
+      { props.filter.name }
     </StyledGridTagButton>
   )
 }
@@ -79,26 +82,24 @@ const StyledRow = styled(Row)`
   }
 `;
 
-function TagGrid({ crossCount }) {
-  const context = useContext(RestaurantContext);
-  const tags = context.menu.filters.allergens;
-  const tag_keys = Object.keys(tags);
+function TagGrid({ crossCount, filters, activeFilters, setFilters }) {
+  const keys = Object.keys(filters);
 
   const createGrid = () => {
     let rows = [];
-    for (let i = 0; i < tag_keys.length; i += crossCount) {
+    for (let i = 0; i < keys.length; i += crossCount) {
       let cols = [];
       for (let j = 0; j < crossCount; ++j) {
-        if (i + j >= tag_keys.length) {
+        if (i + j >= keys.length) {
           cols.push(<StyledColumn key={j}></StyledColumn>);
           continue;
         }
         cols.push(<StyledColumn key={j}>
           <GridTagButton
-            selected={context.activeFilters.allergens.has(tags[tag_keys[i + j]].id)}
-            tag={tags[tag_keys[i + j]]}
-            onSelect={context.setFilters}
-            currentTags={context.activeFilters.allergens}
+            selected={activeFilters.has(filters[keys[i + j]].id)}
+            filter={filters[keys[i + j]]}
+            onSelect={setFilters}
+            activeFilters={activeFilters}
           />
 
         </StyledColumn>);
@@ -193,9 +194,21 @@ export default ({ filterOpen, setFilterOpen }) => {
         </FilterButton>
         <FilterDoneButton onClick={() => setFilterOpen(false)} >DONE</FilterDoneButton>
       </FilterHeader>
-      <Title>Allergens</Title>
+      <Title style={{ marginTop: '24px' }}>Diets</Title>
+      <TagGrid
+        crossCount={1}
+        filters={context.menu.filters.diets}
+        activeFilters={context.activeFilters.diets}
+        setFilters={(diets) => context.setFilters({ diets })}
+      />
+      <Title style={{ marginTop: '32px' }}>Allergens</Title>
       <Subtitle>Exclude dishes that contain:</Subtitle>
-      <TagGrid crossCount={2}/>
+      <TagGrid
+        crossCount={2}
+        filters={context.menu.filters.allergens}
+        activeFilters={context.activeFilters.allergens}
+        setFilters={(allergens) => context.setFilters({ allergens })}
+      />
     </RightSidePanel>
   );
 }
