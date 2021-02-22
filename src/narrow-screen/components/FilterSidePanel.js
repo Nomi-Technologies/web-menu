@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import RestaurantContext from '../../RestaurantContext';
 import { Container, Row, Col } from 'react-bootstrap';
 import TagButton from 'components/TagButton';
@@ -18,24 +18,15 @@ const RightSidePanel = styled.div`
     width: 100%;
   }
   background: #FFFFFF;
-  padding: 0 24px;
-`;
-
-const ClearButton = styled.div`
-  font-weight: 700;
-  font-size: 18px;
-  color: #EF5454;
-  left:20px;
-  position:absolute;
 `;
 
 const StyledGridTagButton = styled(TagButton)`
   cursor: default;
-  font-family: HK Grotesk;
   font-size: 14px;
   line-height: 23px;
   letter-spacing: 0.02em;
   background-color: #EBEEF5;
+  text-transform: capitalize;
   ${({ selected }) => (selected ? {
     color: '#0D5959',
     fontWeight: 'bold',
@@ -114,25 +105,45 @@ function TagGrid({ crossCount, filters, activeFilters, setFilters }) {
   );
 }
 
-const FilterHeader = styled.div`
+const Padded = styled.div`
+  padding: 0 24px;
+`;
+
+const Divider = styled.div`
+  border-bottom: 1px solid #DCE2E9;
+`;
+
+const PanelHeader = styled.div`
   position: relative;
-  height: 50px;
+  height: 60px;
   left: 0px;
-  margin-top: 20px;
-  font-size: 18px;
-  display: flex;
-  justify-content: center;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
 `
 
-const FilterButton = styled.div`
-  color: black;
-  position: relative;
+const PanelHeaderElement = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  letter-spacing: 0.02em;
+`;
+
+const ResetButton = styled(PanelHeaderElement)`
+  position: absolute;
+  left: 0;
+`;
+
+const FilterHeading = styled(PanelHeaderElement)`
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 20px;
+  line-height: 20px;
 `
 
-const FilterDoneButton = styled.div`
-  right:20px;
-  position:absolute;
-  color:#00807F;
+const ApplyButton = styled(PanelHeaderElement)`
+  right: 0;
 `
 
 const Title = styled.div`
@@ -174,41 +185,51 @@ export default ({ filterOpen, setFilterOpen }) => {
       open={filterOpen}
       ref={myRef}
     >
-      <FilterHeader>
-        <ClearButton
-          style={{
-            color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
-          }}
-          onClick={() => context.setFilters({ allergens: new Set() })}>
-          CLEAR
-        </ClearButton>
-        <FilterButton>
-          <span style={{ marginRight: '24px'}}>FILTERS</span>
-          <Counter
-            style={{ position: 'absolute', top: '0', right: '0', fontSize: '12px' }}
-            radius={'18px'}
-            active={context.activeFilters.size > 0}
+      <Padded>
+        <PanelHeader>
+          <ResetButton
+            style={{
+              color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
+            }}
+            onClick={() => context.setFilters({
+              allergens: new Set(),
+              diets: new Set()
+            })}
+          >
+            Reset
+          </ResetButton>
+          <FilterHeading>
+            <span style={{ marginRight: '28px'}}>Filters</span>
+            <Counter
+              style={{ position: 'absolute', top: '0', right: '0', fontSize: '14px' }}
+              radius={'20px'}
+              active={context.activeFilters.size > 0}
+              activeColor={'#00807F'}
             >
-            {context.activeFilters.size}
-          </Counter>
-        </FilterButton>
-        <FilterDoneButton onClick={() => setFilterOpen(false)} >DONE</FilterDoneButton>
-      </FilterHeader>
-      <Title style={{ marginTop: '24px' }}>Diets</Title>
-      <TagGrid
-        crossCount={1}
-        filters={context.menu.filters.diets}
-        activeFilters={context.activeFilters.diets}
-        setFilters={(diets) => context.setFilters({ diets })}
-      />
-      <Title style={{ marginTop: '32px' }}>Allergens</Title>
-      <Subtitle>Exclude dishes that contain:</Subtitle>
-      <TagGrid
-        crossCount={2}
-        filters={context.menu.filters.allergens}
-        activeFilters={context.activeFilters.allergens}
-        setFilters={(allergens) => context.setFilters({ allergens })}
-      />
+              {context.activeFilters.size}
+            </Counter>
+          </FilterHeading>
+          <ApplyButton onClick={() => setFilterOpen(false)} >Apply</ApplyButton>
+        </PanelHeader>
+      </Padded>
+      <Divider />
+      <Padded>
+        <Title style={{ marginTop: '24px' }}>Diets</Title>
+        <TagGrid
+          crossCount={1}
+          filters={context.menu.filters.diets}
+          activeFilters={context.activeFilters.diets}
+          setFilters={(diets) => context.setFilters({ diets })}
+          />
+        <Title style={{ marginTop: '32px' }}>Allergens</Title>
+        <Subtitle>Exclude dishes that contain:</Subtitle>
+        <TagGrid
+          crossCount={2}
+          filters={context.menu.filters.allergens}
+          activeFilters={context.activeFilters.allergens}
+          setFilters={(allergens) => context.setFilters({ allergens })}
+        />
+      </Padded>
     </RightSidePanel>
   );
 }
