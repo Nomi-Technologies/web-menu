@@ -13,12 +13,12 @@ const RightSidePanel = styled.div`
   right: 0;
   height: 100%;
   transition: transform 0.3s ease-in-out;
-  min-width: 305px;
-  @media (max-width: 305px) {
+  min-width: 320px;
+  @media (max-width: 320px) {
     width: 100%;
   }
-
-  background: #F2F3F5;
+  background: #FFFFFF;
+  padding: 0 24px;
 `;
 
 const ClearButton = styled.div`
@@ -30,17 +30,20 @@ const ClearButton = styled.div`
 `;
 
 const StyledGridTagButton = styled(TagButton)`
-  margin: 10px;
   cursor: default;
-  color: #000000;
   font-family: HK Grotesk;
-  font-style: normal;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 23px;
   letter-spacing: 0.02em;
-  
-  padding-top: 6px; /* vertically center */
-  background-color: ${props => props.selected ? '#00807F' : '#EBEEF5'};
+  background-color: #EBEEF5;
+  ${({ selected }) => (selected ? {
+    color: '#0D5959',
+    fontWeight: 'bold',
+    border: '2px solid #0D5959',
+  } : {
+    color: '#000000',
+    fontWeight: '500',
+  })}
 `;
 
 
@@ -60,25 +63,37 @@ const GridTagButton = (props) => {
 }
 
 const Grid = styled(Container)`
-  margin-bottom: 20px;
+  margin-top: 16px;
   padding: 0;
 `;
 
-function TagGrid(props) {
+const StyledColumn = styled(Col)`
+  &:not(:last-child) {
+    margin-right: 16px;
+  }
+`;
+
+const StyledRow = styled(Row)`
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
+`;
+
+function TagGrid({ crossCount }) {
   const context = useContext(RestaurantContext);
   const tags = context.menu.filters.allergens;
   const tag_keys = Object.keys(tags);
 
   const createGrid = () => {
     let rows = [];
-    for (let i = 0; i < tag_keys.length; i += 2) {
+    for (let i = 0; i < tag_keys.length; i += crossCount) {
       let cols = [];
-      for (let j = 0; j < 2; ++j) {
+      for (let j = 0; j < crossCount; ++j) {
         if (i + j >= tag_keys.length) {
-          cols.push(<Col key={j}></Col>);
+          cols.push(<StyledColumn key={j}></StyledColumn>);
           continue;
         }
-        cols.push(<Col key={j}>
+        cols.push(<StyledColumn key={j}>
           <GridTagButton
             selected={context.activeFilters.allergens.has(tags[tag_keys[i + j]].id)}
             tag={tags[tag_keys[i + j]]}
@@ -86,9 +101,9 @@ function TagGrid(props) {
             currentTags={context.activeFilters.allergens}
           />
 
-        </Col>);
+        </StyledColumn>);
       }
-      rows.push(<Row noGutters={true} key={i}>{cols}</Row>);
+      rows.push(<StyledRow noGutters={true} key={i}>{cols}</StyledRow>);
     }
     return rows
   }
@@ -119,33 +134,23 @@ const FilterDoneButton = styled.div`
   color:#00807F;
 `
 
-const AllergenTitle = styled.p`
+const Title = styled.div`
   position: relative;
-
-  margin-left: 20px;  /* Align with Filters label */
-  padding-top: 10px;  
-  font-family: HK Grotesk;
-  font-style: normal;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
+  height: 24px;
   line-height: 24px;
 
-  display: flex;
-  align-items: center;
   letter-spacing: 0.02em;
   color: #000000;
 `
 
-const SectionTitle = styled.p`
-  margin-left: 20px;  /* Align with Filters label */
-  font-family: HK Grotesk;
-  font-style: normal;
-  font-weight: normal;
+const Subtitle = styled.div`
   font-size: 14px;
-  line-height: 18px;
-  display: flex;
-  align-items: center;
   color: #606060;
+  margin-top: 8px;
+  height: 20px;
+  line-height: 20px;
 `;
 
 export default ({ filterOpen, setFilterOpen }) => {
@@ -182,15 +187,15 @@ export default ({ filterOpen, setFilterOpen }) => {
             style={{ position: 'absolute', top: '0', right: '0', fontSize: '12px' }}
             radius={'18px'}
             active={context.activeFilters.size > 0}
-          >
+            >
             {context.activeFilters.size}
           </Counter>
         </FilterButton>
         <FilterDoneButton onClick={() => setFilterOpen(false)} >DONE</FilterDoneButton>
       </FilterHeader>
-      <AllergenTitle>Allergens</AllergenTitle>
-      <SectionTitle>Exclude dishes that contain:</SectionTitle>
-      <TagGrid />
+      <Title>Allergens</Title>
+      <Subtitle>Exclude dishes that contain:</Subtitle>
+      <TagGrid crossCount={2}/>
     </RightSidePanel>
   );
 }
