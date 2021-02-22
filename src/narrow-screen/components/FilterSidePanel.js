@@ -6,28 +6,19 @@ import Counter from 'components/Counter';
 import styled from 'styled-components';
 
 const RightSidePanel = styled.div`
-  position: relative;
-  z-index: 11;
-  top: 0px;
-  right: 15px;
-`;
+  transform: ${props => props.open ? 'translateX(0)' : 'translateX(100%)'};
+  position: fixed;
+  z-index: 150;
+  top: 0;
+  right: 0;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+  min-width: 305px;
+  @media (max-width: 305px) {
+    width: 100%;
+  }
 
-const PanelHeader = styled.div`
-  height: 40px;
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: row;
-`;
-
-const PanelHeaderElement = styled.div`
-  display: inline-flex;
-  align-items: center;
-  font-weight: 700;
-`;
-
-const FilterLabel = styled(PanelHeaderElement)`
-  margin-left: 8px;
+  background: #F2F3F5;
 `;
 
 const ClearButton = styled.div`
@@ -37,25 +28,6 @@ const ClearButton = styled.div`
   left:20px;
   position:absolute;
 `;
-
-function PanelToggle({ setFilterOpen }) {
-  const context = useContext(RestaurantContext);
-  return (
-    <PanelHeader onClick={() => setFilterOpen(true)}>
-      <FilterLabel>
-        FILTERS
-      </FilterLabel>
-      <PanelHeaderElement>
-        <Counter
-          style={{ marginLeft: '5px' }}
-          homeActive={context.activeFilters.size > 0}
-        >
-          {context.activeFilters.size}
-        </Counter>
-      </PanelHeaderElement>
-    </PanelHeader>
-  );
-}
 
 const StyledGridTagButton = styled(TagButton)`
   margin: 10px;
@@ -126,15 +98,6 @@ function TagGrid(props) {
   );
 }
 
-const PanelBody = styled.div`
-  position: absolute;
-  top: -10px;
-  right: -20px;
-  width: 350px;
-  height: 1500px;
-  background: white;
-`
-
 const FilterHeader = styled.div`
   position: relative;
   height: 50px;
@@ -201,41 +164,33 @@ export default ({ filterOpen, setFilterOpen }) => {
   });
 
   return (
-    <RightSidePanel ref={myRef}>
-      <PanelToggle
-        setFilterOpen={setFilterOpen}
-      />
-      {filterOpen ?
-      <>
-          <PanelBody>
-            <FilterHeader>
-              <ClearButton
-                style={{
-                  color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
-                }}
-                onClick={() => context.setFilters({ allergens: new Set() })}>
-                CLEAR
-              </ClearButton>
-              <FilterButton>
-                <span style={{ marginRight: '24px'}}>FILTERS</span>
-                <Counter
-                  style={{ position: 'absolute', top: '0', right: '0', fontSize: '12px' }}
-                  radius={'18px'}
-                  active={context.activeFilters.size > 0}
-                >
-                  {context.activeFilters.size}
-                </Counter>
-              </FilterButton>
-              <FilterDoneButton onClick={() => setFilterOpen(false)} >DONE</FilterDoneButton>
-            </FilterHeader>
-            <AllergenTitle>Allergens</AllergenTitle>
-            <SectionTitle>Exclude dishes that contain:</SectionTitle>
-            <TagGrid />
-          </PanelBody>
-      </>
-        :
-        <></>
-      }
+    <RightSidePanel
+      open={filterOpen}
+      ref={myRef}
+    >
+      <FilterHeader>
+        <ClearButton
+          style={{
+            color: context.activeFilters.size === 0 ? '#8A9DB7' : '#EF5454'
+          }}
+          onClick={() => context.setFilters({ allergens: new Set() })}>
+          CLEAR
+        </ClearButton>
+        <FilterButton>
+          <span style={{ marginRight: '24px'}}>FILTERS</span>
+          <Counter
+            style={{ position: 'absolute', top: '0', right: '0', fontSize: '12px' }}
+            radius={'18px'}
+            active={context.activeFilters.size > 0}
+          >
+            {context.activeFilters.size}
+          </Counter>
+        </FilterButton>
+        <FilterDoneButton onClick={() => setFilterOpen(false)} >DONE</FilterDoneButton>
+      </FilterHeader>
+      <AllergenTitle>Allergens</AllergenTitle>
+      <SectionTitle>Exclude dishes that contain:</SectionTitle>
+      <TagGrid />
     </RightSidePanel>
   );
 }

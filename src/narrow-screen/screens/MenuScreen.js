@@ -201,7 +201,6 @@ const FilteringButton = styled.div`
   &:focus {
     text-decoration: none;
   }
-  cursor: default;
 `;
 
 export default () => {
@@ -310,10 +309,15 @@ export default () => {
   function onClickHambergerMenu() {
     setHamburgerOpen(!hamburgerOpen);
   }
+
+  function onClickFilterButton() {
+    setFilterOpen(!filterOpen);
+  }
   
   return (
     <MenuScreen>
       <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
+      <FilterSidePanel filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
       <Header>
         <NotificationBanner style={(context.activeFilters.size > 0 && !filterOpen) ? null : { display: "none" }}>
           <div style={{
@@ -350,15 +354,12 @@ export default () => {
               />
           </RestaurantLogo> : <></>
         }
-        <FilteringButton>
-          {
-          context.menu.hasAllergens ?
-            <FilterSidePanel
-              filterOpen={filterOpen}
-              setFilterOpen={setFilterOpen}
-            /> : ""
-          }
-        </FilteringButton>
+        {
+          context.menu.hasAllergens || context.menu.hasDiets ?
+          <FilteringButton variant="link" onClick={onClickFilterButton}>
+            FILTERS
+          </FilteringButton> : null
+        }
       
         <CategoryTabList ref={tabBarRef}>
           {context.menu.categories.map(c => {
