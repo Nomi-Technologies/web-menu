@@ -17,7 +17,7 @@ const Grid = styled(Container)`
 `;
 
 function TagGrid(props) {
-  const tags = props.filters.allergens;
+  const tags = props.tags;
   const tag_keys = Object.keys(tags);
   let rows = [];
   for (let i = 0; i < tag_keys.length; i += 2) {
