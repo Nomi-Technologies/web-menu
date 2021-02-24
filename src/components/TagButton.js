@@ -2,13 +2,17 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Button = styled.div`
-  border: solid 2px #E3EDF2;
+  position: relative;
   height: 40px;
   background-color: ${props => props.selected ? '#E3EDF2' : '#F9F9F9'};
   border-radius: 4px;
-  text-align: center;
-  line-height: 40px;
-  font-weight: 500;
+`;
+
+const Content = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 export default function TagButton(props) {
@@ -17,7 +21,7 @@ export default function TagButton(props) {
     <Button 
       {...props}
     >
-      {props.children}
+      <Content>{props.children}</Content>
     </Button>
   );
 }

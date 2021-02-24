@@ -10,8 +10,6 @@ export const parseMenu = (data, enableFiltering) => {
     enableFiltering: enableFiltering,
   };
 
-  menu.hasDiets = true;
-
   data.forEach(dish => {
     // track if a menu has allergens, if not we can hide the slide up bar etc.
     if(dish.Tags.length > 0) {
@@ -31,6 +29,10 @@ export const parseMenu = (data, enableFiltering) => {
       }
       menu.dishesByFilters.byAllergens[tag.id].push(dish);
     });
+
+    if (dish.Diets.length > 0) {
+      menu.hasDiets = true;
+    }
     dish.Diets.forEach((diet) => {
       if (!(diet.id in menu.filters.diets)) {
         menu.filters.diets[diet.id] = diet;
