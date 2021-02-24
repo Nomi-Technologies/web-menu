@@ -89,7 +89,7 @@ export default (props) => {
           Allergen Filters
         </div>
         <div style={{
-          position: 'absolute',
+          position: 'absolute', 
           right: '0px',
           width: 'max-content',
           margin: '0 25px',
