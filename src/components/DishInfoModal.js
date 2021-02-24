@@ -16,7 +16,7 @@ const ModalContainer = styled.div`
   margin: 0 auto;
   overflow: auto;
   position: relative;
-  padding-bottom: 30px;
+  padding: 24px;
 
   @media (max-width: 1000px) {
     width: 100%;
@@ -29,8 +29,8 @@ const ModalContainer = styled.div`
 
 const ModalHeader = styled(Modal.Header)`
   padding: 10px 0 0 20px;
-  border-radius: 6px 6px 0px 0px;
-  border-bottom: 1px solid #DCE2E9;
+  border: 0;
+  width: 100%;
   position: sticky;
   top: 0;
   display: flex;
@@ -75,11 +75,13 @@ const Description = styled.div`
 const Divider = styled.div`
   margin: 18px 0;
   border-top: 1px solid #DCE2E9;
+  width: 100%;
 `;
 
 const SectionTitle = styled.div`
   font-weight: bold;
   font-size: 10px;
+  margin-bottom: 16px;
 `;
 
 const SectionBody = styled.div`
@@ -103,7 +105,7 @@ const StyledRemovableNotice = styled(RemovableNotice)`
   margin-bottom: 10px;
 `;
 const AddOn = styled.div`
-  margin-bottom:10px;
+  margin-bottom:8px;
 
   .container {
     display: flex;
@@ -118,14 +120,14 @@ const AddOn = styled.div`
     -ms-user-select: none;
     user-select: none;
   }
-  
+
   .container input {
     position: absolute;
     opacity: 0;
     height: 0;
     width: 0;
   }
-  
+
   .checkmark {
     position: absolute;
     left: 0;
@@ -134,25 +136,25 @@ const AddOn = styled.div`
     background-color: #e1e7ec;
     border-radius: 5px;
   }
-  
+
   .container:hover input ~ .checkmark {
     background-color: #ccc;
   }
-  
+
   .container input:checked ~ .checkmark {
     background-color: #2196F3;
   }
-  
+
   .checkmark:after {
     content: "";
     position: absolute;
     display: none;
   }
-  
+
   .container input:checked ~ .checkmark:after {
     display: block;
   }
-  
+
   .container .checkmark:after {
     left: 7px;
     top: 5px;
@@ -181,7 +183,7 @@ const QuantitySelector = styled.span`
   font-weight: 700;
   font-size: 18px;
   padding: 15px 20px;
-  border-radius: 100px;
+  border-radius: 6px;
   border: none;
   background-color: #EBEEF5;
   width: 30%;
@@ -200,7 +202,7 @@ const SaveDishButton = styled(Button)`
   border: none;
   background-color: #F06441;
   padding: 15px 25px;
-  border-radius: 100px;
+  border-radius: 6px;
   width: 60%;
   align-items: center;
   max-width: 300px;
@@ -218,6 +220,10 @@ const ChangeQuantity = styled.span`
 const StyledBanner = styled(Banner)`
   border-radius: 6px;
   height: 200px;
+`;
+
+const OptionCheckbox = styled.span`
+  border: 1px solid black;
 `;
 
 export default function(props) {
@@ -280,7 +286,7 @@ export default function(props) {
     } else {
       savedDishes.push(updatedEntry);
     }
-    
+
     context.setSavedDishes(savedDishes);
     props.onHide();
   }
@@ -294,8 +300,8 @@ export default function(props) {
       centered
     >
       {
-        dishImage ? 
-        <StyledBanner src={ dishImage } /> 
+        dishImage ?
+        <StyledBanner src={ dishImage } />
         : ""
       }
       <ModalContainer>
@@ -344,7 +350,7 @@ export default function(props) {
               <Divider/>
               <SectionTitle>PRICE</SectionTitle>
               <SectionBody><Price>
-                { unitDishPrice * quantity } 
+                { unitDishPrice * quantity }
               </Price></SectionBody>
             </> : <></>
           }
@@ -354,9 +360,9 @@ export default function(props) {
               <Divider/>
               <SectionTitle>OPTIONS</SectionTitle>
               <SectionBody style={{ flexDirection: "column", alignItems: "flex-start"}}>
-              { dishData.Modifications.map(t => 
+              { dishData.Modifications.map(t =>
                 <AddOn key={t.id}>
-                  <label className="container"> 
+                  <label className="container">
                     <AddOnName>{t.name} </AddOnName>
                     { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
                     { t.price !=="0" ? <AddOnNotes> (${t.price})</AddOnNotes> : <></>}
@@ -365,16 +371,16 @@ export default function(props) {
                       type="checkbox"
                       onClick={() => toggleModification(t)}
                     />
-                    <span className="checkmark"></span>
+                    <OptionCheckbox className="checkmark"></OptionCheckbox>
                   </label>
                 </AddOn>
               ) }
-              </SectionBody> 
+              </SectionBody>
             </> : <></>
           }
           <Divider/>
           <SectionBody style={{justifyContent: "space-evenly" }}>
-            <QuantitySelector> 
+            <QuantitySelector>
               <ChangeQuantity onClick={() => {
                 if(quantity > 1) {
                   setQuantity(quantity - 1);
@@ -383,7 +389,7 @@ export default function(props) {
               <Quantity> {quantity} </Quantity>
               <ChangeQuantity onClick={() => setQuantity(quantity + 1)}> + </ChangeQuantity>
             </QuantitySelector>
-            <SaveDishButton onClick={saveDish}> 
+            <SaveDishButton onClick={saveDish}>
               <span>{quantity > 1 ? "Save Dishes" : "Save Dish"}</span>
               <span>${  dishData.price.length > 0 ? unitDishPrice * quantity : null }</span>
             </SaveDishButton>

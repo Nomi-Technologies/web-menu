@@ -17,7 +17,7 @@ const SlideUpPanel = styled.div`
   width: 100%;
   height: 100%;
   box-shadow: 0px 0px 20px rgba(136, 146, 158, 0.15);
-  
+
 `;
 
 const PanelHeader = styled.div`
@@ -78,12 +78,12 @@ function SlideUpPanelHeader(props) {
 const PanelBody = styled.div`
   max-height: 600px;
   width: 100%;
-  padding-bottom: 20px;
+  padding: 24px;
 `;
 
 const DishEntry = styled.div`
   display: flex;
-  padding: 20px;
+  padding: 16px;
   font-size: 14px;
   flex-direction: row;
 `;
@@ -137,7 +137,7 @@ const ClearButton = styled.div`
     transform: translate(-50%, 0);
     width: 300px;
     height: 44px;
-    border-radius: 22px;
+    border-radius: 6px;
     font-size: 18px;
     font-weight: bold;
     background-color: #F06441;
@@ -243,7 +243,7 @@ function SlideUpPanelBody({ dishes }) {
     </PanelBody>
 
     {
-      typeof index !== 'undefined' ? 
+      typeof index !== 'undefined' ?
       <DishInfoModal
         index={index}
         show={showModal}
