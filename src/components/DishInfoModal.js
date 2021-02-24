@@ -69,7 +69,11 @@ const ModalBody = styled(Modal.Body)`
 
 const Description = styled.div`
   font-size: 14px;
-  line-height: 1.3;
+  line-height: 20px;
+  font-family: 'HK Grotesk';
+  font-style: normal;
+  font-weight: normal;
+  color: #606060;
 `;
 
 const Divider = styled.div`
@@ -79,9 +83,11 @@ const Divider = styled.div`
 `;
 
 const SectionTitle = styled.div`
+  font-family: 'HK Grotesk';
   font-weight: bold;
-  font-size: 10px;
+  font-size: 14px;
   margin-bottom: 16px;
+  line-height: 20px;
 `;
 
 const SectionBody = styled.div`
@@ -106,6 +112,7 @@ const StyledRemovableNotice = styled(RemovableNotice)`
 `;
 const AddOn = styled.div`
   margin-bottom:8px;
+  width: 100%;
 
   .container {
     display: flex;
@@ -133,7 +140,6 @@ const AddOn = styled.div`
     left: 0;
     height: 20px;
     width: 20px;
-    background-color: #e1e7ec;
     border-radius: 5px;
   }
 
@@ -168,15 +174,19 @@ const AddOn = styled.div`
   }
 `;
 const AddOnName = styled.span`
-  font-weight: 500;
   color: black;
-  font-weight: bold;
   margin-right: 4px;
 `;
 
 const AddOnNotes = styled.span`
   font-weight: 500;
   color: #8A9DB7;
+`;
+
+const AddOnPrice = styled.span`
+  font-weight: 500;
+  color: #8A9DB7;
+  margin-left: auto;
 `;
 
 const QuantitySelector = styled.span`
@@ -200,7 +210,7 @@ const SaveDishButton = styled(Button)`
   font-weight: 700;
   font-size: 18px;
   border: none;
-  background-color: #F06441;
+  background-color: #0D5959;
   padding: 15px 25px;
   border-radius: 6px;
   width: 60%;
@@ -314,20 +324,17 @@ export default function(props) {
           </ExitButtonWrapper>
         </ModalHeader>
         <ModalBody>
-        <SectionTitle>DESCRIPTION</SectionTitle>
-          <SectionBody>
-            {
-              dishData.description.length > 0 ?
-              <>
-                <Description>{dishData.description}</Description>
+          {
+            dishData.description.length > 0 ?
+            <>
+              <Description>{dishData.description}</Description>
 
-              </> : <></>
-            }
-          </SectionBody>
+            </> : <></>
+          }
           { props.menuHasAllergens ?
           <>
             <Divider/>
-            <SectionTitle>ALLERGENS</SectionTitle>
+            <SectionTitle>ALLERGEN INFO</SectionTitle>
             <SectionBody>
               {
                 showRemovableNotice ?
@@ -345,27 +352,17 @@ export default function(props) {
           </>  : ""
           }
           {
-            dishData.price.length > 0 ?
-            <>
-              <Divider/>
-              <SectionTitle>PRICE</SectionTitle>
-              <SectionBody><Price>
-                { unitDishPrice * quantity }
-              </Price></SectionBody>
-            </> : <></>
-          }
-          {
             dishData.Modifications.length > 0 ?
             <>
               <Divider/>
-              <SectionTitle>OPTIONS</SectionTitle>
+              <SectionTitle>DISH OPTIONS</SectionTitle>
               <SectionBody style={{ flexDirection: "column", alignItems: "flex-start"}}>
               { dishData.Modifications.map(t =>
                 <AddOn key={t.id}>
                   <label className="container">
                     <AddOnName>{t.name} </AddOnName>
                     { t.description ? <AddOnNotes> ({t.description})</AddOnNotes> : <></>}
-                    { t.price !=="0" ? <AddOnNotes> (${t.price})</AddOnNotes> : <></>}
+                    { t.price !=="0" ? <AddOnPrice> (+${t.price})</AddOnPrice> : <></>}
                     <input
                       checked={activeModifications.some((mod) => mod.id === t.id)}
                       type="checkbox"
