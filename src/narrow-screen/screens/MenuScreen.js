@@ -128,7 +128,7 @@ const SlideUpPanelWrapper = styled.div`
 
 //Notification flashes for 4 second when 1+ filter is applied  
 const NotificationBanner = styled.div`
-  background-color: #628DEB;
+  background-color: #00807F;
   height: 60px; /* LOGO's 50px + 5px*2 */
   padding: 5px 0;
   position: absolute;
@@ -337,7 +337,7 @@ export default () => {
             active={context.activeFilters.size > 0}
             style={{
               backgroundColor: "white",
-              color:"#628DEB",
+              color:"#00807F",
               position: 'absolute',
               top: '50%',
               left: 0,

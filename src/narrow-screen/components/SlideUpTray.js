@@ -89,7 +89,7 @@ const DishEntry = styled.div`
 `;
 
 const ItemCount = styled.div`
-  flex: 0 1 40px;
+  flex: 0 1 30px;
   position: relative;
 `;
 
@@ -102,7 +102,8 @@ const EditButton = styled.div`
   flex: 0 1 65px;
   cursor: pointer;
   text-align: center;
-  color: #00807f;
+  color: #0D5959;
+  font-weight: 500;
 
   & span {
     position: absolute;
@@ -196,7 +197,7 @@ function SlideUpPanelBody({ dishes, onClose }) {
                         left: 0,
                         top: '50%',
                         transform: 'translate(0, -50%)',
-                        backgroundColor: 'black',
+                        backgroundColor: '#0D5959',
                         fontWeight: 'bold',
                         fontSize: '10px',
                       }}
