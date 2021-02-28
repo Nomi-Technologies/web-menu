@@ -6,7 +6,6 @@ import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import MenuListNav from "../components/MenuListNav";
 import { getRestaurantLogo } from 'utils'
-import { Button } from 'react-bootstrap';
 import RestaurantContext from 'RestaurantContext'
 import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
