@@ -90,13 +90,18 @@ export default (props) => {
         </div>
         <div style={{
           position: 'absolute', 
-          right: '0px',
+          right: '25px',
           width: 'max-content',
-          margin: '0 25px',
           minWidth: '50px',
+          height: '100%',
         }}>
           <Counter
-            style={{ marginLeft: '5px' }}
+            style={{
+              position: 'absolute',
+              left: '0',
+              top: '50%',
+              transform: 'translate(0, -50%)',
+            }}
             active={context.activeFilters.size > 0}
           >
             {context.activeFilters.size}

@@ -6,7 +6,6 @@ import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import MenuListNav from "../components/MenuListNav";
 import { getRestaurantLogo } from 'utils'
-import { Button } from 'react-bootstrap';
 import RestaurantContext from 'RestaurantContext'
 import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
@@ -24,11 +23,11 @@ const CategoryTab = styled.div`
   cursor: pointer;
 `;
 
-const BlueDot = styled.div`
+const Dot = styled.div`
   height: 4px;
   width: 4px;
   border-radius: 2px;
-  background-color: #5383EC;
+  background-color: #00807F;
   margin: 0 auto;
   margin-top: 7px;
 `;
@@ -129,7 +128,7 @@ const SlideUpPanelWrapper = styled.div`
 
 //Notification flashes for 4 second when 1+ filter is applied  
 const NotificationBanner = styled.div`
-  background-color: #628DEB;
+  background-color: #00807F;
   height: 60px; /* LOGO's 50px + 5px*2 */
   padding: 5px 0;
   position: absolute;
@@ -338,7 +337,7 @@ export default () => {
             active={context.activeFilters.size > 0}
             style={{
               backgroundColor: "white",
-              color:"#628DEB",
+              color:"#00807F",
               position: 'absolute',
               top: '50%',
               left: 0,
@@ -347,7 +346,7 @@ export default () => {
           >
             {context.activeFilters.size}
           </Counter>
-            FILTER{context.activeFilters.size > 0 ? 'S' : null} APPLIED
+            FILTER{context.activeFilters.size > 1 ? 'S' : null} APPLIED
           </div>
         </NotificationBanner>
         
@@ -394,7 +393,7 @@ export default () => {
               ref={categoryToTabRef[c.id]}
             >
               {c.name}
-              {active ? <BlueDot /> : <></>}
+              {active ? <Dot /> : <></>}
             </CategoryTab>;
           })}
         </CategoryTabList>

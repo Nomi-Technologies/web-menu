@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Button } from 'react-bootstrap';
 import RestaurantContext from '../../RestaurantContext';
 import DishInfoModal from 'components/DishInfoModal';
 import Counter from 'components/Counter';
@@ -36,7 +35,8 @@ const PanelHeaderElement = styled.div`
 `;
 
 const FilterLabel = styled(PanelHeaderElement)`
-  margin-left: 20px;
+  font-size: 16px;
+  margin-left: 24px;
 `;
 
 const Spacer = styled(PanelHeaderElement)`
@@ -83,13 +83,13 @@ const PanelBody = styled.div`
 
 const DishEntry = styled.div`
   display: flex;
-  padding: 20px;
+  padding: 16px 24px;
   font-size: 14px;
   flex-direction: row;
 `;
 
 const ItemCount = styled.div`
-  flex: 0 1 40px;
+  flex: 0 1 30px;
   position: relative;
 `;
 
@@ -102,7 +102,8 @@ const EditButton = styled.div`
   flex: 0 1 65px;
   cursor: pointer;
   text-align: center;
-  color: #00807f;
+  color: #0D5959;
+  font-weight: 500;
 
   & span {
     position: absolute;
@@ -115,7 +116,7 @@ const EditButton = styled.div`
 const Notice = styled.div`
   font-size: 14px;
   font-weight: 500;
-  margin: 0 20px 10px 20px;
+  margin: 10px 24px 16px 24px;
 `;
 
 const NoDishNotice = styled.div`
@@ -125,31 +126,31 @@ const NoDishNotice = styled.div`
   text-align: center;
 `;
 
-const ClearButton = styled.div`
+const CloseButton = styled.div`
   position: relative;
-  height: 44px;
-  margin-top: 20px;
+  margin: 20px 24px 0 24px;
 
-  & button {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: 300px;
-    height: 44px;
-    border-radius: 22px;
-    font-size: 18px;
+  & .tray-clear-button {
+    height: 48px;
+    text-align: center;
+    line-height: 48px;
+    border-radius: 5px;
+    font-size: 14px;
     font-weight: bold;
-    background-color: #F06441;
     color: white;
-
-    :disabled {
-      background-color: #F8B2A0;
-    }
+    background-color: #F06441;
   }
 `;
 
-function SlideUpPanelBody({ dishes }) {
+const ClearButton = styled.div`
+  font-size: 14px;
+  font-weight: bold;
+  color: #F8B2A0;
+  text-align: center;
+  padding: 18px 0 5px 0;
+`;
+
+function SlideUpPanelBody({ dishes, onClose }) {
   const { dishesById, setSavedDishes } = useContext(RestaurantContext);
 
   const [index, setIndex] = useState();
@@ -196,7 +197,7 @@ function SlideUpPanelBody({ dishes }) {
                         left: 0,
                         top: '50%',
                         transform: 'translate(0, -50%)',
-                        backgroundColor: 'black',
+                        backgroundColor: '#0D5959',
                         fontWeight: 'bold',
                         fontSize: '10px',
                       }}
@@ -232,13 +233,16 @@ function SlideUpPanelBody({ dishes }) {
         :
         <NoDishNotice>Your saved items will show up here</NoDishNotice>
       }
-      <ClearButton>
-        <Button
-          disabled={dishes.length === 0}
-          onClick={onClearTray}
+      <CloseButton>
+        <div
+          className='tray-clear-button'
+          onClick={onClose}
         >
-          Clear all items
-        </Button>
+          Done
+        </div>
+      </CloseButton>
+      <ClearButton onClick={onClearTray} >
+        Clear All Items
       </ClearButton>
     </PanelBody>
 
@@ -269,7 +273,10 @@ export default () => {
         expanded={panelExpanded}
       />
       {panelExpanded ?
-        <SlideUpPanelBody dishes={savedDishes} />
+        <SlideUpPanelBody
+          dishes={savedDishes}
+          onClose={() => setPanelExpanded(false)}
+        />
         :
         <></>
       }
