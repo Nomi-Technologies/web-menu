@@ -347,7 +347,7 @@ export default () => {
           >
             {context.activeFilters.size}
           </Counter>
-            FILTER{context.activeFilters.size > 0 ? 'S' : null} APPLIED
+            FILTER{context.activeFilters.size > 1 ? 'S' : null} APPLIED
           </div>
         </NotificationBanner>
         
