@@ -24,11 +24,11 @@ const CategoryTab = styled.div`
   cursor: pointer;
 `;
 
-const BlueDot = styled.div`
+const Dot = styled.div`
   height: 4px;
   width: 4px;
   border-radius: 2px;
-  background-color: #5383EC;
+  background-color: #00807F;
   margin: 0 auto;
   margin-top: 7px;
 `;
@@ -394,7 +394,7 @@ export default () => {
               ref={categoryToTabRef[c.id]}
             >
               {c.name}
-              {active ? <BlueDot /> : <></>}
+              {active ? <Dot /> : <></>}
             </CategoryTab>;
           })}
         </CategoryTabList>
