@@ -16,7 +16,6 @@ const ModalContainer = styled.div`
   margin: 0 auto;
   overflow: auto;
   position: relative;
-  padding: 24px;
 
   @media (max-width: 1000px) {
     width: 100%;
@@ -28,7 +27,7 @@ const ModalContainer = styled.div`
 `;
 
 const ModalHeader = styled(Modal.Header)`
-  padding: 10px 0 0 20px;
+  padding: 0 0 0 24px;
   border: 0;
   width: 100%;
   position: sticky;
@@ -64,7 +63,7 @@ const ExitButton = styled(Exit)`
 `;
 
 const ModalBody = styled(Modal.Body)`
-  padding: 0 20px;
+  padding: 0 24px;
 `;
 
 const Description = styled.div`
