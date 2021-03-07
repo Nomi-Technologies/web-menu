@@ -1,15 +1,16 @@
 import React, { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
 import MenuCategoryPanel from '../components/MenuCategoryPanel';
-import FilterSlideUpPanel from '../components/FilterSlideUpPanel';
+import FilterSidePanel from '../components/FilterSidePanel';
 import Banner from 'components/Banner';
 import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
 import styled from 'styled-components';
 import MenuListNav from "../components/MenuListNav";
 import { getRestaurantLogo } from 'utils'
-import { Button } from 'react-bootstrap';
 import RestaurantContext from 'RestaurantContext'
 import { getMenuBannerImage } from 'utils';
 import RemovableNotice from 'components/RemovableNotice';
+import Counter from '../../components/Counter';
+import SlideUpTray from '../components/SlideUpTray';
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -22,18 +23,18 @@ const CategoryTab = styled.div`
   cursor: pointer;
 `;
 
-const BlueDot = styled.div`
+const Dot = styled.div`
   height: 4px;
   width: 4px;
   border-radius: 2px;
-  background-color: #5383EC;
+  background-color: #00807F;
   margin: 0 auto;
   margin-top: 7px;
 `;
 
 const CategoryTabList = styled.div`
   list-style-type: none;
-  margin: 0;
+  margin-top: 60px;
   padding: 20px 5px 0 5px;
   overflow: auto;
   white-space: nowrap;
@@ -110,6 +111,14 @@ const NomiLogoSVG = styled(NomiLogo)`
   filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg) brightness(78%) contrast(78%);
 `;
 
+const Header = styled.div`
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: white;
+`;
+
 const SlideUpPanelWrapper = styled.div`
   position: fixed;
   bottom: 0;
@@ -117,40 +126,85 @@ const SlideUpPanelWrapper = styled.div`
   z-index: 100;
 `;
 
-const Header = styled.div`
-  position: fixed;
-  top: 0;
-  z-index: 100;
-  width: 100%;
-`;
-
-const LogoBar = styled.div`
-  background-color: white;
+//Notification flashes for 4 second when 1+ filter is applied  
+const NotificationBanner = styled.div`
+  background-color: #00807F;
   height: 60px; /* LOGO's 50px + 5px*2 */
   padding: 5px 0;
-  position: relative;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
   text-align: center;
-`;
 
-const RestaurantLogo = styled.a`
-  display: inline-block;
-  padding-top: 5px;
-  & img {
-    height: 35px;
+  font-family: HK Grotesk;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 50px; 
+  color:white;
+
+  animation: FadeAnimation 4s ease-in forwards; /*using forwards retains the last keyframe*/
+  @keyframes FadeAnimation {
+    0% {
+      opacity: 0;
+    }
+    30%{
+      opacity: 1;
+      z-index: 2; /*temporarily cover restaurant logo*/
+    }
+    100% {
+      opacity: 0;
+    }
   }
 `;
 
-const AllMenusButton = styled(Button)`
+const RestaurantLogo = styled.a`
   position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
-  left: 5px;
-  margin: auto 0;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  line-height: 60px;
+  & img {
+    height: 35px;
+    width: 100px;
+  }
+
+  & img[alt] {
+    max-height: 35px;
+    max-width: 100px;
+    font-size: 12px;
+    line-height: 12px;
+  }
+`;
+
+const AllMenusButton = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: 24px;
+  margin-left: 20px;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.1em;
-  color: #628deb;
+  color: #00807F;
   text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+`;
+
+const FilteringButton = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 24px;
+  margin-right: 50px;
+  font-weight: bold;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: #00807F;
   &:hover,
   &:focus {
     text-decoration: none;
@@ -159,8 +213,8 @@ const AllMenusButton = styled(Button)`
 
 export default () => {
   const context = useContext(RestaurantContext);
-
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
   const [categoryToTabRef, setCategoryToTabRef] = useState({});
@@ -187,7 +241,8 @@ export default () => {
     const originalDishes = context.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach(d => {
-      if (!context.excludedDishes.has(d.id)) {
+      if (!context.excludedDishes.has(d.id) && 
+          (context.includedDishes.size === 0 || context.includedDishes?.has(d.id))) {
         filtered.push(d);
       }
     });
@@ -263,30 +318,71 @@ export default () => {
     setHamburgerOpen(!hamburgerOpen);
   }
 
+  function onClickFilterButton() {
+    setFilterOpen(!filterOpen);
+  }
+
   return (
     <MenuScreen>
-      <MenuListNav
-        onClose={() => setHamburgerOpen(false)}
-        open={hamburgerOpen} 
-      />
+      <MenuListNav onClose={() => {setHamburgerOpen(false)}} open={hamburgerOpen}/>
+      <FilterSidePanel filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
       <Header>
-        <LogoBar>
-          <AllMenusButton
-            variant="link"
-            onClick={onClickHambergerMenu}
-            >
-            SEE MENUS
-          </AllMenusButton>
+        <NotificationBanner style={(context.activeFilters.size > 0 && !filterOpen) ? null : { display: "none" }}>
+          <div style={{
+            position: 'relative',
+            display: 'inline-block',
+            paddingLeft: '30px',
+          }}>
+          <Counter 
+            active={context.activeFilters.size > 0}
+            style={{
+              backgroundColor: "white",
+              color:"#00807F",
+              position: 'absolute',
+              top: '50%',
+              left: 0,
+              transform: 'translate(0, -50%)',
+            }}
+          >
+            {context.activeFilters.size}
+          </Counter>
+            FILTER{context.activeFilters.size > 1 ? 'S' : null} APPLIED
+          </div>
+        </NotificationBanner>
+        
+        <AllMenusButton variant="link" onClick={onClickHambergerMenu}> 
+          SEE MENUS
+        </AllMenusButton>
+        <RestaurantLogo href={ context.restaurant?.logo }>
           {
-            context.restaurant ?
-            <RestaurantLogo href={ context.restaurant.logo }>
-              <img
-                alt={`${context.restaurant.name} logo`}
-                src={ restaurantLogo }
-                />
-            </RestaurantLogo> : <></>
+            restaurantLogo ?
+            <img
+              alt={`${context.restaurant.name} logo`}
+              src={ restaurantLogo }
+            /> : 'Loading...'
           }
-        </LogoBar>
+        </RestaurantLogo>
+        {
+          context.menu.hasAllergens || context.menu.hasDiets ?
+          <FilteringButton variant="link" onClick={onClickFilterButton}>
+            FILTERS
+            <Counter
+              style={{
+                position: 'absolute',
+                top: '50%',
+                right: '-30px',
+                fontSize: '14px',
+                transform: 'translate(0, -50%)',
+              }}
+              radius={'22px'}
+              active={context.activeFilters.size > 0}
+              activeColor={'#00807F'}
+            >
+              {context.activeFilters.size}
+            </Counter>
+          </FilteringButton> : null
+        }
+      
         <CategoryTabList ref={tabBarRef}>
           {context.menu.categories.map(c => {
             const active = c.id === activeCategoryId;
@@ -297,7 +393,7 @@ export default () => {
               ref={categoryToTabRef[c.id]}
             >
               {c.name}
-              {active ? <BlueDot /> : <></>}
+              {active ? <Dot /> : <></>}
             </CategoryTab>;
           })}
         </CategoryTabList>
@@ -334,14 +430,9 @@ export default () => {
           />
         </a>
       </NomiLogoBar>
-      { 
-        // hide filtering menu if menu doesn't have allergens
-        context.menu.hasAllergens ? 
-        <SlideUpPanelWrapper>
-          <FilterSlideUpPanel />
-        </SlideUpPanelWrapper>
-        : ""
-      }
+      <SlideUpPanelWrapper>
+        <SlideUpTray />
+      </SlideUpPanelWrapper>
     </MenuScreen>
   );
 }

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@gem-mine/rc-swipeout": "^1.0.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -23,10 +24,9 @@
     "websocket-extensions": "^0.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=8001 react-scripts start",
     "build": "CI=false react-scripts build",
     "windows-start": "set PORT=8000 && react-scripts start"
-
   },
   "homepage": ".",
   "eslintConfig": {
