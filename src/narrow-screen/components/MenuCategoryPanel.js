@@ -7,7 +7,6 @@ const DishList = styled.div`
   position: relative;
   padding: 24px 16px 0px 16px;
   z-index: 1;
-  background-color: #EBEEF5;
   overflow: auto;
 `;
 
