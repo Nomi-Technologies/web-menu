@@ -35,6 +35,11 @@ const CategoryDescription = styled.div`
   padding-bottom: 10px;
 `;
 
+const NoDishesMessage = styled.p`
+  font-style: italic;
+  font-size: 16px;
+`
+
 export default function(props) {
   return (
     <DishList
@@ -42,8 +47,20 @@ export default function(props) {
       ref={props.categoryRef}
     >
       <CategoryTitle>{props.category.name}</CategoryTitle>
-      <CategoryDescription>{props.category.description}</CategoryDescription>
-      {props.dishes.map(dish => <DishTile key={dish.id} dish={dish} menuHasAllergens={ props.menuHasAllergens }/>)}
+      {
+        props.dishes.length > 0 ? 
+        <>
+          <CategoryDescription>{props.category.description}</CategoryDescription>
+          {
+            props.dishes.map(
+              dish => <DishTile key={dish.id} dish={dish} menuHasAllergens={ props.menuHasAllergens }/>
+            )
+          }
+        </>
+        : <NoDishesMessage>
+          No dishes in this section. Check the applied filters.
+        </NoDishesMessage>
+      }
     </DishList>
   );
 }
