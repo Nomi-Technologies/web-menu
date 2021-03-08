@@ -114,8 +114,15 @@ const GridHeader = styled.h3`
   letter-spacing: 0.02em;
 `
 
-export default (props) => {
+const FilterCounterContainer = styled.div`
+  position: absolute;
+  width: max-content;
+  min-width: 50px;
+  height: 100%;
+  right: 8px;
+`
 
+export default (props) => {
   const context = useContext(RestaurantContext);
 
   function onExpansionChanged() {
@@ -131,13 +138,7 @@ export default (props) => {
         <div className={'text'}>
           Filters
         </div>
-        <div style={{
-          position: 'absolute', 
-          right: '25px',
-          width: 'max-content',
-          minWidth: '50px',
-          height: '100%',
-        }}>
+        <FilterCounterContainer>
           <Counter
             style={{
               position: 'absolute',
@@ -152,22 +153,32 @@ export default (props) => {
           <props.StyledExpandArrow
             pointingUp={props.expanded}
           />
-        </div>
+        </FilterCounterContainer>
       </props.StyledHeader>
       {props.expanded?
         <props.StyledBody>
-          <GridHeader>Allergens</GridHeader>
-          <TagGrid
-            tags={context.menu.filters.allergens}
-            selected={context.activeFilters.allergens}
-            onSelect={context.setFilters}
-          />
-          <GridHeader>Diets</GridHeader>
-          <DietGrid
-            tags={context.menu.filters.diets}
-            selected={context.activeFilters.diets}
-            onSelect={context.setFilters}
-          />
+          { 
+            context.menu.hasAllergens ? 
+            <>
+              <GridHeader>Allergens</GridHeader>
+              <TagGrid
+                tags={context.menu.filters.allergens}
+                selected={context.activeFilters.allergens}
+                onSelect={context.setFilters}
+              />
+            </> : ""
+          }
+         { 
+            context.menu.hasDiets ? 
+            <>
+              <GridHeader>Diets</GridHeader>
+              <DietGrid
+                tags={context.menu.filters.diets}
+                selected={context.activeFilters.diets}
+                onSelect={context.setFilters}
+              />
+            </> : ""
+          }
           <SaveButton
             disabled={context.activeFilters.size === 0}
             onClick={() => context.setFilters({ allergens: new Set() })}

@@ -19,6 +19,11 @@ const CategoryTitle = styled.div`
   }
 `;
 
+let ExpansionArrowContainer = styled.div`
+  position: absolute;
+  right: 10px;
+`
+
 export default (props) => {
 
   const context = useContext(RestaurantContext);
@@ -41,10 +46,11 @@ export default (props) => {
         <div className="text">
           Menu Sections
         </div>
+        <ExpansionArrowContainer>
           <props.StyledExpandArrow
-            pointingUp={props.expanded}
-            style={{margin: '0 25px'}}
+              pointingUp={props.expanded}
           />
+        </ExpansionArrowContainer>
       </props.StyledHeader>
       {props.expanded?
         <props.StyledBody style={{paddingLeft: '20px'}}>
