@@ -144,12 +144,16 @@ const NotificationBanner = styled.div`
   line-height: 50px; 
   color:white;
 
-  animation: FadeAnimation 4s ease-in forwards; /*using forwards retains the last keyframe*/
+  animation: FadeAnimation 2s cubic-bezier(0.83, 0, 0.17, 1) forwards; /*using forwards retains the last keyframe*/
   @keyframes FadeAnimation {
     0% {
       opacity: 0;
     }
-    30%{
+    20%{
+      opacity: 1;
+      z-index: 2; /*temporarily cover restaurant logo*/
+    }
+    80%{
       opacity: 1;
       z-index: 2; /*temporarily cover restaurant logo*/
     }
