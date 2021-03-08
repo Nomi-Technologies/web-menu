@@ -34,8 +34,7 @@ const LeftPanelWrapper = styled(ColumnStyle)`
 `;
 
 const Panel = styled.div`
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 15px 20px;
 
   /* Menu Sections */
   left: 0%;
@@ -67,7 +66,6 @@ const HeaderStyle = styled.div`
   flex-direction: row;
   display: inline-block;
   font-weight: bold;
-  padding-left: 20px;
   align-items: center;
 
   & div {
@@ -89,7 +87,6 @@ const ExpandArrowStyle = styled(ExpansionArrow)`
 
 const PanelBodyStyle = styled.div`
   width: 100%;
-  padding: 10px 15px 10px 15px;
 `;
 
 function LeftPanel({ categoryToRef }) {
