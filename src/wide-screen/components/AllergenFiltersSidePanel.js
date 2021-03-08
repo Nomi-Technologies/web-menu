@@ -49,6 +49,40 @@ function TagGrid(props) {
   );
 }
 
+
+function DietGrid(props) {
+  const tags = props.tags;
+  const tag_keys = Object.keys(tags);
+  let rows = [];
+  for (let i = 0; i < tag_keys.length; i += 2) {
+    let cols = [];
+    for (let j = 0; j < 2; ++j) {
+      if (i + j >= tag_keys.length) {
+        cols.push(<Col key={j}><div style={{minWidth: "95px"}}></div></Col>);
+        continue;
+      }
+      cols.push(<Col key={j}>
+        <GridTagButton
+          selected={props.selected.has(tags[tag_keys[i+j]].id)}
+          onClick={() => {
+            const tag = tags[tag_keys[i+j]];
+            let selected = new Set(props.selected);
+            if (selected.has(tag.id)) { selected.delete(tag.id); }
+            else { selected.add(tag.id); }
+            props.onSelect({ diets: selected });
+          }}
+        >
+          {tags[tag_keys[i+j]].name}
+        </GridTagButton>
+      </Col>);
+    }
+    rows.push(<Row noGutters={true} key={i}>{cols}</Row>);
+  }
+  return (
+    <Grid>{rows}</Grid>
+  );
+}
+
 const SaveButton = styled(Button)`
   background-color: #628DEB;
   color: white;
@@ -71,6 +105,15 @@ const SaveButton = styled(Button)`
   }
 `;
 
+const GridHeader = styled.h3`
+  position: relative;
+  font-weight: bold;
+  font-size: 16px;
+  height: 24px;
+  line-height: 24px;
+  letter-spacing: 0.02em;
+`
+
 export default (props) => {
 
   const context = useContext(RestaurantContext);
@@ -86,7 +129,7 @@ export default (props) => {
         onClick={onExpansionChanged}
       >
         <div className={'text'}>
-          Allergen Filters
+          Filters
         </div>
         <div style={{
           position: 'absolute', 
@@ -113,9 +156,16 @@ export default (props) => {
       </props.StyledHeader>
       {props.expanded?
         <props.StyledBody>
+          <GridHeader>Allergens</GridHeader>
           <TagGrid
             tags={context.menu.filters.allergens}
             selected={context.activeFilters.allergens}
+            onSelect={context.setFilters}
+          />
+          <GridHeader>Diets</GridHeader>
+          <DietGrid
+            tags={context.menu.filters.diets}
+            selected={context.activeFilters.diets}
             onSelect={context.setFilters}
           />
           <SaveButton
