@@ -6,14 +6,12 @@ const Button = styled.div`
   height: 40px;
   background-color: ${props => props.selected ? '#E3EDF2' : '#F9F9F9'};
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const Content = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
+const Content = styled.div``;
 
 export default function TagButton(props) {
 
