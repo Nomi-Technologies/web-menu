@@ -97,6 +97,7 @@ function LeftPanel({ categoryToRef }) {
   const context = useContext(RestaurantContext);
   const [hotScrollPanelExpanded, setHotScrollPanelExpanded] = useState(true);
   const [allergenFiltersPanelExpanded, setAllergenFiltersPanelExpanded] = useState(true);
+  const [dietFiltersPanelExpanded, setDietFiltersPanelExpanded] = useState(true);
 
   return (
     <LeftPanelWrapper>
@@ -110,7 +111,7 @@ function LeftPanel({ categoryToRef }) {
           onExpansionChanged={setHotScrollPanelExpanded}
         />
       </Panel>
-      { context.menu.hasAllergens && context.menu.enableFiltering ? 
+      { (context.menu.hasAllergens || context.menu.hasDiets) && context.menu.enableFiltering ? 
         <Panel>
           <AllergenFiltersSidePanel
             StyledHeader={HeaderStyle}
@@ -120,7 +121,7 @@ function LeftPanel({ categoryToRef }) {
             onExpansionChanged={setAllergenFiltersPanelExpanded}
           />
         </Panel> : "" 
-      }      
+      }   
       <Panel>
         <QRCodeSidePanel StyledBody={PanelBodyStyle} />
       </Panel>
