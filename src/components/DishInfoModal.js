@@ -16,6 +16,7 @@ const ModalContainer = styled.div`
   margin: 0 auto;
   overflow: auto;
   position: relative;
+  padding: 24px;
 
   @media (max-width: 1000px) {
     width: 100%;
@@ -27,15 +28,12 @@ const ModalContainer = styled.div`
 `;
 
 const ModalHeader = styled(Modal.Header)`
-  padding: 0 0 0 24px;
   border: 0;
   width: 100%;
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
   align-items: center;
+  padding: 0;
 `;
 
 const DishName = styled.div`
@@ -50,9 +48,9 @@ const DishName = styled.div`
 `;
 
 const ExitButtonWrapper = styled.div`
-  flex: 0 0 auto;
-  height: 75px;
-  width: 75px;
+  position: absolute;
+  top: 24px;
+  right: 24px;
   cursor: pointer;
 `;
 
@@ -63,7 +61,7 @@ const ExitButton = styled(Exit)`
 `;
 
 const ModalBody = styled(Modal.Body)`
-  padding: 0 24px;
+  padding: 0px;
 `;
 
 const Description = styled.div`
@@ -363,13 +361,13 @@ export default function(props) {
         : ""
       }
       <ModalContainer>
-        <ModalHeader>
-          <DishName>{dishData.name}</DishName>
           <ExitButtonWrapper
             onClick={props.onHide}
           >
             <ExitButton/>
           </ExitButtonWrapper>
+        <ModalHeader>
+          <DishName>{dishData.name}</DishName>
         </ModalHeader>
         <ModalBody>
           {
