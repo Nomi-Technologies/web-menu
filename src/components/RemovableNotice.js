@@ -20,14 +20,14 @@ const OrangeDot = styled.div`
   border-radius: 4px;
   background-color: #f3a35c;
   position: absolute;
-  right: 10px;
-  top: 22px;
   left: 20px;
+  top: 50%;
+  transform: translate(0, -50%);
 `;
 
 export default ({ className }) => {
   return <Banner className={className}>
-    This dish can be modified to meet your dietary needs.  Please ask your waiter.
+    Contains <span style={{ fontWeight: 'bold' }}>removable allergens</span>
     <OrangeDot />
   </Banner>
 }

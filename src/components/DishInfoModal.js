@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Modal, Button } from 'react-bootstrap';
 import { ReactComponent as Exit } from 'components/exit-button.svg';
-import AllergenIcon from 'components/AllergenIconWithName';
-import RemovableNotice from './RemovableNotice';
 import RestaurantContext from '../RestaurantContext';
 import { getDishImage } from 'utils';
 import Banner from 'components/Banner';
+import InfoIcon from './InfoIcon.png';
+import CheckMark from './CheckMarkIcon.png';
 
 const ModalContainer = styled.div`
   color: black;
@@ -28,15 +28,12 @@ const ModalContainer = styled.div`
 `;
 
 const ModalHeader = styled(Modal.Header)`
-  padding: 10px 0 0 20px;
   border: 0;
   width: 100%;
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
   align-items: center;
+  padding: 0;
 `;
 
 const DishName = styled.div`
@@ -51,9 +48,9 @@ const DishName = styled.div`
 `;
 
 const ExitButtonWrapper = styled.div`
-  flex: 0 0 auto;
-  height: 75px;
-  width: 75px;
+  position: absolute;
+  top: 24px;
+  right: 24px;
   cursor: pointer;
 `;
 
@@ -64,7 +61,7 @@ const ExitButton = styled(Exit)`
 `;
 
 const ModalBody = styled(Modal.Body)`
-  padding: 0 20px;
+  padding: 0px;
 `;
 
 const Description = styled.div`
@@ -92,26 +89,46 @@ const SectionTitle = styled.div`
 
 const SectionBody = styled.div`
   color: #8A9DB7;
-  padding-top: 14px;
   font-weight: 500;
   font-size: 14px;
-  display: flex;
-  flex-direction: row;
 `;
 
-const StyledAllergenIcon = styled(AllergenIcon)`
-  margin: 0 10px 10px 0;
+const TagsWrapper = styled.div`
+  display: inline-block;
+  position: relative;
+  border-radius: 5px;
+  padding: 10px 10px 10px 32px;
+  background-color: #EBEEF5;
+  color: #627083;
+  font-size: 12px;
+
+  :first-letter {
+    text-transform: uppercase;
+  }
+
+  :not(:last-child) {
+    margin-bottom: 8px;
+  }
+
+  & img {
+    width: 16px;
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
 `;
 
-const Price = styled.span`
-  font-weight: 500;
+const TagName = styled.span`
+  text-transform: lowercase;
+  :not(:last-child)::after {
+    content: ', ';
+  }
+  color: ${({ modifiable }) => modifiable ? '#00807F' : '#627083' };
 `;
 
-const StyledRemovableNotice = styled(RemovableNotice)`
-  margin-bottom: 10px;
-`;
 const AddOn = styled.div`
-  margin-bottom:8px;
+  margin-bottom: 16px;
   width: 100%;
 
   .container {
@@ -191,7 +208,7 @@ const AddOnPrice = styled.span`
 
 const QuantitySelector = styled.span`
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
   padding: 15px 20px;
   border-radius: 6px;
   border: none;
@@ -208,7 +225,7 @@ const SaveDishButton = styled(Button)`
   flex-direction: row;
   justify-content: space-between;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
   border: none;
   background-color: #0D5959;
   padding: 15px 25px;
@@ -224,6 +241,35 @@ const Quantity = styled.span`
 const ChangeQuantity = styled.span`
   color: #8A9DB7;
   cursor: pointer;
+  font-size: 18px;
+`;
+
+const RemovableNotice = styled.div`
+  display: inline-block;
+  font-family: 'HK Grotesk';
+  font-weight: 500;
+  font-size: 12px;
+  padding: 8px 8px 8px 26px;
+  background-color: transparent;
+  border-radius: 6px;
+  position: relative;
+  letter-spacing: 0.02em;
+  line-height: 18px;
+  color: #627083;
+  border-radius: 5px;
+  border: 1px solid #E1E7EC;
+  margin-bottom: 8px;
+`;
+
+const Dot = styled.div`
+  height: 8px;
+  width: 8px;
+  border-radius: 4px;
+  background-color: #00807F;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translate(0, -50%);
 `;
 
 
@@ -315,13 +361,13 @@ export default function(props) {
         : ""
       }
       <ModalContainer>
-        <ModalHeader>
-          <DishName>{dishData.name}</DishName>
           <ExitButtonWrapper
             onClick={props.onHide}
           >
             <ExitButton/>
           </ExitButtonWrapper>
+        <ModalHeader>
+          <DishName>{dishData.name}</DishName>
         </ModalHeader>
         <ModalBody>
           {
@@ -331,23 +377,43 @@ export default function(props) {
 
             </> : <></>
           }
-          { props.menuHasAllergens ?
+          { dishData.Tags.length > 0 || dishData.Diets.length > 0 ?
           <>
             <Divider/>
             <SectionTitle>ALLERGEN INFO</SectionTitle>
             <SectionBody>
               {
                 showRemovableNotice ?
-                <StyledRemovableNotice /> : null
+                <RemovableNotice>
+                  Dish can be modified to fit your dietary needs
+                  <Dot />
+                </RemovableNotice> : null
               }
               {
-                dishData.Tags.length > 0 ?
-                (
-                  dishData.Tags.map(t => <StyledAllergenIcon key={t.id} tag={t} showNotice={ context.activeFilters.allergens.has(t.id) }/>)
-                )
+                dishData.Tags.length > 0 ? 
+                <TagsWrapper>
+                  <img src={InfoIcon} />
+                  Contains { dishData.Tags.map((allergen) => (
+                    <TagName modifiable={allergen.DishTag.removable}>
+                      {allergen.name}
+                    </TagName>
+                  )) }
+                </TagsWrapper>
                 :
-                "No Allergy Info"
+                null
               }
+              {/* Adding a line break between two inline-blocks */}
+              <div></div>
+              {
+                dishData.Diets.length > 0 ?
+                <TagsWrapper>
+                  <img src={CheckMark} />
+                  { dishData.Diets.map((diets) => <TagName>{diets.name}</TagName>)} friendly
+                </TagsWrapper>
+                :
+                null
+              }
+              
             </SectionBody>
           </>  : ""
           }
@@ -376,7 +442,11 @@ export default function(props) {
             </> : <></>
           }
           <Divider/>
-          <SectionBody style={{justifyContent: "space-evenly" }}>
+          <SectionBody style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: "space-between",
+          }}>
             <QuantitySelector>
               <ChangeQuantity onClick={() => {
                 if(quantity > 1) {
