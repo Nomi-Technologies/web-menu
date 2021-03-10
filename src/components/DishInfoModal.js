@@ -276,6 +276,14 @@ const Dot = styled.div`
 const StyledBanner = styled(Banner)`
   border-radius: 6px;
   height: 200px;
+  width: 400px;
+  margin: 0 auto;
+
+  @media (max-width: 1000px) {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
 `;
 
 const OptionCheckbox = styled.span`
@@ -289,6 +297,7 @@ export default function(props) {
   const editMode = typeof props.index !== 'undefined';
   const savedDish = editMode ? context.savedDishes[props.index] : undefined;
   const dishData = editMode ? context.dishesById[savedDish.id] : props.dish;
+  
 
   // set activeModifications to saved data (extracting from dishData with modIds)
   const [activeModifications, setActiveModifications] = React.useState(
@@ -300,11 +309,18 @@ export default function(props) {
   const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(dishData.price));
 
   const [dishImage, setDishImage] = useState();
+  const [modalStyle, setModalStyle]= useState();
 
   useEffect(() => {
     if(props.show && context.restaurant && context.selectedMenuIndex !== null) {
       getDishImage(dishData.id).then((banner) => {
         setDishImage(banner)
+        if(banner) {
+          setModalStyle({
+            borderTopRightRadius: '0',
+            borderTopLeftRadius: '0',
+          })
+        }
       })
     }
   }, [context.restaurant, props.show])
@@ -347,6 +363,8 @@ export default function(props) {
     props.onHide();
   }
 
+  console.log(modalStyle);
+
   return (
     <Modal
       className='react-bootstrap-modal'
@@ -360,7 +378,7 @@ export default function(props) {
         <StyledBanner src={ dishImage } />
         : ""
       }
-      <ModalContainer>
+      <ModalContainer style={modalStyle}>
           <ExitButtonWrapper
             onClick={props.onHide}
           >
