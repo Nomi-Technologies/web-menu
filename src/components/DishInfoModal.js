@@ -297,7 +297,6 @@ export default function(props) {
   const editMode = typeof props.index !== 'undefined';
   const savedDish = editMode ? context.savedDishes[props.index] : undefined;
   const dishData = editMode ? context.dishesById[savedDish.id] : props.dish;
-  
 
   // set activeModifications to saved data (extracting from dishData with modIds)
   const [activeModifications, setActiveModifications] = React.useState(
@@ -362,8 +361,6 @@ export default function(props) {
     context.setSavedDishes(savedDishes);
     props.onHide();
   }
-
-  console.log(modalStyle);
 
   return (
     <Modal
