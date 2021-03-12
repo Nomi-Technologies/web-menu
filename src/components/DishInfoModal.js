@@ -374,7 +374,7 @@ export default function(props) {
     >
       {
         dishImage ?
-        <StyledBanner src={ dishImage } />
+        <StyledBanner src={ dishImage } removeOverlay />
         : ""
       }
       <ModalContainer style={modalStyle}>
