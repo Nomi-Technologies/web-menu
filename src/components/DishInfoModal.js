@@ -18,7 +18,7 @@ const ModalContainer = styled.div`
   position: relative;
   padding: 24px;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 500px) {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -274,12 +274,14 @@ const Dot = styled.div`
 
 
 const StyledBanner = styled(Banner)`
-  border-radius: 6px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
   height: 200px;
   width: 400px;
   margin: 0 auto;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 500px) {
+    height: 300px;
     width: 100%;
     box-sizing: border-box;
     border-radius: 0;
