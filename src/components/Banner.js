@@ -32,7 +32,7 @@ export default function(props) {
   return (
     <Banner className={props.className} src={ props.src }>
       {props.children}
-      <BlackLayer/>
+      {props.removeOverlay ? null : <BlackLayer/>}
     </Banner>
   )
 }

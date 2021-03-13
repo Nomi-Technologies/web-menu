@@ -18,7 +18,7 @@ const ModalContainer = styled.div`
   position: relative;
   padding: 24px;
 
-  @media (max-width: 1000px) {
+  @media (max-width: 500px) {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -274,8 +274,18 @@ const Dot = styled.div`
 
 
 const StyledBanner = styled(Banner)`
-  border-radius: 6px;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
   height: 200px;
+  width: 400px;
+  margin: 0 auto;
+
+  @media (max-width: 500px) {
+    height: 300px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
 `;
 
 const OptionCheckbox = styled.span`
@@ -300,11 +310,18 @@ export default function(props) {
   const [unitDishPrice, setUnitDishPrice] = React.useState(parseInt(dishData.price));
 
   const [dishImage, setDishImage] = useState();
+  const [modalStyle, setModalStyle]= useState();
 
   useEffect(() => {
     if(props.show && context.restaurant && context.selectedMenuIndex !== null) {
       getDishImage(dishData.id).then((banner) => {
         setDishImage(banner)
+        if(banner) {
+          setModalStyle({
+            borderTopRightRadius: '0',
+            borderTopLeftRadius: '0',
+          })
+        }
       })
     }
   }, [context.restaurant, props.show])
@@ -357,10 +374,10 @@ export default function(props) {
     >
       {
         dishImage ?
-        <StyledBanner src={ dishImage } />
+        <StyledBanner src={ dishImage } removeOverlay />
         : ""
       }
-      <ModalContainer>
+      <ModalContainer style={modalStyle}>
           <ExitButtonWrapper
             onClick={props.onHide}
           >
