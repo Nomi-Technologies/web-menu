@@ -210,7 +210,7 @@ function MainContent({ categoryToRef }) {
     let filtered = [];
     originalDishes.forEach((d) => {
       if (!context.excludedDishes.has(d.id) && 
-          (context.includedDishes.size === 0 || context.includedDishes?.has(d.id))) {
+          (!context.includedDishes || context.includedDishes.has(d.id))) {
         filtered.push(d);
       }
     });

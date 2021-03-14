@@ -10,6 +10,8 @@ export default () => {
   const { restaurant_identifier } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const [activeFiltersByMenu, setActiveFiltersByMenu] = useState([]);
+
+  // Init to [undefined] - undefined means include all dishes
   const [includedDishesByMenu, setIncludedDishesByMenu] = useState([]);
   const [excludedDishesByMenu, setExcludedDishesByMenu] = useState([]);
   const [selectedMenuIndex, setSelectedMenuIndex] = useState(0);
@@ -30,7 +32,6 @@ export default () => {
         })).then(
           parsedMenus => {
             setActiveFiltersByMenu(parsedMenus.map(() => new FilterSet()));
-            setIncludedDishesByMenu(parsedMenus.map(() => new Set()));
             setExcludedDishesByMenu(parsedMenus.map(() => new Set()));
             setMenus(parsedMenus);
             const dishesLUT = parsedMenus.reduce((accumulator, menu) => {
