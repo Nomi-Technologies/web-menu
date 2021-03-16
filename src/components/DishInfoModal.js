@@ -124,7 +124,7 @@ const TagName = styled.span`
   :not(:last-child)::after {
     content: ', ';
   }
-  color: ${({ modifiable }) => modifiable ? '#00807F' : '#627083' };
+  color: ${({ highlight }) => highlight ? '#00807F' : '#627083' };
 `;
 
 const AddOn = styled.div`
@@ -411,7 +411,7 @@ export default function(props) {
                 <TagsWrapper>
                   <img src={InfoIcon} />
                   Contains { dishData.Tags.map((allergen) => (
-                    <TagName modifiable={allergen.DishTag.removable}>
+                    <TagName highlight={allergen.DishTag.removable && context.activeFilters.allergens.has(allergen.id)}>
                       {allergen.name}
                     </TagName>
                   )) }

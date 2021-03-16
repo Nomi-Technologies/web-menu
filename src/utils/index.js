@@ -50,7 +50,7 @@ export const parseMenu = (data, enableFiltering) => {
 }
 
 export const filterMenu = ({ byAllergens, byDiets }, { allergens, diets }) => {
-  let included = new Set();
+  let intersection;
   let excluded = new Set();
   let onlyHasRemovables = new Set();
 
@@ -72,11 +72,13 @@ export const filterMenu = ({ byAllergens, byDiets }, { allergens, diets }) => {
   );
 
   diets.forEach((dietId) => {
+    const included = new Set();
     byDiets[dietId].forEach((dish) => {
       included.add(dish.id);
     });
+    intersection = intersection ? new Set([...included].filter((id) => intersection.has(id))) : included;
   });
-  return { included, excluded, hasRemovables: onlyHasRemovables.size > 0 };
+  return { included: intersection, excluded, hasRemovables: onlyHasRemovables.size > 0 };
 }
 
 export const getRestaurant = async restaurantId => {
