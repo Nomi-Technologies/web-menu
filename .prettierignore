@@ -1,0 +1,5 @@
+# Ignore artifacts:
+*.md
+
+# Ignore all HTML files:
+*.html
