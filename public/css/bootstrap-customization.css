@@ -3,7 +3,7 @@ Modals are not even in the body of the html page. So we cannot inject global sty
 from react (which only applies to root).
 */
 
-.modal-dialog-centered { 
+.modal-dialog-centered {
   height: 100%;
   margin: 0;
   max-width: none;

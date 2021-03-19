@@ -41,41 +41,50 @@ const ColumnSeparator = styled(Column)`
 const NoDishesMessage = styled.p`
   font-style: italic;
   font-size: 16px;
-`
+`;
 
 export default (props) => {
   return (
     <CategorySection ref={props.reactRef}>
       <Title>{props.category.name}</Title>
-      {
-        props.category.description ? (
-          <Description>{props.category.description}</Description>
-        ) : ""
-      }
+      {props.category.description ? (
+        <Description>{props.category.description}</Description>
+      ) : (
+        ""
+      )}
       <DishGrid>
-        {
-          props.dishes.length > 0 ? 
+        {props.dishes.length > 0 ? (
           <>
             <Column>
-            {props.dishes
-              .slice(0, Math.ceil(props.dishes.length / 2))
-              .map((dish) => (
-                <DishTile key={dish.id} dish={dish} menuHasAllergens={ props.menuHasAllergens }/>
-              ))}
+              {props.dishes
+                .slice(0, Math.ceil(props.dishes.length / 2))
+                .map((dish) => (
+                  <DishTile
+                    key={dish.id}
+                    dish={dish}
+                    menuHasAllergens={props.menuHasAllergens}
+                  />
+                ))}
             </Column>
             <ColumnSeparator />
             <Column>
               {props.dishes
                 .slice(Math.ceil(props.dishes.length / 2))
                 .map((dish) => (
-                  <DishTile key={dish.id} dish={dish} menuHasAllergens={ props.menuHasAllergens }/>
+                  <DishTile
+                    key={dish.id}
+                    dish={dish}
+                    menuHasAllergens={props.menuHasAllergens}
+                  />
                 ))}
             </Column>
-          </> : <NoDishesMessage>
+          </>
+        ) : (
+          <NoDishesMessage>
             No dishes in this section. Check the applied filters.
           </NoDishesMessage>
-        }
+        )}
       </DishGrid>
     </CategorySection>
   );
-}
+};

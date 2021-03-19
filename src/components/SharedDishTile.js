@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext } from "react";
 import styled from "styled-components";
-import RestaurantContext from '../RestaurantContext';
+import RestaurantContext from "../RestaurantContext";
 
 const DishTile = styled.div`
   font-family: "Source Serif Pro";
@@ -59,7 +59,7 @@ const Description = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height:1.3;
+  line-height: 1.3;
   margin: 0;
 `;
 
@@ -74,21 +74,27 @@ const OrangeDot = styled.div`
 `;
 
 export default function (props) {
-  let context = useContext(RestaurantContext)
-  let showRemovableNotice = props.dish.Tags.some((tag) => tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id))
-  || props.dish.gfp && context.activeFilters?.allergens.has(context.allergens['Gluten'])
+  let context = useContext(RestaurantContext);
+  let showRemovableNotice =
+    props.dish.Tags.some(
+      (tag) =>
+        tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id)
+    ) ||
+    (props.dish.gfp &&
+      context.activeFilters?.allergens.has(context.allergens["Gluten"]));
 
   return (
     <DishTile className={props.className} onClick={props.onClick}>
       <TileTitle>
         <Name>
-          { props.dish.name }
-          { showRemovableNotice ? <OrangeDot/> : "" }
+          {props.dish.name}
+          {showRemovableNotice ? <OrangeDot /> : ""}
         </Name>
-        {
-          props.dish.price ?
-          <TitleTrailing>{'$' + props.dish.price}</TitleTrailing> : <></>
-        }
+        {props.dish.price ? (
+          <TitleTrailing>{"$" + props.dish.price}</TitleTrailing>
+        ) : (
+          <></>
+        )}
       </TileTitle>
       {props.dish.description ? (
         <TileSubtitle>

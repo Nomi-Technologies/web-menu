@@ -10,6 +10,19 @@ import ReactGA from "react-ga";
  * #root generally does not respond to the changes in size in .App
  */
 export default () => {
+  const [dimensions, setDimensions] = React.useState({});
+
+  React.useLayoutEffect(() => {
+    const resizeListener = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    resizeListener();
+    window.addEventListener("resize", resizeListener);
+    return () => window.removeEventListener("resize", resizeListener);
+  }, []);
   React.useEffect(() => {
     let gaID = process.env.REACT_APP_GOOGLE_ANALYTICS_ID;
     if (gaID) {
