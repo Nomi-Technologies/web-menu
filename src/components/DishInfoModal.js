@@ -85,6 +85,7 @@ const SectionTitle = styled.div`
   font-size: 14px;
   margin-bottom: 16px;
   line-height: 20px;
+  text-transform: uppercase;
 `;
 
 const SectionBody = styled.div`
@@ -411,7 +412,7 @@ export default function (props) {
           {dishData.Tags.length > 0 || dishData.Diets.length > 0 ? (
             <>
               <Divider />
-              <SectionTitle>ALLERGEN INFO</SectionTitle>
+              <SectionTitle>Allergen and Diet Info</SectionTitle>
               <SectionBody>
                 {showRemovableNotice ? (
                   <RemovableNotice>
@@ -454,46 +455,48 @@ export default function (props) {
           {dishData.Modifications.length > 0 ? (
             <>
               <Divider />
-              <SectionTitle>DISH OPTIONS</SectionTitle>
+              <SectionTitle>Dish Options</SectionTitle>
               <SectionBody
                 style={{ flexDirection: "column", alignItems: "flex-start" }}
               >
-                {dishData.Modifications.map((t) => (
-                  <AddOn key={t.id}>
-                    <label className="container">
-                      <AddOnName>{t.name} </AddOnName>
-                      {t.description ? (
-                        <AddOnNotes> ({t.description})</AddOnNotes>
-                      ) : (
-                        <></>
-                      )}
-                      {t.price !== "0" ? (
-                        <AddOnPrice> (+${t.price})</AddOnPrice>
-                      ) : (
-                        <></>
-                      )}
-                      <input
-                        checked={activeModifications.some(
-                          (mod) => mod.id === t.id
+                {
+                  dishData.Modifications.map((t) => (
+                    <AddOn key={t.id}>
+                      <label className="container">
+                        <AddOnName>{t.name} </AddOnName>
+                        {t.description ? (
+                          <AddOnNotes> ({t.description})</AddOnNotes>
+                        ) : (
+                          <></>
                         )}
-                        type="checkbox"
-                        onClick={() => toggleModification(t)}
-                      />
-                      <OptionCheckbox className="checkmark"></OptionCheckbox>
-                    </label>
-                  </AddOn>
-                ))}
+                        {t.price !== "0" ? (
+                          <AddOnPrice> (+${t.price})</AddOnPrice>
+                        ) : (
+                          <></>
+                        )}
+                        <input
+                          checked={activeModifications.some(
+                            (mod) => mod.id === t.id
+                          )}
+                          type="checkbox"
+                          onClick={() => toggleModification(t)}
+                        />
+                        <OptionCheckbox className="checkmark"></OptionCheckbox>
+                      </label>
+                    </AddOn>
+                  ))
+                }
               </SectionBody>
             </>
           ) : (
             <></>
           )}
-          <Divider />
           <SectionBody
             style={{
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
+              marginTop: "20px"
             }}
           >
             <QuantitySelector>
