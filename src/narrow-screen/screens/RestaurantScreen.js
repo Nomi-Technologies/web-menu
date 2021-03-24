@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import RestaurantContext from '../../RestaurantContext';
+import RestaurantContext from "../../RestaurantContext";
 import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
 
@@ -25,15 +25,16 @@ export default () => {
 
   return (
     <>
-      {context.menu ?
-      <MenuScreen /> : context.error ? (
+      {context.menu ? (
+        <MenuScreen />
+      ) : context.error ? (
         <PageError>
-          There was an error loading this page. Please try reloading the page
-          or contact the Nomi team by filling out a form at dinewithnomi.com
+          There was an error loading this page. Please try reloading the page or
+          contact the Nomi team by filling out a form at dinewithnomi.com
         </PageError>
       ) : (
         <Loading>Restaurant Menu Loading...</Loading>
       )}
     </>
   );
-}
+};

@@ -1,12 +1,12 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
-import RestaurantContext from '../../RestaurantContext';
-import DishInfoModal from 'components/DishInfoModal';
-import Counter from 'components/Counter';
-import ExpansionArrow from 'components/ExpansionArrow';
-import styled from 'styled-components';
-import Swipeout from '@gem-mine/rc-swipeout';
-import '@gem-mine/rc-swipeout/assets/index.css';
-import DeleteIcon from 'components/Delete.png';
+import React, { useContext, useState, useEffect, useRef } from "react";
+import RestaurantContext from "../../RestaurantContext";
+import DishInfoModal from "components/DishInfoModal";
+import Counter from "components/Counter";
+import ExpansionArrow from "components/ExpansionArrow";
+import styled from "styled-components";
+import Swipeout from "@gem-mine/rc-swipeout";
+import "@gem-mine/rc-swipeout/assets/index.css";
+import DeleteIcon from "components/Delete.png";
 
 const SlideUpPanel = styled.div`
   position: relative;
@@ -16,7 +16,6 @@ const SlideUpPanel = styled.div`
   width: 100%;
   height: 100%;
   box-shadow: 0px 0px 20px rgba(136, 146, 158, 0.15);
-  
 `;
 
 const PanelHeader = styled.div`
@@ -50,15 +49,13 @@ const StyledExpansionArrow = styled(ExpansionArrow)`
 function SlideUpPanelHeader(props) {
   return (
     <PanelHeader>
-      <FilterLabel onClick={props.onExpansionChanged}>
-        My Dishes
-      </FilterLabel>
+      <FilterLabel onClick={props.onExpansionChanged}>My Dishes</FilterLabel>
       <PanelHeaderElement>
         <Counter
-          style={{ marginLeft: '10px' }}
+          style={{ marginLeft: "10px" }}
           onClick={props.onExpansionChanged}
           active={props.count > 0}
-          activeColor={'#F06441'}
+          activeColor={"#F06441"}
         >
           {props.count}
         </Counter>
@@ -73,7 +70,6 @@ function SlideUpPanelHeader(props) {
     </PanelHeader>
   );
 }
-
 
 const PanelBody = styled.div`
   max-height: 600px;
@@ -102,7 +98,7 @@ const EditButton = styled.div`
   flex: 0 1 65px;
   cursor: pointer;
   text-align: center;
-  color: #0D5959;
+  color: #0d5959;
   font-weight: 500;
 
   & span {
@@ -138,14 +134,14 @@ const CloseButton = styled.div`
     font-size: 14px;
     font-weight: bold;
     color: white;
-    background-color: #F06441;
+    background-color: #f06441;
   }
 `;
 
 const ClearButton = styled.div`
   font-size: 14px;
   font-weight: bold;
-  color: #F8B2A0;
+  color: #f8b2a0;
   text-align: center;
   padding: 18px 0 5px 0;
 `;
@@ -163,98 +159,96 @@ function SlideUpPanelBody({ dishes, onClose }) {
     if (savedDishes.length === 0) {
       setIndex();
     }
-  }
+  };
 
   const onClearTray = () => {
     setSavedDishes([]);
     setIndex();
-  }
+  };
 
-  return <>
-    <PanelBody>
-      {
-        dishes.length > 0 ?
-        <>
-          <Notice>Ready to order? Call your waiter over.</Notice>
-          {
-            dishes.map(({ quantity, id, modIds }, index) => {
+  return (
+    <>
+      <PanelBody>
+        {dishes.length > 0 ? (
+          <>
+            <Notice>Ready to order? Call your waiter over.</Notice>
+            {dishes.map(({ quantity, id, modIds }, index) => {
               // Getting actual dish data
               const dish = dishesById[id];
-              return <Swipeout
-                key={index}
-                right={[{
-                  text: <img src={DeleteIcon} />,
-                  onPress: () => onDelete(index),
-                  style: { backgroundColor: 'red', width: '60px' },
-                }]}
-              >
-                <DishEntry>
-                  <ItemCount>
-                    <Counter
-                      radius={'20px'}
-                      style={{
-                        position: 'absolute',
-                        left: 0,
-                        top: '50%',
-                        transform: 'translate(0, -50%)',
-                        backgroundColor: '#0D5959',
-                        fontWeight: 'bold',
-                        fontSize: '10px',
+              return (
+                <Swipeout
+                  key={index}
+                  right={[
+                    {
+                      text: <img src={DeleteIcon} />,
+                      onPress: () => onDelete(index),
+                      style: { backgroundColor: "red", width: "60px" },
+                    },
+                  ]}
+                >
+                  <DishEntry>
+                    <ItemCount>
+                      <Counter
+                        radius={"20px"}
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: "50%",
+                          transform: "translate(0, -50%)",
+                          backgroundColor: "#0D5959",
+                          fontWeight: "bold",
+                          fontSize: "10px",
+                        }}
+                      >
+                        {quantity}
+                      </Counter>
+                    </ItemCount>
+                    <DishInfo>
+                      <div style={{ fontWeight: "bold" }}>{dish.name}</div>
+                      {modIds.map((id, index) => {
+                        const mod = dish.Modifications.find(
+                          (mod) => mod.id === id
+                        );
+                        return (
+                          <div key={index} style={{ marginTop: "5px" }}>
+                            {mod.name}
+                          </div>
+                        );
+                      })}
+                    </DishInfo>
+                    <EditButton
+                      onClick={() => {
+                        setIndex(index);
+                        setShowModal(true);
                       }}
                     >
-                      {quantity}
-                    </Counter>
-                  </ItemCount>
-                  <DishInfo>
-                    <div style={{ fontWeight: 'bold' }}>
-                      {dish.name}
-                    </div>
-                    {
-                      modIds.map((id, index) => {
-                        const mod = dish.Modifications.find((mod) => mod.id === id);
-                        return <div
-                          key={index}
-                          style={{marginTop: '5px'}}
-                        >{mod.name}</div>;
-                      })
-                    }
-                  </DishInfo>
-                  <EditButton
-                    onClick={() => {
-                      setIndex(index);
-                      setShowModal(true);
-                    }}
-                  ><span>edit</span></EditButton>
-                </DishEntry>
-              </Swipeout>;
-            })
-          }
-        </>
-        :
-        <NoDishNotice>Your saved items will show up here</NoDishNotice>
-      }
-      <CloseButton>
-        <div
-          className='tray-clear-button'
-          onClick={onClose}
-        >
-          Done
-        </div>
-      </CloseButton>
-      <ClearButton onClick={onClearTray} >
-        Clear All Items
-      </ClearButton>
-    </PanelBody>
+                      <span>edit</span>
+                    </EditButton>
+                  </DishEntry>
+                </Swipeout>
+              );
+            })}
+          </>
+        ) : (
+          <NoDishNotice>Your saved items will show up here</NoDishNotice>
+        )}
+        <CloseButton>
+          <div className="tray-clear-button" onClick={onClose}>
+            Done
+          </div>
+        </CloseButton>
+        <ClearButton onClick={onClearTray}>Clear All Items</ClearButton>
+      </PanelBody>
 
-    {
-      typeof index !== 'undefined' ? 
-      <DishInfoModal
-        index={index}
-        show={showModal}
-        onHide={() => setShowModal(false)}
-      /> : null
-    }
-  </>
+      {typeof index !== "undefined" ? (
+        <DishInfoModal
+          index={index}
+          show={showModal}
+          onHide={() => setShowModal(false)}
+        />
+      ) : null}
+    </>
+  );
 }
 
 export default () => {
@@ -272,14 +266,14 @@ export default () => {
         onExpansionChanged={onExpansionChanged}
         expanded={panelExpanded}
       />
-      {panelExpanded ?
+      {panelExpanded ? (
         <SlideUpPanelBody
           dishes={savedDishes}
           onClose={() => setPanelExpanded(false)}
         />
-        :
+      ) : (
         <></>
-      }
+      )}
     </SlideUpPanel>
   );
-}
+};

@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from 'react';
-import MenuScreen from './MenuScreen';
-import { ReactComponent as NomiTopBottomLogo } from 'components/nomi-topbottom.svg';
-import styled from 'styled-components';
-import MenuTabNav from '../components/MenuTabNav';
-import RestaurantContext from '../../RestaurantContext';
-import { getRestaurantLogo } from '../../utils'
+import React, { useContext, useState, useEffect } from "react";
+import MenuScreen from "./MenuScreen";
+import { ReactComponent as NomiTopBottomLogo } from "components/nomi-topbottom.svg";
+import styled from "styled-components";
+import MenuTabNav from "../components/MenuTabNav";
+import RestaurantContext from "../../RestaurantContext";
+import { getRestaurantLogo } from "../../utils";
 
 const Header = styled.div`
   position: fixed;
@@ -15,7 +15,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   /* White */
-  background: #FFFFFF;
+  background: #ffffff;
   /* card-shadow-3 */
   box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
 `;
@@ -38,7 +38,7 @@ const FilterToggleSwitch = styled.div`
 
   margin-left: 5%;
 
-  background: #FFFFFF;
+  background: #ffffff;
   /* card-shadow-3 */
 
   box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
@@ -49,7 +49,7 @@ const PageError = styled.div`
   position: relative;
   flex: 0 0 auto;
   text-align: center;
-  color: #FF726F;
+  color: #ff726f;
   margin-top: 5%;
   font-size: 24px;
   font-weight: bold;
@@ -69,54 +69,48 @@ const HeaderColumns = styled.div`
 `;
 
 export default () => {
-
   const context = useContext(RestaurantContext);
   const restaurant = context.restaurant;
   const [restaurantLogo, setRestaurantLogo] = useState();
 
   useEffect(() => {
-    if(context.restaurant) {
+    if (context.restaurant) {
       getRestaurantLogo(context.restaurant.id).then((logo) => {
-        setRestaurantLogo(logo)
-      })
+        setRestaurantLogo(logo);
+      });
     }
-    
-  }, [context.restaurant])
+  }, [context.restaurant]);
 
   return (
     <>
       <Header>
-        <HeaderColumns style={{ width: '20%' }}>
-          {
-            restaurant ?
+        <HeaderColumns style={{ width: "20%" }}>
+          {restaurant ? (
             <RestaurantImgLogo
               alt={`${restaurant.name} logo`}
-              src={ restaurantLogo }
-            /> : <></>
-          }
+              src={restaurantLogo}
+            />
+          ) : (
+            <></>
+          )}
         </HeaderColumns>
-        <HeaderColumns style={{ width: '60%' }}>
+        <HeaderColumns style={{ width: "60%" }}>
           <MenuTabNav />
         </HeaderColumns>
-        <HeaderColumns style={{ width: '20%' }}>
-          <NomiLogo
-            width='70px'
-            height='28px'
-          />
+        <HeaderColumns style={{ width: "20%" }}>
+          <NomiLogo width="70px" height="28px" />
         </HeaderColumns>
       </Header>
-      {context.menu?
-        <MenuScreen
-          restaurantName={restaurant.name}
-          menu={context.menu}
-        />
-        :
-        (
-          context.error ?
-          <PageError>There was an error loading this page. Please try reloading the page or contact the Nomi team by filling out a form at dinewithnomi.com</PageError> :
-          <Loading>Restaurant Menu Loading...</Loading>
-        )
-      }
+      {context.menu ? (
+        <MenuScreen restaurantName={restaurant.name} menu={context.menu} />
+      ) : context.error ? (
+        <PageError>
+          There was an error loading this page. Please try reloading the page or
+          contact the Nomi team by filling out a form at dinewithnomi.com
+        </PageError>
+      ) : (
+        <Loading>Restaurant Menu Loading...</Loading>
+      )}
     </>
   );
-}
+};
