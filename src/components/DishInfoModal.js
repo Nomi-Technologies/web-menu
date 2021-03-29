@@ -191,8 +191,10 @@ const AddOn = styled.div`
     transform: rotate(45deg);
   }
 `;
+
 const AddOnName = styled.span`
   color: black;
+  margin-left: 8px;
   margin-right: 4px;
 `;
 
@@ -288,9 +290,9 @@ const StyledBanner = styled(Banner)`
   }
 `;
 
-const OptionCheckbox = styled.span`
-  border: 1px solid black;
-`;
+// const OptionCheckbox = styled.span`
+//   border: 1px solid black;
+// `;
 
 export default function (props) {
   const context = useContext(RestaurantContext);
@@ -303,8 +305,8 @@ export default function (props) {
   const [activeModifications, setActiveModifications] = React.useState(
     editMode
       ? savedDish.modIds.map((id) =>
-          dishData.Modifications.find((mod) => mod.id === id)
-        )
+        dishData.Modifications.find((mod) => mod.id === id)
+      )
       : []
   );
   const [quantity, setQuantity] = React.useState(
@@ -318,6 +320,7 @@ export default function (props) {
   const [dishImage, setDishImage] = useState();
   const [modalStyle, setModalStyle] = useState();
 
+  const [check, setCheck] = useState(false);
   useEffect(() => {
     if (
       props.show &&
@@ -347,24 +350,37 @@ export default function (props) {
 
   function toggleModification(modification) {
     var arr;
+    console.log("before active modification", activeModifications)
+
     if (
       activeModifications.length === 0 ||
       activeModifications.indexOf(modification) === -1
     ) {
       arr = activeModifications;
       arr.push(modification);
+      console.log("adding modification:", modification)
+
     } else {
       var index = activeModifications.indexOf(modification);
       arr = activeModifications;
       arr.splice(index, 1);
+      console.log("removing modification:", modification)
+      console.log("removing index:", index,)
     }
+    setCheck(!check)
 
     setActiveModifications(arr);
+    console.log("updated active modification", activeModifications)
+
     const newPrice = activeModifications.reduce(
       (total, currentMod) => total + parseInt(currentMod.price),
       parseInt(dishData.price)
     );
     setUnitDishPrice(newPrice);
+
+    console.log("in toggleModification after", check)
+    console.log("-------")
+
   }
 
   function saveDish() {
@@ -461,8 +477,17 @@ export default function (props) {
               >
                 {
                   dishData.Modifications.map((t) => (
+
                     <AddOn key={t.id}>
-                      <label className="container">
+                      <label>
+                        <input
+                          checked={activeModifications.some(
+                            (mod) => mod.id === t.id
+                          )}
+                          type="checkbox"
+                          onClick={() => toggleModification(t)}
+                        />
+                        {/* <Checkbox className="checkmark" checked={activeModifications.some((mod) => mod.id === t.id)} onClick={() => toggleModification(t)}></Checkbox> */}
                         <AddOnName>{t.name} </AddOnName>
                         {t.description ? (
                           <AddOnNotes> ({t.description})</AddOnNotes>
@@ -474,15 +499,10 @@ export default function (props) {
                         ) : (
                           <></>
                         )}
-                        <input
-                          checked={activeModifications.some(
-                            (mod) => mod.id === t.id
-                          )}
-                          type="checkbox"
-                          onClick={() => toggleModification(t)}
-                        />
-                        <OptionCheckbox className="checkmark"></OptionCheckbox>
+
+                        {/* <OptionCheckbox className="checkmark"></OptionCheckbox> */}
                       </label>
+
                     </AddOn>
                   ))
                 }
