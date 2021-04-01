@@ -288,37 +288,27 @@ export default function (props) {
 
   function toggleModification(modification) {
     var arr;
-    console.log("before active modification", activeModifications)
-
     if (
       activeModifications.length === 0 ||
       activeModifications.indexOf(modification) === -1
     ) {
       arr = activeModifications;
       arr.push(modification);
-      console.log("adding modification:", modification)
 
     } else {
       var index = activeModifications.indexOf(modification);
       arr = activeModifications;
       arr.splice(index, 1);
-      console.log("removing modification:", modification)
-      console.log("removing index:", index,)
     }
     setCheck(!check)
 
     setActiveModifications(arr);
-    console.log("updated active modification", activeModifications)
 
     const newPrice = activeModifications.reduce(
       (total, currentMod) => total + parseInt(currentMod.price),
       parseInt(dishData.price)
     );
     setUnitDishPrice(newPrice);
-
-    console.log("in toggleModification after", check)
-    console.log("-------")
-
   }
 
   function saveDish() {
