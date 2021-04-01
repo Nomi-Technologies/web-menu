@@ -231,9 +231,6 @@ const StyledBanner = styled(Banner)`
   }
 `;
 
-// const OptionCheckbox = styled.span`
-//   border: 1px solid red;
-// `;
 
 export default function (props) {
   const context = useContext(RestaurantContext);
