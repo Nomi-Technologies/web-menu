@@ -129,67 +129,8 @@ const TagName = styled.span`
 `;
 
 const AddOn = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 13px;
   width: 100%;
-
-  .container {
-    display: flex;
-    height: 100%;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    padding-left: 30px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  .container input {
-    position: absolute;
-    opacity: 0;
-    height: 0;
-    width: 0;
-  }
-
-  .checkmark {
-    position: absolute;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    border-radius: 5px;
-  }
-
-  .container:hover input ~ .checkmark {
-    background-color: #ccc;
-  }
-
-  .container input:checked ~ .checkmark {
-    background-color: #2196f3;
-  }
-
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  .container input:checked ~ .checkmark:after {
-    display: block;
-  }
-
-  .container .checkmark:after {
-    left: 7px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
 `;
 
 const AddOnName = styled.span`
@@ -291,7 +232,7 @@ const StyledBanner = styled(Banner)`
 `;
 
 // const OptionCheckbox = styled.span`
-//   border: 1px solid black;
+//   border: 1px solid red;
 // `;
 
 export default function (props) {
@@ -487,7 +428,6 @@ export default function (props) {
                           type="checkbox"
                           onClick={() => toggleModification(t)}
                         />
-                        {/* <Checkbox className="checkmark" checked={activeModifications.some((mod) => mod.id === t.id)} onClick={() => toggleModification(t)}></Checkbox> */}
                         <AddOnName>{t.name} </AddOnName>
                         {t.description ? (
                           <AddOnNotes> ({t.description})</AddOnNotes>
@@ -499,8 +439,6 @@ export default function (props) {
                         ) : (
                           <></>
                         )}
-
-                        {/* <OptionCheckbox className="checkmark"></OptionCheckbox> */}
                       </label>
 
                     </AddOn>
