@@ -130,16 +130,20 @@ const TagName = styled.span`
 
 const AddOn = styled.div`
   width: 100%;
-  input{ //vertically center checkbox
-    margin-bottom:2px;
-    display:inline-block;
-    vertical-align:middle;
+  label {
+    position: relative;
+  }
+  input {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(0, -50%);
   }
 `;
 
 const AddOnName = styled.span`
   color: black;
-  margin-left: 8px;
+  margin-left: 20px;
   margin-right: 4px;
 `;
 
@@ -235,7 +239,6 @@ const StyledBanner = styled(Banner)`
   }
 `;
 
-
 export default function (props) {
   const context = useContext(RestaurantContext);
 
@@ -247,8 +250,8 @@ export default function (props) {
   const [activeModifications, setActiveModifications] = React.useState(
     editMode
       ? savedDish.modIds.map((id) =>
-        dishData.Modifications.find((mod) => mod.id === id)
-      )
+          dishData.Modifications.find((mod) => mod.id === id)
+        )
       : []
   );
   const [quantity, setQuantity] = React.useState(
@@ -262,7 +265,6 @@ export default function (props) {
   const [dishImage, setDishImage] = useState();
   const [modalStyle, setModalStyle] = useState();
 
-  const [check, setCheck] = useState(false);
   useEffect(() => {
     if (
       props.show &&
@@ -298,13 +300,11 @@ export default function (props) {
     ) {
       arr = activeModifications;
       arr.push(modification);
-
     } else {
       var index = activeModifications.indexOf(modification);
       arr = activeModifications;
       arr.splice(index, 1);
     }
-    setCheck(!check)
 
     setActiveModifications(arr);
 
@@ -407,31 +407,30 @@ export default function (props) {
               <SectionBody
                 style={{ flexDirection: "column", alignItems: "flex-start" }}
               >
-                {
-                  dishData.Modifications.map((t) => (
-
-                    <AddOn key={t.id}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          onClick={() => toggleModification(t)}
-                        />
-                        <AddOnName>{t.name} </AddOnName>
-                        {t.description ? (
-                          <AddOnNotes> ({t.description})</AddOnNotes>
-                        ) : (
-                          <></>
+                {dishData.Modifications.map((t) => (
+                  <AddOn key={t.id}>
+                    <label>
+                      <input
+                        checked={activeModifications.some(
+                          (mod) => mod.id === t.id
                         )}
-                        {t.price !== "0" ? (
-                          <AddOnPrice> (+${t.price})</AddOnPrice>
-                        ) : (
-                          <></>
-                        )}
-                      </label>
-
-                    </AddOn>
-                  ))
-                }
+                        type="checkbox"
+                        onClick={() => toggleModification(t)}
+                      />
+                      <AddOnName>{t.name} </AddOnName>
+                      {t.description ? (
+                        <AddOnNotes> ({t.description})</AddOnNotes>
+                      ) : (
+                        <></>
+                      )}
+                      {t.price !== "0" ? (
+                        <AddOnPrice> (+${t.price})</AddOnPrice>
+                      ) : (
+                        <></>
+                      )}
+                    </label>
+                  </AddOn>
+                ))}
               </SectionBody>
             </>
           ) : (
@@ -442,7 +441,7 @@ export default function (props) {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              marginTop: "20px"
+              marginTop: "20px",
             }}
           >
             <QuantitySelector>
