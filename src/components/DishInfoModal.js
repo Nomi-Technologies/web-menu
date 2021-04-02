@@ -129,70 +129,21 @@ const TagName = styled.span`
 `;
 
 const AddOn = styled.div`
-  margin-bottom: 16px;
   width: 100%;
-
-  .container {
-    display: flex;
-    height: 100%;
-    flex-direction: row;
-    align-items: center;
+  label {
     position: relative;
-    padding-left: 30px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
   }
-
-  .container input {
+  input {
     position: absolute;
-    opacity: 0;
-    height: 0;
-    width: 0;
-  }
-
-  .checkmark {
-    position: absolute;
+    top: 50%;
     left: 0;
-    height: 20px;
-    width: 20px;
-    border-radius: 5px;
-  }
-
-  .container:hover input ~ .checkmark {
-    background-color: #ccc;
-  }
-
-  .container input:checked ~ .checkmark {
-    background-color: #2196f3;
-  }
-
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  .container input:checked ~ .checkmark:after {
-    display: block;
-  }
-
-  .container .checkmark:after {
-    left: 7px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+    transform: translate(0, -50%);
   }
 `;
+
 const AddOnName = styled.span`
   color: black;
+  margin-left: 20px;
   margin-right: 4px;
 `;
 
@@ -288,10 +239,6 @@ const StyledBanner = styled(Banner)`
   }
 `;
 
-const OptionCheckbox = styled.span`
-  border: 1px solid black;
-`;
-
 export default function (props) {
   const context = useContext(RestaurantContext);
 
@@ -360,6 +307,7 @@ export default function (props) {
     }
 
     setActiveModifications(arr);
+
     const newPrice = activeModifications.reduce(
       (total, currentMod) => total + parseInt(currentMod.price),
       parseInt(dishData.price)
@@ -459,33 +407,30 @@ export default function (props) {
               <SectionBody
                 style={{ flexDirection: "column", alignItems: "flex-start" }}
               >
-                {
-                  dishData.Modifications.map((t) => (
-                    <AddOn key={t.id}>
-                      <label className="container">
-                        <AddOnName>{t.name} </AddOnName>
-                        {t.description ? (
-                          <AddOnNotes> ({t.description})</AddOnNotes>
-                        ) : (
-                          <></>
+                {dishData.Modifications.map((t) => (
+                  <AddOn key={t.id}>
+                    <label>
+                      <input
+                        checked={activeModifications.some(
+                          (mod) => mod.id === t.id
                         )}
-                        {t.price !== "0" ? (
-                          <AddOnPrice> (+${t.price})</AddOnPrice>
-                        ) : (
-                          <></>
-                        )}
-                        <input
-                          checked={activeModifications.some(
-                            (mod) => mod.id === t.id
-                          )}
-                          type="checkbox"
-                          onClick={() => toggleModification(t)}
-                        />
-                        <OptionCheckbox className="checkmark"></OptionCheckbox>
-                      </label>
-                    </AddOn>
-                  ))
-                }
+                        type="checkbox"
+                        onClick={() => toggleModification(t)}
+                      />
+                      <AddOnName>{t.name} </AddOnName>
+                      {t.description ? (
+                        <AddOnNotes> ({t.description})</AddOnNotes>
+                      ) : (
+                        <></>
+                      )}
+                      {t.price !== "0" ? (
+                        <AddOnPrice> (+${t.price})</AddOnPrice>
+                      ) : (
+                        <></>
+                      )}
+                    </label>
+                  </AddOn>
+                ))}
               </SectionBody>
             </>
           ) : (
@@ -496,7 +441,7 @@ export default function (props) {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              marginTop: "20px"
+              marginTop: "20px",
             }}
           >
             <QuantitySelector>
