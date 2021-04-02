@@ -129,8 +129,12 @@ const TagName = styled.span`
 `;
 
 const AddOn = styled.div`
-  margin-bottom: 13px;
   width: 100%;
+  input{ //vertically center checkbox
+    margin-bottom:2px;
+    display:inline-block;
+    vertical-align:middle;
+  }
 `;
 
 const AddOnName = styled.span`
@@ -409,9 +413,6 @@ export default function (props) {
                     <AddOn key={t.id}>
                       <label>
                         <input
-                          checked={activeModifications.some(
-                            (mod) => mod.id === t.id
-                          )}
                           type="checkbox"
                           onClick={() => toggleModification(t)}
                         />
