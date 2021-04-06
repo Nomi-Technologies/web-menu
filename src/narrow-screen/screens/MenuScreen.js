@@ -83,7 +83,7 @@ const MenuName = styled.div`
   display: inline-block;
   font-weight: normal;
   font-size: 14px;
-  color: #628deb;
+  color: #00807F;
   cursor: pointer;
 `;
 
@@ -433,9 +433,8 @@ export default () => {
         <StyledBanner src={menuBanner}>
           <BannerContent>
             <RestaurantName>{context.restaurant.name}</RestaurantName>
-            <MenuName onClick={() => setHamburgerOpen(true)}>{`${
-              context.restaurant.Menus[context.selectedMenuIndex].name
-            } menu`}</MenuName>
+            <MenuName onClick={() => setHamburgerOpen(true)}>{`${context.restaurant.Menus[context.selectedMenuIndex].name
+              } menu`}</MenuName>
           </BannerContent>
         </StyledBanner>
         {context.menu.hasRemovables ? <RemovableNotice /> : null}

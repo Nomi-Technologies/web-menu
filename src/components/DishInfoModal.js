@@ -160,13 +160,15 @@ const AddOn = styled.div`
     width: 20px;
     border-radius: 5px;
   }
-
-  .container:hover input ~ .checkmark {
-    background-color: #ccc;
+  
+  .container input ~ .checkmark {
+    border: 1px solid black;
   }
 
   .container input:checked ~ .checkmark {
-    background-color: #2196f3;
+    background-color: #00807F;
+    border: none;
+
   }
 
   .checkmark:after {
@@ -289,7 +291,7 @@ const StyledBanner = styled(Banner)`
 `;
 
 const OptionCheckbox = styled.span`
-  border: 1px solid black;
+  // border: 1px solid black;
 `;
 
 export default function (props) {
@@ -303,8 +305,8 @@ export default function (props) {
   const [activeModifications, setActiveModifications] = React.useState(
     editMode
       ? savedDish.modIds.map((id) =>
-          dishData.Modifications.find((mod) => mod.id === id)
-        )
+        dishData.Modifications.find((mod) => mod.id === id)
+      )
       : []
   );
   const [quantity, setQuantity] = React.useState(
