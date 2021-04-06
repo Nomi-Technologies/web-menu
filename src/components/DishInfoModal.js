@@ -351,14 +351,13 @@ export default function (props) {
       activeModifications.length === 0 ||
       activeModifications.indexOf(modification) === -1
     ) {
-      arr = activeModifications;
+      arr = [...activeModifications];
       arr.push(modification);
     } else {
       var index = activeModifications.indexOf(modification);
-      arr = activeModifications;
+      arr = [...activeModifications];
       arr.splice(index, 1);
     }
-
     setActiveModifications(arr);
     const newPrice = activeModifications.reduce(
       (total, currentMod) => total + parseInt(currentMod.price),
