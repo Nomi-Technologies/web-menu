@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
-import RestaurantContext from '../../RestaurantContext'
+import RestaurantContext from "../../RestaurantContext";
 import MenuList from "../components/CategoryDishList";
 import ExpansionArrow from "components/ExpansionArrow";
 import Banner from "components/Banner";
-import { getMenuBannerImage } from 'utils'
-import RemovableNotice from 'components/RemovableNotice';
+import { getMenuBannerImage } from "utils";
+import RemovableNotice from "components/RemovableNotice";
 
 import HotScrollSidePanel from "../components/HotScrollSidePanel";
 import AllergenFiltersSidePanel from "../components/AllergenFiltersSidePanel";
@@ -34,8 +34,7 @@ const LeftPanelWrapper = styled(ColumnStyle)`
 `;
 
 const Panel = styled.div`
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 15px 20px;
 
   /* Menu Sections */
   left: 0%;
@@ -67,7 +66,6 @@ const HeaderStyle = styled.div`
   flex-direction: row;
   display: inline-block;
   font-weight: bold;
-  padding-left: 20px;
   align-items: center;
 
   & div {
@@ -89,14 +87,18 @@ const ExpandArrowStyle = styled(ExpansionArrow)`
 
 const PanelBodyStyle = styled.div`
   width: 100%;
-  padding: 10px 15px 10px 15px;
 `;
 
 function LeftPanel({ categoryToRef }) {
-  
   const context = useContext(RestaurantContext);
   const [hotScrollPanelExpanded, setHotScrollPanelExpanded] = useState(true);
-  const [allergenFiltersPanelExpanded, setAllergenFiltersPanelExpanded] = useState(true);
+  const [
+    allergenFiltersPanelExpanded,
+    setAllergenFiltersPanelExpanded,
+  ] = useState(true);
+  const [dietFiltersPanelExpanded, setDietFiltersPanelExpanded] = useState(
+    true
+  );
 
   return (
     <LeftPanelWrapper>
@@ -110,7 +112,8 @@ function LeftPanel({ categoryToRef }) {
           onExpansionChanged={setHotScrollPanelExpanded}
         />
       </Panel>
-      { context.menu.hasAllergens && context.menu.enableFiltering ? 
+      {(context.menu.hasAllergens || context.menu.hasDiets) &&
+      context.menu.enableFiltering ? (
         <Panel>
           <AllergenFiltersSidePanel
             StyledHeader={HeaderStyle}
@@ -119,8 +122,10 @@ function LeftPanel({ categoryToRef }) {
             expanded={allergenFiltersPanelExpanded}
             onExpansionChanged={setAllergenFiltersPanelExpanded}
           />
-        </Panel> : "" 
-      }
+        </Panel>
+      ) : (
+        ""
+      )}
       <Panel>
         <QRCodeSidePanel StyledBody={PanelBodyStyle} />
       </Panel>
@@ -149,7 +154,6 @@ const MainContentWrapper = styled.div`
     margin: 0 0 0 25%;
   }
 `;
-
 
 const StyledBanner = styled(Banner)`
   height: 250px;
@@ -199,19 +203,23 @@ function MainContent({ categoryToRef }) {
   const [menuBanner, setMenuBanner] = useState();
 
   useEffect(() => {
-    if(context.restaurant && context.selectedMenuIndex !== null) {
-      getMenuBannerImage(context.restaurant.Menus[context.selectedMenuIndex].id).then((banner) => {
-        setMenuBanner(banner)
-      })
+    if (context.restaurant && context.selectedMenuIndex !== null) {
+      getMenuBannerImage(
+        context.restaurant.Menus[context.selectedMenuIndex].id
+      ).then((banner) => {
+        setMenuBanner(banner);
+      });
     }
-  }, [context.restaurant, context.selectedMenuIndex])
-
+  }, [context.restaurant, context.selectedMenuIndex]);
 
   function getDishByCategoryIdWithFilter(categoryId) {
     const originalDishes = context.menu.dishesByCategory[categoryId];
     let filtered = [];
     originalDishes.forEach((d) => {
-      if (!context.excludedDishes.has(d.id)) {
+      if (
+        !context.excludedDishes.has(d.id) &&
+        (!context.includedDishes || context.includedDishes.has(d.id))
+      ) {
         filtered.push(d);
       }
     });
@@ -220,14 +228,11 @@ function MainContent({ categoryToRef }) {
 
   return (
     <MainContentWrapper>
-      <StyledBanner src={ menuBanner }>
+      <StyledBanner src={menuBanner}>
         <RestaurantName>{context.restaurant.name.toUpperCase()}</RestaurantName>
       </StyledBanner>
       <DishList>
-        {
-          context.menu.hasRemovables ?
-          <RemovableNotice /> : null
-        }
+        {context.menu.hasRemovables ? <RemovableNotice /> : null}
         {context.menu.categories.map((c) => {
           return (
             <MenuList
@@ -270,7 +275,6 @@ export default () => {
     setCategoryToRef(categoryToRef);
   }, []);
 
-
   useLayoutEffect(() => {
     window.scrollTo({ top: 0 });
   }, [context.selectedMenuIndex]);
@@ -286,7 +290,6 @@ export default () => {
     setCategoryToRef(categoryToRef);
   }, [context.menu]);
 
-
   return (
     <MenuScreen>
       <LeftPanel categoryToRef={categoryToRef} />
@@ -294,4 +297,4 @@ export default () => {
       <RightPanel />
     </MenuScreen>
   );
-}
+};

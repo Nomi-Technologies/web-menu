@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import styled from 'styled-components';
-import RestaurantContext from '../../RestaurantContext';
+import React, { useContext } from "react";
+import styled from "styled-components";
+import RestaurantContext from "../../RestaurantContext";
 
 const MenuTab = styled.div`
   display: inline-block;
@@ -13,7 +13,7 @@ const MenuTab = styled.div`
     padding-bottom: 10px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    border-bottom: solid 4px #5383EC;
+    border-bottom: solid 4px #5383ec;
   }
 `;
 
@@ -34,16 +34,15 @@ export default () => {
 
   return (
     <MenuTabList>
-      {
-        context.restaurant?.Menus.map((menu, i) =>
-          <MenuTab
-            key={menu.id}
-            className={context.selectedMenuIndex === i ? 'is-selected': ''}
-            onClick={() => context.setSelectedMenu(i)}
-          >
-            {menu.name}
-          </MenuTab>)
-      }
+      {context.restaurant?.Menus.map((menu, i) => (
+        <MenuTab
+          key={menu.id}
+          className={context.selectedMenuIndex === i ? "is-selected" : ""}
+          onClick={() => context.setSelectedMenu(i)}
+        >
+          {menu.name}
+        </MenuTab>
+      ))}
     </MenuTabList>
-  )
+  );
 };

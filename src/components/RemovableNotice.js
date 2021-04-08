@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Banner = styled.div`
-  font-family: 'HK Grotesk';
+  font-family: "HK Grotesk";
   font-weight: 500;
   font-size: 14px;
   padding: 16px;
@@ -20,14 +20,16 @@ const OrangeDot = styled.div`
   border-radius: 4px;
   background-color: #f3a35c;
   position: absolute;
-  right: 10px;
-  top: 22px;
   left: 20px;
+  top: 50%;
+  transform: translate(0, -50%);
 `;
 
 export default ({ className }) => {
-  return <Banner className={className}>
-    This dish can be modified to meet your dietary needs.  Please ask your waiter.
-    <OrangeDot />
-  </Banner>
-}
+  return (
+    <Banner className={className}>
+      Contains <span style={{ fontWeight: "bold" }}>removable allergens</span>
+      <OrangeDot />
+    </Banner>
+  );
+};

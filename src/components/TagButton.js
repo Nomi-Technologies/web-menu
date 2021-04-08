@@ -1,23 +1,22 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Button = styled.div`
-  border: solid 2px #E3EDF2;
+  position: relative;
   height: 40px;
-  background-color: ${props => props.selected ? '#E3EDF2' : '#F9F9F9'};
+  background-color: ${(props) => (props.selected ? "#E3EDF2" : "#F9F9F9")};
   border-radius: 4px;
-  text-align: center;
-  line-height: 40px;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-export default function TagButton(props) {
+const Content = styled.div``;
 
+export default function TagButton(props) {
   return (
-    <Button 
-      {...props}
-    >
-      {props.children}
+    <Button {...props}>
+      <Content>{props.children}</Content>
     </Button>
   );
 }

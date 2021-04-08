@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
 
 const AllergenInfoButton = styled.button`
@@ -12,13 +12,9 @@ const AllergenInfoButton = styled.button`
   display: inline-block;
   font-weight: bold;
   color: white;
-  background-color: #8A9DB7;
+  background-color: #8a9db7;
 `;
 
-export default function(props) {
-  return (
-    <AllergenInfoButton {...props}>
-      i
-    </AllergenInfoButton>
-  );
+export default function (props) {
+  return <AllergenInfoButton {...props}>i</AllergenInfoButton>;
 }

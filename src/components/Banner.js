@@ -1,15 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-
+import React from "react";
+import styled from "styled-components";
 
 const Banner = styled.div`
-  font-family: 'Oswald', sans-serif;
+  font-family: "Oswald", sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
   left: 0px;
   top: 0px;
-  background: url(${({src}) => src});
+  background: url(${({ src }) => src});
   background-color: black;
   background-size: cover;
   z-index: 10;
@@ -28,11 +27,11 @@ const BlackLayer = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-export default function(props) {
+export default function (props) {
   return (
-    <Banner className={props.className} src={ props.src }>
+    <Banner className={props.className} src={props.src}>
       {props.children}
-      <BlackLayer/>
+      {props.removeOverlay ? null : <BlackLayer />}
     </Banner>
-  )
+  );
 }

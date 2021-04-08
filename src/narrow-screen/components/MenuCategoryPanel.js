@@ -1,13 +1,12 @@
-import React from 'react';
-import DishTile from './DishTile';
-import styled from 'styled-components';
+import React from "react";
+import DishTile from "./DishTile";
+import styled from "styled-components";
 
 const DishList = styled.div`
-  font-family: 'Source Serif Pro';
+  font-family: "Source Serif Pro";
   position: relative;
   padding: 24px 16px 0px 16px;
   z-index: 1;
-  background-color: #d8e2f8;
   overflow: auto;
 `;
 
@@ -36,15 +35,33 @@ const CategoryDescription = styled.div`
   padding-bottom: 10px;
 `;
 
-export default function(props) {
+const NoDishesMessage = styled.p`
+  font-style: italic;
+  font-size: 16px;
+`;
+
+export default function (props) {
   return (
-    <DishList
-      className={props.className}
-      ref={props.categoryRef}
-    >
+    <DishList className={props.className} ref={props.categoryRef}>
       <CategoryTitle>{props.category.name}</CategoryTitle>
-      <CategoryDescription>{props.category.description}</CategoryDescription>
-      {props.dishes.map(dish => <DishTile key={dish.id} dish={dish} menuHasAllergens={ props.menuHasAllergens }/>)}
+      {props.dishes.length > 0 ? (
+        <>
+          <CategoryDescription>
+            {props.category.description}
+          </CategoryDescription>
+          {props.dishes.map((dish) => (
+            <DishTile
+              key={dish.id}
+              dish={dish}
+              menuHasAllergens={props.menuHasAllergens}
+            />
+          ))}
+        </>
+      ) : (
+        <NoDishesMessage>
+          No dishes in this section. Check the applied filters.
+        </NoDishesMessage>
+      )}
     </DishList>
   );
 }
