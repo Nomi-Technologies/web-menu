@@ -11,8 +11,6 @@ jobs:
     steps:
       - checkout
       - node/install-packages
-      # Run optional required steps before releasing
-      # - run: npm run build-script
       - run: npx semantic-release
 
 workflows:
