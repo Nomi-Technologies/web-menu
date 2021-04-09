@@ -223,21 +223,30 @@ export default ({ filterOpen, setFilterOpen }) => {
       </Padded>
       <Divider />
       <Padded>
-        <Title style={{ marginTop: "24px" }}>Diets</Title>
-        <TagGrid
-          crossCount={1}
-          filters={context.menu.filters.diets}
-          activeFilters={context.activeFilters.diets}
-          setFilters={(diets) => context.setFilters({ diets })}
-        />
-        <Title style={{ marginTop: "32px" }}>Allergens</Title>
-        <Subtitle>Exclude dishes that contain:</Subtitle>
-        <TagGrid
-          crossCount={2}
-          filters={context.menu.filters.allergens}
-          activeFilters={context.activeFilters.allergens}
-          setFilters={(allergens) => context.setFilters({ allergens })}
-        />
+        { context.menu?.hasDiets && 
+          <>
+            <Title style={{ marginTop: "24px" }}>Diets</Title>
+            <TagGrid
+              crossCount={1}
+              filters={context.menu.filters.diets}
+              activeFilters={context.activeFilters.diets}
+              setFilters={(diets) => context.setFilters({ diets })}
+            />
+          </>
+        }
+        {
+          context.menu?.hasAllergens && 
+          <>
+            <Title style={{ marginTop: "32px" }}>Allergens</Title>
+            <Subtitle>Exclude dishes that contain:</Subtitle>
+            <TagGrid
+              crossCount={2}
+              filters={context.menu.filters.allergens}
+              activeFilters={context.activeFilters.allergens}
+              setFilters={(allergens) => context.setFilters({ allergens })}
+            />
+          </>
+        }
       </Padded>
     </RightSidePanel>
   );
