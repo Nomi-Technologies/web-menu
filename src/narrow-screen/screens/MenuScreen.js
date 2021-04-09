@@ -171,7 +171,7 @@ const NotificationBanner = styled.div`
 `;
 
 const RestaurantLogo = styled.a`
-  position: relative;
+  position: absolute;
   top: 0;
   left: 50%;
   transform: translate(-50%, 0);
