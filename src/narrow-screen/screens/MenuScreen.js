@@ -171,15 +171,11 @@ const NotificationBanner = styled.div`
 `;
 
 const RestaurantLogo = styled.a`
-  position: absolute;
+  position: relative;
   top: 0;
   left: 50%;
   transform: translate(-50%, 0);
   line-height: 60px;
-  & img {
-    height: 35px;
-    width: 100px;
-  }
 
   & img[alt] {
     max-height: 35px;
