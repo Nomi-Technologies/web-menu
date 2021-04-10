@@ -1111,17 +1111,12 @@
     "resolve-global" "1.0.0"
     "yargs" "^16.2.0"
 
-"@commitlint/config-angular-type-enum@^12.0.1":
-  "integrity" "sha512-0qETLi7f7BineQruIBjyzHFfvDfh9FTEbMs+oTAfl+cDKTLJYI5W6eKGjI3MPg5+8sxUtzh6pJ+Dp3LFOpawTQ=="
-  "resolved" "https://registry.npmjs.org/@commitlint/config-angular-type-enum/-/config-angular-type-enum-12.0.1.tgz"
-  "version" "12.0.1"
-
-"@commitlint/config-angular@^12.0.1":
-  "integrity" "sha512-LuhglC8lh+5zdl+hjNunhH1b4Uj70w/TbdWna6CTvpuR59WSZSFZhIxutN2Fjuf1jlHGkx2bC9ZiOQW01YQNTA=="
-  "resolved" "https://registry.npmjs.org/@commitlint/config-angular/-/config-angular-12.0.1.tgz"
-  "version" "12.0.1"
+"@commitlint/config-conventional@^12.0.1":
+  "integrity" "sha512-15CqbXMsQiEb0qbzjEHe2OkzaXPYSp7RxaS6KoSVk/4W0QiigquavQ+M0huBZze92h0lMS6Pxoq4AJ5CQ3D+iQ=="
+  "resolved" "https://registry.npmjs.org/@commitlint/config-conventional/-/config-conventional-12.1.1.tgz"
+  "version" "12.1.1"
   dependencies:
-    "@commitlint/config-angular-type-enum" "^12.0.1"
+    "conventional-changelog-conventionalcommits" "^4.3.1"
 
 "@commitlint/ensure@^12.0.1":
   "integrity" "sha512-XdBq+q1YBBDxWIAEjE3Y1YMbzhUnUuSLAEWD8SU1xsvEpQXWRYwDlMBRkjO7funNWTdL0ZQSkZDzme70imYjbw=="
@@ -3961,6 +3956,15 @@
   "version" "5.0.12"
   dependencies:
     "compare-func" "^2.0.0"
+    "q" "^1.5.1"
+
+"conventional-changelog-conventionalcommits@^4.3.1":
+  "integrity" "sha512-buge9xDvjjOxJlyxUnar/+6i/aVEVGA7EEh4OafBCXPlLUQPGbRUBhBUveWRxzvR8TEjhKEP4BdepnpG2FSZXw=="
+  "resolved" "https://registry.npmjs.org/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-4.5.0.tgz"
+  "version" "4.5.0"
+  dependencies:
+    "compare-func" "^2.0.0"
+    "lodash" "^4.17.15"
     "q" "^1.5.1"
 
 "conventional-changelog-writer@^4.0.0":
