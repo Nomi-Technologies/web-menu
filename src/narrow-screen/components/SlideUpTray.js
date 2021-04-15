@@ -157,9 +157,7 @@ function SlideUpPanelBody({ dishes, onClose }) {
     const savedDishes = [...dishes];
     savedDishes.splice(index, 1);
     setSavedDishes(savedDishes);
-    if (savedDishes.length === 0) {
-      setIndex();
-    }
+    setIndex();
   };
 
   const onClearTray = () => {
@@ -186,6 +184,7 @@ function SlideUpPanelBody({ dishes, onClose }) {
                       style: { backgroundColor: "red", width: "60px" },
                     },
                   ]}
+                  autoClose={() => true}
                 >
                   <DishEntry>
                     <ItemCount>
