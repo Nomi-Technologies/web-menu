@@ -18,7 +18,7 @@ const OrangeDot = styled.div`
   height: 8px;
   width: 8px;
   border-radius: 4px;
-  background-color: #f3a35c;
+  background-color: #F06441;
   position: absolute;
   left: 20px;
   top: 50%;

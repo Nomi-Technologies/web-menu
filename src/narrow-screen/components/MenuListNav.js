@@ -35,7 +35,7 @@ const MenuTile = styled(Tile)`
     active
       ? `
     color: white;
-    background-color: #628DEB;
+    background-color: #00807F;
     `
       : `
     color: #8A9DB7;
@@ -47,7 +47,7 @@ const CloseButton = styled(Tile)`
   margin: 12px 0 48px 0;
   height: 30px;
   line-height: 30px;
-  color: #628deb;
+  color: #00807F;
 `;
 
 const MenuListNav = (props) => {
