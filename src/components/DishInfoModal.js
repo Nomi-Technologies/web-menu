@@ -167,9 +167,8 @@ const AddOn = styled.div`
   }
 
   .container input:checked ~ .checkmark {
-    background-color: #00807F;
+    background-color: #00807f;
     border: none;
-
   }
 
   .checkmark:after {
@@ -291,33 +290,28 @@ const StyledBanner = styled(Banner)`
   }
 `;
 
-const OptionCheckbox = styled.span`
-
-`;
+const OptionCheckbox = styled.span``;
 
 const RemoveDish = styled.p`
   padding-top: 16px;
   font-size: 14px;
   text-align: center;
-  color: #00807F;
+  color: #00807f;
   font-weight: bold;
-`
+`;
 
 export default function (props) {
   const context = useContext(RestaurantContext);
 
-  const editMode = typeof props.index !== "undefined";
-  const savedDish = editMode ? context.savedDishes[props.index] : undefined;
+  const savedDish = context.savedDishes[props.index];
   const dishData = savedDish ? context.dishesById[savedDish.id] : props.dish;
-
-  const { dishesById, setSavedDishes } = useContext(RestaurantContext);
 
   // set activeModifications to saved data (extracting from dishData with modIds)
   const [activeModifications, setActiveModifications] = React.useState(
     savedDish
       ? savedDish.modIds.map((id) =>
-        dishData.Modifications.find((mod) => mod.id === id)
-      )
+          dishData.Modifications.find((mod) => mod.id === id)
+        )
       : []
   );
 
@@ -327,7 +321,7 @@ export default function (props) {
 
   // price of one dish, including mods
   const [unitDishPrice, setUnitDishPrice] = React.useState(
-    dishData ? parseInt(dishData.price) : ''
+    dishData ? parseInt(dishData.price) : ""
   );
 
   const [dishImage, setDishImage] = useState();
@@ -353,13 +347,14 @@ export default function (props) {
   }, [context.restaurant, props.show]);
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
-  let showRemovableNotice = dishData ?
-    dishData.Tags.some(
-      (tag) =>
-        tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id)
-    ) ||
-    (dishData.gfp &&
-      context.activeFilters?.allergens.has(context.allergens["Gluten"])) : '';
+  let showRemovableNotice = dishData
+    ? dishData.Tags.some(
+        (tag) =>
+          tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id)
+      ) ||
+      (dishData.gfp &&
+        context.activeFilters?.allergens.has(context.allergens["Gluten"]))
+    : "";
 
   function toggleModification(modification) {
     var arr;
@@ -390,7 +385,7 @@ export default function (props) {
       modIds: activeModifications.map((mod) => mod.id) ?? [],
     };
 
-    if (editMode) {
+    if (savedDish) {
       savedDishes[props.index] = updatedEntry;
     } else {
       savedDishes.push(updatedEntry);
@@ -401,14 +396,11 @@ export default function (props) {
   }
 
   function onDelete() {
-    const savedDishes = [...props.dishes];
+    const savedDishes = [...context.savedDishes];
     savedDishes.splice(props.index, 1);
-    setSavedDishes(savedDishes);
-    if (savedDishes.length === 0) {
-      setSavedDishes([]);
-    }
-    props.onHide()
-  };
+    context.setSavedDishes(savedDishes);
+    props.onHide();
+  }
 
   return (
     <Modal
@@ -419,7 +411,7 @@ export default function (props) {
       centered
     >
       {dishImage ? <StyledBanner src={dishImage} removeOverlay /> : ""}
-      {dishData ?
+      {dishData ? (
         <ModalContainer style={modalStyle}>
           <ExitButtonWrapper onClick={props.onHide}>
             <ExitButton />
@@ -449,7 +441,7 @@ export default function (props) {
                   {dishData.Tags.length > 0 ? (
                     <TagsWrapper>
                       <img src={InfoIcon} />
-                    Contains{" "}
+                      Contains{" "}
                       {dishData.Tags.map((allergen) => (
                         <TagName
                           highlight={
@@ -470,7 +462,7 @@ export default function (props) {
                       {dishData.Diets.map((diets) => (
                         <TagName>{diets.name}</TagName>
                       ))}{" "}
-                    friendly
+                      friendly
                     </TagsWrapper>
                   ) : null}
                 </SectionBody>
@@ -485,33 +477,31 @@ export default function (props) {
                 <SectionBody
                   style={{ flexDirection: "column", alignItems: "flex-start" }}
                 >
-                  {
-                    dishData.Modifications.map((t) => (
-                      <AddOn key={t.id}>
-                        <label className="container">
-                          <AddOnName>{t.name} </AddOnName>
-                          {t.description ? (
-                            <AddOnNotes> ({t.description})</AddOnNotes>
-                          ) : (
-                            <></>
+                  {dishData.Modifications.map((t) => (
+                    <AddOn key={t.id}>
+                      <label className="container">
+                        <AddOnName>{t.name} </AddOnName>
+                        {t.description ? (
+                          <AddOnNotes> ({t.description})</AddOnNotes>
+                        ) : (
+                          <></>
+                        )}
+                        {t.price !== "0" ? (
+                          <AddOnPrice> (+${t.price})</AddOnPrice>
+                        ) : (
+                          <></>
+                        )}
+                        <input
+                          checked={activeModifications.some(
+                            (mod) => mod.id === t.id
                           )}
-                          {t.price !== "0" ? (
-                            <AddOnPrice> (+${t.price})</AddOnPrice>
-                          ) : (
-                            <></>
-                          )}
-                          <input
-                            checked={activeModifications.some(
-                              (mod) => mod.id === t.id
-                            )}
-                            type="checkbox"
-                            onClick={() => toggleModification(t)}
-                          />
-                          <OptionCheckbox className="checkmark"></OptionCheckbox>
-                        </label>
-                      </AddOn>
-                    ))
-                  }
+                          type="checkbox"
+                          onClick={() => toggleModification(t)}
+                        />
+                        <OptionCheckbox className="checkmark"></OptionCheckbox>
+                      </label>
+                    </AddOn>
+                  ))}
                 </SectionBody>
               </>
             ) : (
@@ -522,7 +512,7 @@ export default function (props) {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
-                marginTop: "20px"
+                marginTop: "20px",
               }}
             >
               <QuantitySelector>
@@ -534,12 +524,12 @@ export default function (props) {
                   }}
                 >
                   {" "}
-                -{" "}
+                  -{" "}
                 </ChangeQuantity>
                 <Quantity> {quantity} </Quantity>
                 <ChangeQuantity onClick={() => setQuantity(quantity + 1)}>
                   {" "}
-                +{" "}
+                  +{" "}
                 </ChangeQuantity>
               </QuantitySelector>
               <SaveDishButton onClick={saveDish}>
@@ -549,9 +539,22 @@ export default function (props) {
                 </span>
               </SaveDishButton>
             </SectionBody>
-            {editMode ? <RemoveDish onClick={() => { onDelete() }}>Remove dish</RemoveDish> : ''}
+            {savedDish ? (
+              <RemoveDish
+                onClick={() => {
+                  onDelete();
+                }}
+              >
+                Remove dish
+              </RemoveDish>
+            ) : (
+              ""
+            )}
           </ModalBody>
-        </ModalContainer> : ''}
+        </ModalContainer>
+      ) : (
+        ""
+      )}
     </Modal>
   );
 }
