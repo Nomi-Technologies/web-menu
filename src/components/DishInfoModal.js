@@ -321,7 +321,10 @@ export default function (props) {
 
   // price of one dish, including mods
   const [unitDishPrice, setUnitDishPrice] = React.useState(
-    dishData ? parseInt(dishData.price) : ""
+    activeModifications.reduce(
+      (total, currentMod) => total + parseInt(currentMod.price),
+      parseInt(dishData.price)
+    )
   );
 
   const [dishImage, setDishImage] = useState();
@@ -370,7 +373,7 @@ export default function (props) {
       arr.splice(index, 1);
     }
     setActiveModifications(arr);
-    const newPrice = activeModifications.reduce(
+    const newPrice = arr.reduce(
       (total, currentMod) => total + parseInt(currentMod.price),
       parseInt(dishData.price)
     );
