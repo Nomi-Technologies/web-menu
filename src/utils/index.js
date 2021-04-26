@@ -101,24 +101,16 @@ export const getDishesOfMenu = async (restaurantId, menuName) => {
   return res.json();
 };
 
+export const getDishImage = async (dishId) => {
+  return `https://${process.env.AWS_S3_ENV_BUCKET_NAME}.s3-${process.env.AWS_CLOUD_REGION}.amazonaws.com/dishes/${dishId}`;
+};
+
 export const getRestaurantLogo = async (restaurantId) => {
-  const res = await fetch(
-    `${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${restaurantId}`
-  );
-  let blob = await res.blob();
-  return URL.createObjectURL(blob);
+  return `https://${process.env.AWS_S3_ENV_BUCKET_NAME}.s3-${process.env.AWS_CLOUD_REGION}.amazonaws.com/restaurants/${restaurantId}`;
 };
 
 export const getMenuBannerImage = async (menuId) => {
-  const res = await fetch(
-    `${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${menuId}`
-  );
-  if (res.ok) {
-    let blob = await res.blob();
-    return URL.createObjectURL(blob);
-  } else {
-    return null;
-  }
+  return `https://${process.env.AWS_S3_ENV_BUCKET_NAME}.s3-${process.env.AWS_CLOUD_REGION}.amazonaws.com/menus/${menuId}`;
 };
 
 export const googleAnalyticsPageView = (restaurant) => {
@@ -137,18 +129,6 @@ export const googleAnalyticsPageView = (restaurant) => {
         });
       }
     }
-  }
-};
-
-export const getDishImage = async (dishId) => {
-  const res = await fetch(
-    `${process.env.REACT_APP_API_BASE_URL}/api/images/dishes/${dishId}`
-  );
-  if (res.ok) {
-    let blob = await res.blob();
-    return URL.createObjectURL(blob);
-  } else {
-    return null;
   }
 };
 
