@@ -24,7 +24,7 @@
     "websocket-extensions": "^0.1.4"
   },
   "scripts": {
-    "start": "AWS_CLOUD_REGION=us-west-1 PORT=8001 react-scripts start",
+    "start": "PORT=8001 react-scripts start",
     "build": "CI=false react-scripts build",
     "prepare": "husky install",
     "semantic-release": "semantic-release"

@@ -102,15 +102,15 @@ export const getDishesOfMenu = async (restaurantId, menuName) => {
 };
 
 export const getDishImage = async (dishId) => {
-  return `https://${process.env.AWS_S3_ENV_BUCKET_NAME}.s3-${process.env.AWS_CLOUD_REGION}.amazonaws.com/dishes/${dishId}`;
+  return `${process.env.AWS_S3_BASE_URL}/dishes/${dishId}`;
 };
 
 export const getRestaurantLogo = async (restaurantId) => {
-  return `https://${process.env.AWS_S3_ENV_BUCKET_NAME}.s3-${process.env.AWS_CLOUD_REGION}.amazonaws.com/restaurants/${restaurantId}`;
+  return `${process.env.AWS_S3_BASE_URL}/restaurants/${restaurantId}`;
 };
 
 export const getMenuBannerImage = async (menuId) => {
-  return `https://${process.env.AWS_S3_ENV_BUCKET_NAME}.s3-${process.env.AWS_CLOUD_REGION}.amazonaws.com/menus/${menuId}`;
+  return `${process.env.AWS_S3_BASE_URL}/menus/${menuId}`;
 };
 
 export const googleAnalyticsPageView = (restaurant) => {
