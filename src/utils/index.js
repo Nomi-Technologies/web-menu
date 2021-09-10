@@ -102,15 +102,36 @@ export const getDishesOfMenu = async (restaurantId, menuName) => {
 };
 
 export const getDishImage = async (dishId) => {
-  return `${process.env.REACT_APP_AWS_S3_BASE_URL}/dishes/${dishId}`;
+  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/dishes/${dishId}`
+  const img = await fetch(url)
+
+  if (img.status === 200) {
+    return url;
+  } else {
+    return null;
+  }
 };
 
 export const getRestaurantLogo = async (restaurantId) => {
-  return `${process.env.REACT_APP_AWS_S3_BASE_URL}/restaurants/${restaurantId}`;
+  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/restaurants/${restaurantId}`;
+  const img = await fetch(url)
+
+  if (img.status === 200) {
+    return url;
+  } else {
+    return null;
+  }
 };
 
 export const getMenuBannerImage = async (menuId) => {
-  return `${process.env.REACT_APP_AWS_S3_BASE_URL}/menus/${menuId}`;
+  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/menus/${menuId}`;
+  const img = await fetch(url)
+
+  if (img.status === 200) {
+    return url;
+  } else {
+    return null;
+  }
 };
 
 export const googleAnalyticsPageView = (restaurant) => {

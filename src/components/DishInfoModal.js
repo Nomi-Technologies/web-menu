@@ -310,8 +310,8 @@ export default function (props) {
   const [activeModifications, setActiveModifications] = React.useState(
     savedDish
       ? savedDish.modIds.map((id) =>
-          dishData.Modifications.find((mod) => mod.id === id)
-        )
+        dishData.Modifications.find((mod) => mod.id === id)
+      )
       : []
   );
 
@@ -337,9 +337,10 @@ export default function (props) {
       context.selectedMenuIndex !== null &&
       typeof dishData !== "undefined"
     ) {
-      getDishImage(dishData.id).then((banner) => {
-        setDishImage(banner);
-        if (banner) {
+      getDishImage(dishData.id).then((dishImage) => {
+
+        if (dishImage !== null) {
+          setDishImage(dishImage);
           setModalStyle({
             borderTopRightRadius: "0",
             borderTopLeftRadius: "0",
@@ -352,11 +353,11 @@ export default function (props) {
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
   let showRemovableNotice = dishData
     ? dishData.Tags.some(
-        (tag) =>
-          tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id)
-      ) ||
-      (dishData.gfp &&
-        context.activeFilters?.allergens.has(context.allergens["Gluten"]))
+      (tag) =>
+        tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id)
+    ) ||
+    (dishData.gfp &&
+      context.activeFilters?.allergens.has(context.allergens["Gluten"]))
     : "";
 
   function toggleModification(modification) {
