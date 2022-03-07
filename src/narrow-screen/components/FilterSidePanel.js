@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import RestaurantContext from "../../RestaurantContext";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, InputGroup, Form } from "react-bootstrap";
 import TagButton from "components/TagButton";
 import Counter from "components/Counter";
 import styled from "styled-components";
@@ -180,6 +180,11 @@ export default ({ filterOpen, setFilterOpen }) => {
     }
   };
 
+  const handleChangeSearchValue = (e) => {
+    context.setFilters({ searchDishes: e.target.value });
+    context.menu.dishesByFilters.bySearchValue = e.target.value;
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -191,14 +196,21 @@ export default ({ filterOpen, setFilterOpen }) => {
         <PanelHeader>
           <ResetButton
             style={{
-              color: context.activeFilters.size === 0 ? "#8A9DB7" : "#EF5454",
+              color:
+                context.activeFilters.size +
+                  context.menu.dishesByFilters.bySearchValue.length ===
+                0
+                  ? "#8A9DB7"
+                  : "#EF5454",
             }}
-            onClick={() =>
+            onClick={() => {
               context.setFilters({
                 allergens: new Set(),
                 diets: new Set(),
-              })
-            }
+              });
+              context.setFilters({ searchDishes: "" });
+              context.menu.dishesByFilters.bySearchValue = "";
+            }}
           >
             Reset
           </ResetButton>
@@ -212,18 +224,52 @@ export default ({ filterOpen, setFilterOpen }) => {
                 fontSize: "14px",
               }}
               radius={"20px"}
-              active={context.activeFilters.size > 0}
+              active={
+                context.menu.dishesByFilters.bySearchValue.length +
+                  context.activeFilters.size >
+                0
+              }
               activeColor={"#00807F"}
             >
-              {context.activeFilters.size}
+              {context.menu.dishesByFilters.bySearchValue.length > 0
+                ? context.activeFilters.size + 1
+                : context.activeFilters.size}
             </Counter>
           </FilterHeading>
-          <ApplyButton onClick={() => setFilterOpen(false)}>Apply</ApplyButton>
+          <ApplyButton
+            onClick={() => {
+              setFilterOpen(false);
+            }}
+          >
+            Apply
+          </ApplyButton>
         </PanelHeader>
       </Padded>
       <Divider />
       <Padded>
-        { context.menu?.hasDiets && 
+        {context.menu?.hasDiets && (
+          <>
+            <Title style={{ marginTop: "24px" }}>Search</Title>
+            <InputGroup>
+              <Form.Control
+                style={{
+                  marginTop: "12px",
+                  borderRadius: "50px",
+                  backgroundColor: "#ebeef5",
+                  color: "#000000",
+                  fontWeight: "bold",
+                }}
+                name="searchValue"
+                type="text"
+                placeholder="Search for dishes..."
+                value={context.setFilters.searchDishes}
+                onChange={handleChangeSearchValue}
+              />
+              <i class="fas fa-search" />
+            </InputGroup>
+          </>
+        )}
+        {context.menu?.hasDiets && (
           <>
             <Title style={{ marginTop: "24px" }}>Diets</Title>
             <TagGrid
@@ -233,9 +279,8 @@ export default ({ filterOpen, setFilterOpen }) => {
               setFilters={(diets) => context.setFilters({ diets })}
             />
           </>
-        }
-        {
-          context.menu?.hasAllergens && 
+        )}
+        {context.menu?.hasAllergens && (
           <>
             <Title style={{ marginTop: "32px" }}>Allergens</Title>
             <Subtitle>Exclude dishes that contain:</Subtitle>
@@ -246,7 +291,7 @@ export default ({ filterOpen, setFilterOpen }) => {
               setFilters={(allergens) => context.setFilters({ allergens })}
             />
           </>
-        }
+        )}
       </Padded>
     </RightSidePanel>
   );

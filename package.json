@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/react-fontawesome": "^0.1.17",
     "@gem-mine/rc-swipeout": "^1.0.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
@@ -24,7 +25,7 @@
     "websocket-extensions": "^0.1.4"
   },
   "scripts": {
-    "start": "PORT=8001 react-scripts start",
+    "start": "set PORT=8001&& react-scripts start",
     "build": "CI=false react-scripts build",
     "prepare": "husky install",
     "semantic-release": "semantic-release"
