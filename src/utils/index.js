@@ -3,8 +3,8 @@ export const parseMenu = (data, enableFiltering) => {
     categories: [],
     dishes: [],
     dishesByCategory: {},
-    dishesByFilters: { byAllergens: {}, byDiets: {}, bySearchValue: "" },
-    filters: { allergens: {}, diets: {}, searchValue: "" },
+    dishesByFilters: { byAllergens: {}, byDiets: {}, bySearchValue: '' },
+    filters: { allergens: {}, diets: {}, searchValue: '' },
     hasAllergens: false,
     hasDiets: false,
     hasRemovables: false,
@@ -54,7 +54,7 @@ export const parseMenu = (data, enableFiltering) => {
 export const filterMenu = (
   { byAllergens, byDiets },
   bySearchValue,
-  { allergens, diets, dishes }
+  { allergens, diets, dishes },
 ) => {
   let intersection;
   let excluded = new Set();
@@ -74,7 +74,7 @@ export const filterMenu = (
         excluded.add(dish.id);
         onlyHasRemovables.delete(dish.id);
       }
-    })
+    }),
   );
 
   diets.forEach((dietId) => {
@@ -93,7 +93,8 @@ export const filterMenu = (
     dishes.forEach((dish) => {
       if (
         dish.name.substring(0, bySearchValue.length).toLowerCase() ===
-        bySearchValue.toLowerCase()
+          bySearchValue.toLowerCase() ||
+        dish.description.toLowerCase().includes(bySearchValue.toLowerCase())
       ) {
         if (diets.size > 0) {
           if (intersection.has(dish.id)) {
@@ -119,15 +120,13 @@ export const filterMenu = (
 };
 
 export const getRestaurant = async (restaurantId) => {
-  const res = await fetch(
-    `${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}`
-  );
+  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}`);
   return res.json();
 };
 
 export const getDishesOfMenu = async (restaurantId, menuName) => {
   const res = await fetch(
-    `${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}/${menuName}`
+    `${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}/${menuName}`,
   );
   return res.json();
 };
@@ -166,17 +165,14 @@ export const getMenuBannerImage = async (menuId) => {
 };
 
 export const googleAnalyticsPageView = (restaurant) => {
-  if (
-    process.env.NODE_ENV === "production" &&
-    process.env.REACT_APP_GOOGLE_ANALYTICS_ID
-  ) {
+  if (process.env.NODE_ENV === 'production' && process.env.REACT_APP_GOOGLE_ANALYTICS_ID) {
     if (window && typeof window !== undefined && window.gtag) {
-      window.gtag("config", process.env.REACT_APP_GOOGLE_ANALYTICS_ID, {
+      window.gtag('config', process.env.REACT_APP_GOOGLE_ANALYTICS_ID, {
         page_title: document.title,
         page_path: window.location.pathname,
       });
       if (restaurant) {
-        window.gtag("event", "load_restaurant", {
+        window.gtag('event', 'load_restaurant', {
           restaurant_name: restaurant,
         });
       }
@@ -184,4 +180,4 @@ export const googleAnalyticsPageView = (restaurant) => {
   }
 };
 
-export * from "./filter-set";
+export * from './filter-set';
