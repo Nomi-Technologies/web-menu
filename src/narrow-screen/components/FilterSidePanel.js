@@ -7,17 +7,16 @@ import styled from 'styled-components';
 
 const RightSidePanel = styled.div`
   transform: ${(props) => (props.open ? 'translateX(0)' : 'translateX(100%)')};
+  top: 0;
+  bottom: 0;
   position: fixed;
   z-index: 150;
-  top: 0;
   right: 0;
-  height: 100%;
+  max-height: 100vh;
   transition: transform 0.3s ease-in-out;
-  min-width: 320px;
-  @media (max-width: 320px) {
-    width: 100%;
-  }
+  width: 100%;
   background: #ffffff;
+  overflow-y: auto;
 `;
 
 const StyledGridTagButton = styled(TagButton)`
@@ -181,7 +180,6 @@ export default ({ filterOpen, setFilterOpen }) => {
   };
 
   const handleChangeSearchValue = (e) => {
-    console.log(e);
     context.setFilters({ searchDishes: e.target.value });
     context.menu.dishesByFilters.bySearchValue = e.target.value;
   };
@@ -238,12 +236,15 @@ export default ({ filterOpen, setFilterOpen }) => {
               setFilterOpen(false);
             }}
           >
-            Apply
+            Done
           </ApplyButton>
         </PanelHeader>
       </Padded>
       <Divider />
       <Padded>
+        <Subtitle style={{ textAlign: 'center' }}>
+          Customize and filter your menu to help you find the best dish for you.
+        </Subtitle>
         {context.menu?.hasDiets && (
           <>
             <Title style={{ marginTop: '24px' }}>Search</Title>
@@ -269,8 +270,9 @@ export default ({ filterOpen, setFilterOpen }) => {
         {context.menu?.hasDiets && (
           <>
             <Title style={{ marginTop: '24px' }}>Diets</Title>
+            <Subtitle>Include only dishes that can be:</Subtitle>
             <TagGrid
-              crossCount={1}
+              crossCount={2}
               filters={context.menu.filters.diets}
               activeFilters={context.activeFilters.diets}
               setFilters={(diets) => context.setFilters({ diets })}

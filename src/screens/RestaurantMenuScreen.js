@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import MobileRestaurantScreen from "narrow-screen/screens/RestaurantScreen";
-import WebRestuarantScreen from "wide-screen/screens/RestaurantScreen";
-import { useParams } from "react-router-dom";
-import { getRestaurant, getDishesOfMenu, parseMenu } from "utils";
-import { filterMenu, googleAnalyticsPageView, FilterSet } from "../utils";
-import RestaurantContext from "../RestaurantContext";
+import React, { useState, useEffect, useLayoutEffect } from 'react';
+import MobileRestaurantScreen from 'narrow-screen/screens/RestaurantScreen';
+import WebRestuarantScreen from 'wide-screen/screens/RestaurantScreen';
+import { useParams } from 'react-router-dom';
+import { getRestaurant, getDishesOfMenu, parseMenu } from 'utils';
+import { filterMenu, googleAnalyticsPageView, FilterSet } from '../utils';
+import RestaurantContext from '../RestaurantContext';
 
 export default () => {
   const { restaurant_identifier } = useParams();
@@ -30,7 +30,7 @@ export default () => {
           restaurant.Menus.map(async (menu) => {
             let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
             return parseMenu(rawMenu, menu.enableFiltering);
-          })
+          }),
         ).then((parsedMenus) => {
           setActiveFiltersByMenu(parsedMenus.map(() => new FilterSet()));
           setExcludedDishesByMenu(parsedMenus.map(() => new Set()));
@@ -42,9 +42,7 @@ export default () => {
             return accumulator;
           }, {});
           setDishesById(dishesLUT);
-          const allSavedDishes = JSON.parse(
-            localStorage.getItem("savedDishes") ?? "{}"
-          );
+          const allSavedDishes = JSON.parse(localStorage.getItem('savedDishes') ?? '{}');
           let savedDishes = allSavedDishes[restaurant.id] ?? [];
 
           // purge localStorage
@@ -56,21 +54,15 @@ export default () => {
             }
             let removedMods = [];
             modIds.forEach((modId) => {
-              if (
-                !dishesLUT[id].Modifications.some((mod) => mod.id === modId)
-              ) {
+              if (!dishesLUT[id].Modifications.some((mod) => mod.id === modId)) {
                 removedMods.push(modId);
               }
             });
-            savedDishes[index].modIds = modIds.filter(
-              (modId) => removedMods.indexOf(modId) < 0
-            );
+            savedDishes[index].modIds = modIds.filter((modId) => removedMods.indexOf(modId) < 0);
           });
-          savedDishes = savedDishes.filter(
-            ({ id }) => removedDishes.indexOf(id) < 0
-          );
+          savedDishes = savedDishes.filter(({ id }) => removedDishes.indexOf(id) < 0);
           allSavedDishes[restaurant.id] = savedDishes;
-          localStorage.setItem("savedDishes", JSON.stringify(allSavedDishes));
+          localStorage.setItem('savedDishes', JSON.stringify(allSavedDishes));
           setSavedDishes(savedDishes);
         });
       })
@@ -120,7 +112,7 @@ export default () => {
               allergens,
               diets,
               dishes,
-            }
+            },
           );
           menu.hasRemovables = hasRemovables;
           setMenus(menusCopy);
@@ -135,17 +127,13 @@ export default () => {
         setSelectedMenu: setSelectedMenuIndex,
         setSavedDishes: (dishes) => {
           setSavedDishes(dishes);
-          const saved = JSON.parse(localStorage.getItem("savedDishes") ?? "{}");
+          const saved = JSON.parse(localStorage.getItem('savedDishes') ?? '{}');
           saved[restaurant.id] = dishes;
-          localStorage.setItem("savedDishes", JSON.stringify(saved));
+          localStorage.setItem('savedDishes', JSON.stringify(saved));
         },
       }}
     >
-      {window.innerWidth < 1000 ? (
-        <MobileRestaurantScreen />
-      ) : (
-        <WebRestuarantScreen />
-      )}
+      {window.innerWidth < 1000 ? <MobileRestaurantScreen /> : <WebRestuarantScreen />}
     </RestaurantContext.Provider>
   );
 };

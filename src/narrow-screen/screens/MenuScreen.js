@@ -1,27 +1,21 @@
-import React, {
-  useState,
-  useLayoutEffect,
-  useContext,
-  useEffect,
-  useRef,
-} from "react";
-import MenuCategoryPanel from "../components/MenuCategoryPanel";
-import FilterSidePanel from "../components/FilterSidePanel";
-import Banner from "components/Banner";
-import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
-import styled from "styled-components";
-import MenuListNav from "../components/MenuListNav";
-import { getRestaurantLogo } from "utils";
-import RestaurantContext from "RestaurantContext";
-import { getMenuBannerImage } from "utils";
-import RemovableNotice from "components/RemovableNotice";
-import Counter from "../../components/Counter";
-import SlideUpTray from "../components/SlideUpTray";
+import React, { useState, useLayoutEffect, useContext, useEffect, useRef } from 'react';
+import MenuCategoryPanel from '../components/MenuCategoryPanel';
+import FilterSidePanel from '../components/FilterSidePanel';
+import Banner from 'components/Banner';
+import { ReactComponent as NomiLogo } from 'components/nomi-withword.svg';
+import styled from 'styled-components';
+import MenuListNav from '../components/MenuListNav';
+import { getRestaurantLogo } from 'utils';
+import RestaurantContext from 'RestaurantContext';
+import { getMenuBannerImage } from 'utils';
+import RemovableNotice from 'components/RemovableNotice';
+import Counter from '../../components/Counter';
+import SlideUpTray from '../components/SlideUpTray';
 
 const CategoryTab = styled.div`
   display: inline-block;
   margin: 0 15px;
-  color: ${({ active }) => (active ? "black" : "#B9B9B9")};
+  color: ${({ active }) => (active ? 'black' : '#B9B9B9')};
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: bold;
@@ -114,8 +108,7 @@ const NomiLogoSVG = styled(NomiLogo)`
   position: relative;
   bottom: 4px;
   display: inline-block;
-  filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg)
-    brightness(78%) contrast(78%);
+  filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg) brightness(78%) contrast(78%);
 `;
 
 const Header = styled.div`
@@ -238,9 +231,7 @@ export default () => {
 
   useEffect(() => {
     if (context.restaurant && context.selectedMenuIndex !== null) {
-      getMenuBannerImage(
-        context.restaurant.Menus[context.selectedMenuIndex].id
-      ).then((banner) => {
+      getMenuBannerImage(context.restaurant.Menus[context.selectedMenuIndex].id).then((banner) => {
         setMenuBanner(banner);
       });
     }
@@ -284,9 +275,7 @@ export default () => {
     let runningMax = Number.MIN_SAFE_INTEGER;
     let activeId = stateRef.current.activeCategoryId;
     for (const id in stateRef.current.categoryToRef) {
-      const offset =
-        stateRef.current.categoryToRef[id].current.getBoundingClientRect().top -
-        118;
+      const offset = stateRef.current.categoryToRef[id].current.getBoundingClientRect().top - 118;
       if (offset > 0) {
         continue;
       }
@@ -304,21 +293,21 @@ export default () => {
       const rect = tabRef.current.getBoundingClientRect();
       const left = rect.left - window.innerWidth / 2 + rect.width / 2;
       tabBarRef.current.scrollBy({
-        behavior: "smooth",
+        behavior: 'smooth',
         left: left,
       });
     }
   }, [activeCategoryId]);
 
   useLayoutEffect(() => {
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   function onSelectTab(id) {
     const category = categoryToRef[id].current;
     const scrollAmount = category.getBoundingClientRect().top - 118;
-    window.scrollBy({ top: scrollAmount, behavior: "smooth" });
+    window.scrollBy({ top: scrollAmount, behavior: 'smooth' });
   }
 
   useEffect(() => {
@@ -339,81 +328,76 @@ export default () => {
 
   return (
     <MenuScreen>
+      <FilterSidePanel filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
       <MenuListNav
         onClose={() => {
           setHamburgerOpen(false);
         }}
         open={hamburgerOpen}
       />
-      <FilterSidePanel filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
       <Header>
         <NotificationBanner
           style={
-            context.activeFilters.size +
-              context.menu.dishesByFilters.bySearchValue.length >
-              0 && !filterOpen
+            context.activeFilters.size + context.menu.dishesByFilters.bySearchValue.length > 0 &&
+            !filterOpen
               ? null
-              : { display: "none" }
+              : { display: 'none' }
           }
         >
           <div
             style={{
-              position: "relative",
-              display: "inline-block",
-              paddingLeft: "30px",
+              position: 'relative',
+              display: 'inline-block',
+              paddingLeft: '30px',
             }}
           >
             <Counter
               active={
-                context.activeFilters.size +
-                  context.menu.dishesByFilters.bySearchValue.length >
-                0
+                context.activeFilters.size + context.menu.dishesByFilters.bySearchValue.length > 0
               }
               style={{
-                backgroundColor: "white",
-                color: "#00807F",
-                position: "absolute",
-                top: "50%",
+                backgroundColor: 'white',
+                color: '#00807F',
+                position: 'absolute',
+                top: '50%',
                 left: 0,
-                transform: "translate(0, -50%)",
+                transform: 'translate(0, -50%)',
               }}
             >
               {context.menu.dishesByFilters.bySearchValue.length > 0
                 ? context.activeFilters.size + 1
                 : context.activeFilters.size}
             </Counter>
-            FILTER{context.activeFilters.size > 1 ? "S" : null} APPLIED
+            FILTER{context.activeFilters.size > 1 ? 'S' : null} APPLIED
           </div>
         </NotificationBanner>
 
-        <AllMenusButton variant="link" onClick={onClickHambergerMenu}>
+        <AllMenusButton variant='link' onClick={onClickHambergerMenu}>
           SEE MENUS
         </AllMenusButton>
         <RestaurantLogo href={context.restaurant?.logo}>
           {restaurantLogo ? (
             <img alt={`${context.restaurant.name} logo`} src={restaurantLogo} />
           ) : (
-            "Loading..."
+            'Loading...'
           )}
         </RestaurantLogo>
         {context.menu.hasAllergens || context.menu.hasDiets ? (
-          <FilteringButton variant="link" onClick={onClickFilterButton}>
+          <FilteringButton variant='link' onClick={onClickFilterButton}>
             FILTERS
             <Counter
               style={{
-                position: "absolute",
-                top: "50%",
-                right: "-30px",
-                fontSize: "14px",
-                transform: "translate(0, -50%)",
+                position: 'absolute',
+                top: '50%',
+                right: '-30px',
+                fontSize: '14px',
+                transform: 'translate(0, -50%)',
               }}
-              radius={"22px"}
+              radius={'22px'}
               active={
-                context.activeFilters.size +
-                  context.menu.dishesByFilters.bySearchValue.length >
-                0
+                context.activeFilters.size + context.menu.dishesByFilters.bySearchValue.length > 0
               }
-              activeColor={"#00807F"}
+              activeColor={'#00807F'}
             >
               {context.menu.dishesByFilters.bySearchValue.length > 0
                 ? context.activeFilters.size + 1
@@ -464,8 +448,8 @@ export default () => {
       </MenuBody>
       <NomiLogoBar>
         <NomiLogoText>Powered by</NomiLogoText>
-        <a href="https://www.dinewithnomi.com/">
-          <NomiLogoSVG width="70px" height="16px" fill="#8A9DB7" />
+        <a href='https://www.dinewithnomi.com/'>
+          <NomiLogoSVG width='70px' height='16px' fill='#8A9DB7' />
         </a>
       </NomiLogoBar>
       <SlideUpPanelWrapper>
