@@ -242,12 +242,11 @@ export default ({ filterOpen, setFilterOpen }) => {
       </Padded>
       <Divider />
       <Padded>
-        <Subtitle style={{ textAlign: 'center' }}>
+        <Subtitle style={{ textAlign: 'center', marginTop: '15px', marginBottom: '20px' }}>
           Customize and filter your menu to help you find the best dish for you.
         </Subtitle>
         {context.menu?.hasDiets && (
           <>
-            <Title style={{ marginTop: '24px' }}>Search</Title>
             <InputGroup>
               <Form.Control
                 style={{
