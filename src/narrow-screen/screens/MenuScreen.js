@@ -221,13 +221,17 @@ const FilteringButton = styled.div`
 export default () => {
   const context = useContext(RestaurantContext);
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
-  const [filterOpen, setFilterOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
   const [categoryToTabRef, setCategoryToTabRef] = useState({});
   const [tabBarRef, setTabBarRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [menuBanner, setMenuBanner] = useState();
+  const [filterOpen, setFilterOpenHook] = useState(false);
+  function setFilterOpen(open) {
+    setFilterOpenHook(open);
+    window.setPageScrollable(!open);
+  }
 
   // For window's event listener to get the states in this React component
   const stateRef = useRef();
