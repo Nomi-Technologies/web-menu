@@ -114,8 +114,7 @@ export default () => {
           const menu = menusCopy[selectedMenuIndex];
           const dishes = menu.dishes;
           let { included, excluded, hasRemovables } = filterMenu(
-            menu.dishesByFilters,
-            searchDishes,
+            { ...menu.dishesByFilters, bySearchValue: searchDishes },
             {
               allergens,
               diets,

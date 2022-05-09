@@ -21,6 +21,10 @@
     />
     <link
       rel='stylesheet'
+      href='%PUBLIC_URL%/css/common.css'
+    />
+    <link
+      rel='stylesheet'
       href='%PUBLIC_URL%/css/bootstrap-customization.css'
     />
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
@@ -57,11 +61,20 @@
   <script src='%PUBLIC_URL%/js/bootstrap-customization.js'></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1V27CCNXDJ"></script>
   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { 
-        dataLayer.push(arguments); 
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { 
+      dataLayer.push(arguments); 
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-1V27CCNXDJ');
+    function setPageScrollable(yes) {
+      if (yes) {
+        document.documentElement.classList.remove('noscroll');
+        document.body.classList.remove('noscroll');
+      } else {
+        document.documentElement.classList.add('noscroll');
+        document.body.classList.add('noscroll');
       }
-      gtag('js', new Date());
-      gtag('config', 'G-1V27CCNXDJ');
+    }
   </script>
 </html>

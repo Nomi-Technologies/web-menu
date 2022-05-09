@@ -1,23 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import RestaurantContext from '../../RestaurantContext';
-import { Container, Row, Col, InputGroup, Form } from 'react-bootstrap';
-import TagButton from 'components/TagButton';
-import Counter from 'components/Counter';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import RestaurantContext from "../../RestaurantContext";
+import { Container, Row, Col, InputGroup, Form } from "react-bootstrap";
+import TagButton from "components/TagButton";
+import Counter from "components/Counter";
+import styled from "styled-components";
 
 const RightSidePanel = styled.div`
-  transform: ${(props) => (props.open ? 'translateX(0)' : 'translateX(100%)')};
+  transform: ${(props) => (props.open ? "translateX(0)" : "translateX(100%)")};
+  top: 0;
+  bottom: 0;
   position: fixed;
   z-index: 150;
-  top: 0;
   right: 0;
-  height: 100%;
+  max-height: 100vh;
   transition: transform 0.3s ease-in-out;
-  min-width: 320px;
-  @media (max-width: 320px) {
-    width: 100%;
-  }
+  width: 100%;
   background: #ffffff;
+  overflow-y: auto;
 `;
 
 const StyledGridTagButton = styled(TagButton)`
@@ -30,13 +29,13 @@ const StyledGridTagButton = styled(TagButton)`
   ${({ selected }) =>
     selected
       ? {
-          color: '#0D5959',
-          fontWeight: 'bold',
-          border: '2px solid #0D5959',
+          color: "#0D5959",
+          fontWeight: "bold",
+          border: "2px solid #0D5959",
         }
       : {
-          color: '#000000',
-          fontWeight: '500',
+          color: "#000000",
+          fontWeight: "500",
         }}
 `;
 
@@ -95,13 +94,13 @@ function TagGrid({ crossCount, filters, activeFilters, setFilters }) {
               onSelect={setFilters}
               activeFilters={activeFilters}
             />
-          </StyledColumn>,
+          </StyledColumn>
         );
       }
       rows.push(
         <StyledRow noGutters={true} key={i}>
           {cols}
-        </StyledRow>,
+        </StyledRow>
       );
     }
     return rows;
@@ -180,15 +179,9 @@ export default ({ filterOpen, setFilterOpen }) => {
     }
   };
 
-  const handleChangeSearchValue = (e) => {
-    console.log(e);
-    context.setFilters({ searchDishes: e.target.value });
-    context.menu.dishesByFilters.bySearchValue = e.target.value;
-  };
-
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   });
 
   return (
@@ -198,37 +191,41 @@ export default ({ filterOpen, setFilterOpen }) => {
           <ResetButton
             style={{
               color:
-                context.activeFilters.size + context.menu.dishesByFilters.bySearchValue.length === 0
-                  ? '#8A9DB7'
-                  : '#EF5454',
+                context.activeFilters.size +
+                  context.activeFilters.searchDishes.length ===
+                0
+                  ? "#8A9DB7"
+                  : "#EF5454",
             }}
             onClick={() => {
               context.setFilters({
                 allergens: new Set(),
                 diets: new Set(),
+                searchDishes: "",
               });
-              context.setFilters({ searchDishes: '' });
-              context.menu.dishesByFilters.bySearchValue = '';
+              context.activeFilters.searchDishes.length = "";
             }}
           >
             Reset
           </ResetButton>
           <FilterHeading>
-            <span style={{ marginRight: '28px' }}>Filters</span>
+            <span style={{ marginRight: "28px" }}>Filters</span>
             <Counter
               style={{
-                position: 'absolute',
-                top: '0',
-                right: '0',
-                fontSize: '14px',
+                position: "absolute",
+                top: "0",
+                right: "0",
+                fontSize: "14px",
               }}
-              radius={'20px'}
+              radius={"20px"}
               active={
-                context.menu.dishesByFilters.bySearchValue.length + context.activeFilters.size > 0
+                context.activeFilters.searchDishes.length +
+                  context.activeFilters.size >
+                0
               }
-              activeColor={'#00807F'}
+              activeColor={"#00807F"}
             >
-              {context.menu.dishesByFilters.bySearchValue.length > 0
+              {context.activeFilters.searchDishes.length > 0
                 ? context.activeFilters.size + 1
                 : context.activeFilters.size}
             </Counter>
@@ -244,33 +241,31 @@ export default ({ filterOpen, setFilterOpen }) => {
       </Padded>
       <Divider />
       <Padded>
+        <Title style={{ marginTop: "24px" }}>Search</Title>
+        <InputGroup>
+          <Form.Control
+            style={{
+              marginTop: "12px",
+              borderRadius: "50px",
+              backgroundColor: "#ebeef5",
+              color: "#000000",
+              fontWeight: "bold",
+            }}
+            name="searchValue"
+            type="text"
+            placeholder="Search for dishes..."
+            value={context.activeFilters.searchDishes}
+            onChange={(e) =>
+              context.setFilters({ searchDishes: e.target.value })
+            }
+          />
+          <i class="fas fa-search" />
+        </InputGroup>
         {context.menu?.hasDiets && (
           <>
-            <Title style={{ marginTop: '24px' }}>Search</Title>
-            <InputGroup>
-              <Form.Control
-                style={{
-                  marginTop: '12px',
-                  borderRadius: '50px',
-                  backgroundColor: '#ebeef5',
-                  color: '#000000',
-                  fontWeight: 'bold',
-                }}
-                name='searchValue'
-                type='text'
-                placeholder='Search for dishes...'
-                value={context.setFilters.searchDishes}
-                onChange={handleChangeSearchValue}
-              />
-              <i class='fas fa-search' />
-            </InputGroup>
-          </>
-        )}
-        {context.menu?.hasDiets && (
-          <>
-            <Title style={{ marginTop: '24px' }}>Diets</Title>
+            <Title style={{ marginTop: "24px" }}>Diets</Title>
             <TagGrid
-              crossCount={1}
+              crossCount={2}
               filters={context.menu.filters.diets}
               activeFilters={context.activeFilters.diets}
               setFilters={(diets) => context.setFilters({ diets })}
@@ -279,7 +274,7 @@ export default ({ filterOpen, setFilterOpen }) => {
         )}
         {context.menu?.hasAllergens && (
           <>
-            <Title style={{ marginTop: '32px' }}>Allergens</Title>
+            <Title style={{ marginTop: "32px" }}>Allergens</Title>
             <Subtitle>Exclude dishes that contain:</Subtitle>
             <TagGrid
               crossCount={2}
