@@ -255,6 +255,11 @@ export default ({ filterOpen, setFilterOpen }) => {
             type="text"
             placeholder="Search for dishes..."
             value={context.activeFilters.searchDishes}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                e.target.blur();
+              }
+            }}
             onChange={(e) =>
               context.setFilters({ searchDishes: e.target.value })
             }
