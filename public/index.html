@@ -69,8 +69,10 @@
     gtag('config', 'G-1V27CCNXDJ');
     function setPageScrollable(yes) {
       if (yes) {
+        document.documentElement.classList.remove('noscroll');
         document.body.classList.remove('noscroll');
       } else {
+        document.documentElement.classList.add('noscroll');
         document.body.classList.add('noscroll');
       }
     }
