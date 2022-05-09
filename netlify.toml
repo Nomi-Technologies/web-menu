@@ -1,15 +1,19 @@
 [context.production.environment]
 REACT_APP_API_BASE_URL = "https://nomi-menu-service.herokuapp.com"
+REACT_APP_AWS_S3_BASE_URL = "https://nomi-aws-production.s3-us-west-1.amazonaws.com"
 
 [context.deploy-preview.environment]
 REACT_APP_API_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com"
+REACT_APP_AWS_S3_BASE_URL = "https://nomi-aws-testing.s3-us-west-1.amazonaws.com"
 
 [context.develop.environment]
 REACT_APP_API_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com"
+REACT_APP_AWS_S3_BASE_URL = "https://nomi-aws-testing.s3-us-west-1.amazonaws.com"
 
 [context.staging.environment]
 REACT_APP_API_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com"
 REACT_APP_GOOGLE_ANALYTICS_ID = "G-NXNMHVKZLT"
+REACT_APP_AWS_S3_BASE_URL = "https://nomi-aws-staging.s3-us-west-1.amazonaws.com"
 
 [[redirects]]
 from = "/*"

@@ -179,11 +179,6 @@ export default ({ filterOpen, setFilterOpen }) => {
     }
   };
 
-  const handleChangeSearchValue = (e) => {
-    context.setFilters({ searchDishes: e.target.value });
-    context.menu.dishesByFilters.bySearchValue = e.target.value;
-  };
-
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -195,14 +190,20 @@ export default ({ filterOpen, setFilterOpen }) => {
         <PanelHeader>
           <ResetButton
             style={{
-              color: context.activeFilters.size ? "#8A9DB7" : "#EF5454",
+              color:
+                context.activeFilters.size +
+                  context.activeFilters.searchDishes.length ===
+                0
+                  ? "#8A9DB7"
+                  : "#EF5454",
             }}
             onClick={() => {
               context.setFilters({
                 allergens: new Set(),
                 diets: new Set(),
+                searchDishes: "",
               });
-              context.setFilters({ searchDishes: "" });
+              context.activeFilters.searchDishes.length = "";
             }}
           >
             Reset
@@ -217,10 +218,16 @@ export default ({ filterOpen, setFilterOpen }) => {
                 fontSize: "14px",
               }}
               radius={"20px"}
-              active={context.activeFilters.size > 0}
+              active={
+                context.activeFilters.searchDishes.length +
+                  context.activeFilters.size >
+                0
+              }
               activeColor={"#00807F"}
             >
-              {context.activeFilters.size}
+              {context.activeFilters.searchDishes.length > 0
+                ? context.activeFilters.size + 1
+                : context.activeFilters.size}
             </Counter>
           </FilterHeading>
           <ApplyButton
@@ -228,26 +235,40 @@ export default ({ filterOpen, setFilterOpen }) => {
               setFilterOpen(false);
             }}
           >
-            Done
+            Apply
           </ApplyButton>
         </PanelHeader>
       </Padded>
       <Divider />
       <Padded>
-        <Subtitle
-          style={{
-            textAlign: "center",
-            marginTop: "15px",
-            marginBottom: "20px",
-          }}
-        >
-          Customize and filter your menu to help you find the best dish for you.
-        </Subtitle>
-
+        <Title style={{ marginTop: "24px" }}>Search</Title>
+        <InputGroup>
+          <Form.Control
+            style={{
+              marginTop: "12px",
+              borderRadius: "50px",
+              backgroundColor: "#ebeef5",
+              color: "#000000",
+              fontWeight: "bold",
+            }}
+            name="searchValue"
+            type="text"
+            placeholder="Search for dishes..."
+            value={context.activeFilters.searchDishes}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                e.target.blur();
+              }
+            }}
+            onChange={(e) =>
+              context.setFilters({ searchDishes: e.target.value })
+            }
+          />
+          <i class="fas fa-search" />
+        </InputGroup>
         {context.menu?.hasDiets && (
           <>
             <Title style={{ marginTop: "24px" }}>Diets</Title>
-            <Subtitle>Include only dishes that can be:</Subtitle>
             <TagGrid
               crossCount={2}
               filters={context.menu.filters.diets}
