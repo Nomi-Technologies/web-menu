@@ -235,7 +235,7 @@ export default ({ filterOpen, setFilterOpen }) => {
               setFilterOpen(false);
             }}
           >
-            Apply
+            Done
           </ApplyButton>
         </PanelHeader>
       </Padded>
