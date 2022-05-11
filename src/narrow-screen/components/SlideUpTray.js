@@ -6,7 +6,7 @@ import ExpansionArrow from "components/ExpansionArrow";
 import styled from "styled-components";
 import Swipeout from "@gem-mine/rc-swipeout";
 import "@gem-mine/rc-swipeout/assets/index.css";
-import DeleteIcon from "components/DeleteX.png";
+import DeleteIcon from "components/Delete.png";
 
 const SlideUpPanel = styled.div`
   position: relative;
@@ -148,7 +148,6 @@ const ClearButton = styled.div`
 
 function SlideUpPanelBody({ dishes, onClose }) {
   const { dishesById, setSavedDishes } = useContext(RestaurantContext);
-  const { savedDishes } = useContext(RestaurantContext);
 
   const [index, setIndex] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -157,7 +156,9 @@ function SlideUpPanelBody({ dishes, onClose }) {
     const savedDishes = [...dishes];
     savedDishes.splice(index, 1);
     setSavedDishes(savedDishes);
-    setIndex();
+    if (savedDishes.length === 0) {
+      setIndex();
+    }
   };
 
   const onClearTray = () => {
@@ -184,7 +185,6 @@ function SlideUpPanelBody({ dishes, onClose }) {
                       style: { backgroundColor: "red", width: "60px" },
                     },
                   ]}
-                  autoClose={() => true}
                 >
                   <DishEntry>
                     <ItemCount>
@@ -245,7 +245,6 @@ function SlideUpPanelBody({ dishes, onClose }) {
           index={index}
           show={showModal}
           onHide={() => setShowModal(false)}
-          dishes={savedDishes}
         />
       ) : null}
     </>

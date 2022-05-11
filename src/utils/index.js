@@ -3,8 +3,8 @@ export const parseMenu = (data, enableFiltering) => {
     categories: [],
     dishes: [],
     dishesByCategory: {},
-    dishesByFilters: { byAllergens: {}, byDiets: {}, bySearchValue: "" },
-    filters: { allergens: {}, diets: {}, searchValue: "" },
+    dishesByFilters: { byAllergens: {}, byDiets: {} },
+    filters: { allergens: {}, diets: {} },
     hasAllergens: false,
     hasDiets: false,
     hasRemovables: false,
@@ -27,7 +27,6 @@ export const parseMenu = (data, enableFiltering) => {
       menu.dishesByCategory[dish.Category.id] = [];
     }
     menu.dishesByCategory[dish.Category.id].push(dish);
-
     dish.Tags.forEach((tag) => {
       if (!(tag.id in menu.filters.allergens)) {
         menu.filters.allergens[tag.id] = tag;
@@ -39,7 +38,6 @@ export const parseMenu = (data, enableFiltering) => {
     if (dish.Diets.length > 0) {
       menu.hasDiets = true;
     }
-
     dish.Diets.forEach((diet) => {
       if (!(diet.id in menu.filters.diets)) {
         menu.filters.diets[diet.id] = diet;
@@ -51,10 +49,7 @@ export const parseMenu = (data, enableFiltering) => {
   return menu;
 };
 
-export const filterMenu = (
-  { byAllergens, byDiets, bySearchValue },
-  { allergens, diets, dishes }
-) => {
+export const filterMenu = ({ byAllergens, byDiets }, { allergens, diets }) => {
   let intersection;
   let excluded = new Set();
   let onlyHasRemovables = new Set();
@@ -85,32 +80,6 @@ export const filterMenu = (
       ? new Set([...included].filter((id) => intersection.has(id)))
       : included;
   });
-  if (bySearchValue.length > 0) {
-    if (diets.size == 0) {
-      intersection = new Set();
-    }
-    dishes.forEach((dish) => {
-      if (
-        dish.name.substring(0, bySearchValue.length).toLowerCase() ===
-          bySearchValue.toLowerCase() ||
-        dish.description.toLowerCase().includes(bySearchValue.toLowerCase())
-      ) {
-        if (diets.size > 0) {
-          if (intersection.has(dish.id)) {
-            intersection.add(dish.id);
-          }
-        } else {
-          intersection.add(dish.id);
-        }
-      } else {
-        if (diets.size > 0) {
-          if (intersection.has(dish.id)) {
-            intersection.delete(dish.id);
-          }
-        }
-      }
-    });
-  }
   return {
     included: intersection,
     excluded,
@@ -132,34 +101,21 @@ export const getDishesOfMenu = async (restaurantId, menuName) => {
   return res.json();
 };
 
-export const getDishImage = async (dishId) => {
-  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/dishes/${dishId}`;
-  const img = await fetch(url);
-
-  if (img.status === 200) {
-    return url;
-  } else {
-    return null;
-  }
-};
-
 export const getRestaurantLogo = async (restaurantId) => {
-  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/restaurants/${restaurantId}`;
-  const img = await fetch(url);
-
-  if (img.status === 200) {
-    return url;
-  } else {
-    return null;
-  }
+  const res = await fetch(
+    `${process.env.REACT_APP_API_BASE_URL}/api/images/restaurants/${restaurantId}`
+  );
+  let blob = await res.blob();
+  return URL.createObjectURL(blob);
 };
 
 export const getMenuBannerImage = async (menuId) => {
-  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/menus/${menuId}`;
-  const img = await fetch(url);
-
-  if (img.status === 200) {
-    return url;
+  const res = await fetch(
+    `${process.env.REACT_APP_API_BASE_URL}/api/images/menus/${menuId}`
+  );
+  if (res.ok) {
+    let blob = await res.blob();
+    return URL.createObjectURL(blob);
   } else {
     return null;
   }
@@ -181,6 +137,18 @@ export const googleAnalyticsPageView = (restaurant) => {
         });
       }
     }
+  }
+};
+
+export const getDishImage = async (dishId) => {
+  const res = await fetch(
+    `${process.env.REACT_APP_API_BASE_URL}/api/images/dishes/${dishId}`
+  );
+  if (res.ok) {
+    let blob = await res.blob();
+    return URL.createObjectURL(blob);
+  } else {
+    return null;
   }
 };
 

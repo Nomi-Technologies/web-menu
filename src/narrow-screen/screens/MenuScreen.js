@@ -83,7 +83,7 @@ const MenuName = styled.div`
   display: inline-block;
   font-weight: normal;
   font-size: 14px;
-  color: #00807f;
+  color: #628deb;
   cursor: pointer;
 `;
 
@@ -221,17 +221,13 @@ const FilteringButton = styled.div`
 export default () => {
   const context = useContext(RestaurantContext);
   const [hamburgerOpen, setHamburgerOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [restaurantLogo, setRestaurantLogo] = useState();
   const [categoryToRef, setCategoryToRef] = useState({});
   const [categoryToTabRef, setCategoryToTabRef] = useState({});
   const [tabBarRef, setTabBarRef] = useState();
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [menuBanner, setMenuBanner] = useState();
-  const [filterOpen, setFilterOpenHook] = useState(false);
-  function setFilterOpen(open) {
-    setFilterOpenHook(open);
-    window.setPageScrollable(!open);
-  }
 
   // For window's event listener to get the states in this React component
   const stateRef = useRef();
@@ -353,9 +349,7 @@ export default () => {
       <Header>
         <NotificationBanner
           style={
-            context.activeFilters.size +
-              context.activeFilters.searchDishes.length >
-              0 && !filterOpen
+            context.activeFilters.size > 0 && !filterOpen
               ? null
               : { display: "none" }
           }
@@ -368,11 +362,7 @@ export default () => {
             }}
           >
             <Counter
-              active={
-                context.activeFilters.size +
-                  context.activeFilters.searchDishes.length >
-                0
-              }
+              active={context.activeFilters.size > 0}
               style={{
                 backgroundColor: "white",
                 color: "#00807F",
@@ -382,9 +372,7 @@ export default () => {
                 transform: "translate(0, -50%)",
               }}
             >
-              {context.activeFilters.searchDishes.length > 0
-                ? context.activeFilters.size + 1
-                : context.activeFilters.size}
+              {context.activeFilters.size}
             </Counter>
             FILTER{context.activeFilters.size > 1 ? "S" : null} APPLIED
           </div>
@@ -412,16 +400,10 @@ export default () => {
                 transform: "translate(0, -50%)",
               }}
               radius={"22px"}
-              active={
-                context.activeFilters.size +
-                  context.activeFilters.searchDishes.length >
-                0
-              }
+              active={context.activeFilters.size > 0}
               activeColor={"#00807F"}
             >
-              {context.activeFilters.searchDishes.length > 0
-                ? context.activeFilters.size + 1
-                : context.activeFilters.size}
+              {context.activeFilters.size}
             </Counter>
           </FilteringButton>
         ) : null}

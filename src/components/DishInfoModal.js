@@ -71,7 +71,6 @@ const Description = styled.div`
   font-style: normal;
   font-weight: normal;
   color: #606060;
-  font-weight: 500;
 `;
 
 const Divider = styled.div`
@@ -162,13 +161,12 @@ const AddOn = styled.div`
     border-radius: 5px;
   }
 
-  .container input ~ .checkmark {
-    border: 1px solid black;
+  .container:hover input ~ .checkmark {
+    background-color: #ccc;
   }
 
   .container input:checked ~ .checkmark {
-    background-color: #00807f;
-    border: none;
+    background-color: #2196f3;
   }
 
   .checkmark:after {
@@ -200,7 +198,7 @@ const AddOnName = styled.span`
 
 const AddOnNotes = styled.span`
   font-weight: 500;
-  color: #606060;
+  color: #8a9db7;
 `;
 
 const AddOnPrice = styled.span`
@@ -290,41 +288,31 @@ const StyledBanner = styled(Banner)`
   }
 `;
 
-const OptionCheckbox = styled.span``;
-
-const RemoveDish = styled.p`
-  padding-top: 16px;
-  font-size: 14px;
-  text-align: center;
-  color: #00807f;
-  font-weight: bold;
+const OptionCheckbox = styled.span`
+  border: 1px solid black;
 `;
 
 export default function (props) {
   const context = useContext(RestaurantContext);
 
-  const savedDish = context.savedDishes[props.index];
-  const dishData = savedDish ? context.dishesById[savedDish.id] : props.dish;
+  const editMode = typeof props.index !== "undefined";
+  const savedDish = editMode ? context.savedDishes[props.index] : undefined;
+  const dishData = editMode ? context.dishesById[savedDish.id] : props.dish;
 
   // set activeModifications to saved data (extracting from dishData with modIds)
   const [activeModifications, setActiveModifications] = React.useState(
-    savedDish
+    editMode
       ? savedDish.modIds.map((id) =>
-        dishData.Modifications.find((mod) => mod.id === id)
-      )
+          dishData.Modifications.find((mod) => mod.id === id)
+        )
       : []
   );
-
   const [quantity, setQuantity] = React.useState(
-    savedDish ? savedDish.quantity : 1
+    editMode ? savedDish.quantity : 1
   );
-
   // price of one dish, including mods
   const [unitDishPrice, setUnitDishPrice] = React.useState(
-    activeModifications.reduce(
-      (total, currentMod) => total + parseInt(currentMod.price),
-      parseInt(dishData.price)
-    )
+    parseInt(dishData.price)
   );
 
   const [dishImage, setDishImage] = useState();
@@ -334,13 +322,11 @@ export default function (props) {
     if (
       props.show &&
       context.restaurant &&
-      context.selectedMenuIndex !== null &&
-      typeof dishData !== "undefined"
+      context.selectedMenuIndex !== null
     ) {
-      getDishImage(dishData.id).then((dishImage) => {
-
-        if (dishImage !== null) {
-          setDishImage(dishImage);
+      getDishImage(dishData.id).then((banner) => {
+        setDishImage(banner);
+        if (banner) {
           setModalStyle({
             borderTopRightRadius: "0",
             borderTopLeftRadius: "0",
@@ -351,14 +337,13 @@ export default function (props) {
   }, [context.restaurant, props.show]);
 
   // show if gluten is being filtered and dish is gluten free, or if dish has a removable allergen that is beig filtered
-  let showRemovableNotice = dishData
-    ? dishData.Tags.some(
+  let showRemovableNotice =
+    dishData.Tags.some(
       (tag) =>
         tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id)
     ) ||
     (dishData.gfp &&
-      context.activeFilters?.allergens.has(context.allergens["Gluten"]))
-    : "";
+      context.activeFilters?.allergens.has(context.allergens["Gluten"]));
 
   function toggleModification(modification) {
     var arr;
@@ -374,7 +359,7 @@ export default function (props) {
       arr.splice(index, 1);
     }
     setActiveModifications(arr);
-    const newPrice = arr.reduce(
+    const newPrice = activeModifications.reduce(
       (total, currentMod) => total + parseInt(currentMod.price),
       parseInt(dishData.price)
     );
@@ -389,19 +374,12 @@ export default function (props) {
       modIds: activeModifications.map((mod) => mod.id) ?? [],
     };
 
-    if (savedDish) {
+    if (editMode) {
       savedDishes[props.index] = updatedEntry;
     } else {
       savedDishes.push(updatedEntry);
     }
 
-    context.setSavedDishes(savedDishes);
-    props.onHide();
-  }
-
-  function onDelete() {
-    const savedDishes = [...context.savedDishes];
-    savedDishes.splice(props.index, 1);
     context.setSavedDishes(savedDishes);
     props.onHide();
   }
@@ -415,73 +393,73 @@ export default function (props) {
       centered
     >
       {dishImage ? <StyledBanner src={dishImage} removeOverlay /> : ""}
-      {dishData ? (
-        <ModalContainer style={modalStyle}>
-          <ExitButtonWrapper onClick={props.onHide}>
-            <ExitButton />
-          </ExitButtonWrapper>
-          <ModalHeader>
-            <DishName>{dishData.name}</DishName>
-          </ModalHeader>
-          <ModalBody>
-            {dishData.description.length > 0 ? (
-              <>
-                <Description>{dishData.description}</Description>
-              </>
-            ) : (
-              <></>
-            )}
-            {dishData.Tags.length > 0 || dishData.Diets.length > 0 ? (
-              <>
-                <Divider />
-                <SectionTitle>Allergen and Diet Info</SectionTitle>
-                <SectionBody>
-                  {showRemovableNotice ? (
-                    <RemovableNotice>
-                      Dish can be modified to fit your dietary needs
-                      <Dot />
-                    </RemovableNotice>
-                  ) : null}
-                  {dishData.Tags.length > 0 ? (
-                    <TagsWrapper>
-                      <img src={InfoIcon} />
-                      Contains{" "}
-                      {dishData.Tags.map((allergen) => (
-                        <TagName
-                          highlight={
-                            allergen.DishTag.removable &&
-                            context.activeFilters.allergens.has(allergen.id)
-                          }
-                        >
-                          {allergen.name}
-                        </TagName>
-                      ))}
-                    </TagsWrapper>
-                  ) : null}
-                  {/* Adding a line break between two inline-blocks */}
-                  <div></div>
-                  {dishData.Diets.length > 0 ? (
-                    <TagsWrapper>
-                      <img src={CheckMark} />
-                      {dishData.Diets.map((diets) => (
-                        <TagName>{diets.name}</TagName>
-                      ))}{" "}
-                      friendly
-                    </TagsWrapper>
-                  ) : null}
-                </SectionBody>
-              </>
-            ) : (
-              ""
-            )}
-            {dishData.Modifications.length > 0 ? (
-              <>
-                <Divider />
-                <SectionTitle>Dish Options</SectionTitle>
-                <SectionBody
-                  style={{ flexDirection: "column", alignItems: "flex-start" }}
-                >
-                  {dishData.Modifications.map((t) => (
+      <ModalContainer style={modalStyle}>
+        <ExitButtonWrapper onClick={props.onHide}>
+          <ExitButton />
+        </ExitButtonWrapper>
+        <ModalHeader>
+          <DishName>{dishData.name}</DishName>
+        </ModalHeader>
+        <ModalBody>
+          {dishData.description.length > 0 ? (
+            <>
+              <Description>{dishData.description}</Description>
+            </>
+          ) : (
+            <></>
+          )}
+          {dishData.Tags.length > 0 || dishData.Diets.length > 0 ? (
+            <>
+              <Divider />
+              <SectionTitle>Allergen and Diet Info</SectionTitle>
+              <SectionBody>
+                {showRemovableNotice ? (
+                  <RemovableNotice>
+                    Dish can be modified to fit your dietary needs
+                    <Dot />
+                  </RemovableNotice>
+                ) : null}
+                {dishData.Tags.length > 0 ? (
+                  <TagsWrapper>
+                    <img src={InfoIcon} />
+                    Contains{" "}
+                    {dishData.Tags.map((allergen) => (
+                      <TagName
+                        highlight={
+                          allergen.DishTag.removable &&
+                          context.activeFilters.allergens.has(allergen.id)
+                        }
+                      >
+                        {allergen.name}
+                      </TagName>
+                    ))}
+                  </TagsWrapper>
+                ) : null}
+                {/* Adding a line break between two inline-blocks */}
+                <div></div>
+                {dishData.Diets.length > 0 ? (
+                  <TagsWrapper>
+                    <img src={CheckMark} />
+                    {dishData.Diets.map((diets) => (
+                      <TagName>{diets.name}</TagName>
+                    ))}{" "}
+                    friendly
+                  </TagsWrapper>
+                ) : null}
+              </SectionBody>
+            </>
+          ) : (
+            ""
+          )}
+          {dishData.Modifications.length > 0 ? (
+            <>
+              <Divider />
+              <SectionTitle>Dish Options</SectionTitle>
+              <SectionBody
+                style={{ flexDirection: "column", alignItems: "flex-start" }}
+              >
+                {
+                  dishData.Modifications.map((t) => (
                     <AddOn key={t.id}>
                       <label className="container">
                         <AddOnName>{t.name} </AddOnName>
@@ -505,60 +483,47 @@ export default function (props) {
                         <OptionCheckbox className="checkmark"></OptionCheckbox>
                       </label>
                     </AddOn>
-                  ))}
-                </SectionBody>
-              </>
-            ) : (
-              <></>
-            )}
-            <SectionBody
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: "20px",
-              }}
-            >
-              <QuantitySelector>
-                <ChangeQuantity
-                  onClick={() => {
-                    if (quantity > 1) {
-                      setQuantity(quantity - 1);
-                    }
-                  }}
-                >
-                  {" "}
-                  -{" "}
-                </ChangeQuantity>
-                <Quantity> {quantity} </Quantity>
-                <ChangeQuantity onClick={() => setQuantity(quantity + 1)}>
-                  {" "}
-                  +{" "}
-                </ChangeQuantity>
-              </QuantitySelector>
-              <SaveDishButton onClick={saveDish}>
-                <span>{quantity > 1 ? "Save Dishes" : "Save Dish"}</span>
-                <span>
-                  ${dishData.price.length > 0 ? unitDishPrice * quantity : null}
-                </span>
-              </SaveDishButton>
-            </SectionBody>
-            {savedDish ? (
-              <RemoveDish
+                  ))
+                }
+              </SectionBody>
+            </>
+          ) : (
+            <></>
+          )}
+          <SectionBody
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: "20px"
+            }}
+          >
+            <QuantitySelector>
+              <ChangeQuantity
                 onClick={() => {
-                  onDelete();
+                  if (quantity > 1) {
+                    setQuantity(quantity - 1);
+                  }
                 }}
               >
-                Remove dish
-              </RemoveDish>
-            ) : (
-              ""
-            )}
-          </ModalBody>
-        </ModalContainer>
-      ) : (
-        ""
-      )}
+                {" "}
+                -{" "}
+              </ChangeQuantity>
+              <Quantity> {quantity} </Quantity>
+              <ChangeQuantity onClick={() => setQuantity(quantity + 1)}>
+                {" "}
+                +{" "}
+              </ChangeQuantity>
+            </QuantitySelector>
+            <SaveDishButton onClick={saveDish}>
+              <span>{quantity > 1 ? "Save Dishes" : "Save Dish"}</span>
+              <span>
+                ${dishData.price.length > 0 ? unitDishPrice * quantity : null}
+              </span>
+            </SaveDishButton>
+          </SectionBody>
+        </ModalBody>
+      </ModalContainer>
     </Modal>
   );
 }

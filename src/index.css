@@ -6,7 +6,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1; /* offseting bootstrap's 1.5 */
   color: black; /* offseting bootstrap's custom color */
-  background-color: #EBEEF5;
+  background-color: #d8e2f8;
 }
 
 #root {

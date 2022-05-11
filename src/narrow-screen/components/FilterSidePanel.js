@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import RestaurantContext from "../../RestaurantContext";
-import { Container, Row, Col, InputGroup, Form } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import TagButton from "components/TagButton";
 import Counter from "components/Counter";
 import styled from "styled-components";
 
 const RightSidePanel = styled.div`
   transform: ${(props) => (props.open ? "translateX(0)" : "translateX(100%)")};
-  top: 0;
-  bottom: 0;
   position: fixed;
   z-index: 150;
+  top: 0;
   right: 0;
-  max-height: 100vh;
+  height: 100%;
   transition: transform 0.3s ease-in-out;
-  width: 100%;
+  min-width: 320px;
+  @media (max-width: 320px) {
+    width: 100%;
+  }
   background: #ffffff;
-  overflow-y: auto;
 `;
 
 const StyledGridTagButton = styled(TagButton)`
@@ -190,21 +191,14 @@ export default ({ filterOpen, setFilterOpen }) => {
         <PanelHeader>
           <ResetButton
             style={{
-              color:
-                context.activeFilters.size +
-                  context.activeFilters.searchDishes.length ===
-                0
-                  ? "#8A9DB7"
-                  : "#EF5454",
+              color: context.activeFilters.size === 0 ? "#8A9DB7" : "#EF5454",
             }}
-            onClick={() => {
+            onClick={() =>
               context.setFilters({
                 allergens: new Set(),
                 diets: new Set(),
-                searchDishes: "",
-              });
-              context.activeFilters.searchDishes.length = "";
-            }}
+              })
+            }
           >
             Reset
           </ResetButton>
@@ -218,66 +212,30 @@ export default ({ filterOpen, setFilterOpen }) => {
                 fontSize: "14px",
               }}
               radius={"20px"}
-              active={
-                context.activeFilters.searchDishes.length +
-                  context.activeFilters.size >
-                0
-              }
+              active={context.activeFilters.size > 0}
               activeColor={"#00807F"}
             >
-              {context.activeFilters.searchDishes.length > 0
-                ? context.activeFilters.size + 1
-                : context.activeFilters.size}
+              {context.activeFilters.size}
             </Counter>
           </FilterHeading>
-          <ApplyButton
-            onClick={() => {
-              setFilterOpen(false);
-            }}
-          >
-            Done
-          </ApplyButton>
+          <ApplyButton onClick={() => setFilterOpen(false)}>Apply</ApplyButton>
         </PanelHeader>
       </Padded>
       <Divider />
       <Padded>
-        <Title style={{ marginTop: "24px" }}>Search</Title>
-        <InputGroup>
-          <Form.Control
-            style={{
-              marginTop: "12px",
-              borderRadius: "50px",
-              backgroundColor: "#ebeef5",
-              color: "#000000",
-              fontWeight: "bold",
-            }}
-            name="searchValue"
-            type="text"
-            placeholder="Search for dishes..."
-            value={context.activeFilters.searchDishes}
-            onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                e.target.blur();
-              }
-            }}
-            onChange={(e) =>
-              context.setFilters({ searchDishes: e.target.value })
-            }
-          />
-          <i class="fas fa-search" />
-        </InputGroup>
-        {context.menu?.hasDiets && (
+        { context.menu?.hasDiets && 
           <>
             <Title style={{ marginTop: "24px" }}>Diets</Title>
             <TagGrid
-              crossCount={2}
+              crossCount={1}
               filters={context.menu.filters.diets}
               activeFilters={context.activeFilters.diets}
               setFilters={(diets) => context.setFilters({ diets })}
             />
           </>
-        )}
-        {context.menu?.hasAllergens && (
+        }
+        {
+          context.menu?.hasAllergens && 
           <>
             <Title style={{ marginTop: "32px" }}>Allergens</Title>
             <Subtitle>Exclude dishes that contain:</Subtitle>
@@ -288,7 +246,7 @@ export default ({ filterOpen, setFilterOpen }) => {
               setFilters={(allergens) => context.setFilters({ allergens })}
             />
           </>
-        )}
+        }
       </Padded>
     </RightSidePanel>
   );

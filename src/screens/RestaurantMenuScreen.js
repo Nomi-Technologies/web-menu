@@ -103,24 +103,18 @@ export default () => {
         setFilters: ({
           allergens = activeFiltersByMenu[selectedMenuIndex].allergens,
           diets = activeFiltersByMenu[selectedMenuIndex].diets,
-          searchDishes = activeFiltersByMenu[selectedMenuIndex].searchDishes,
         }) => {
           let filtersByMenu = [...activeFiltersByMenu];
           filtersByMenu[selectedMenuIndex].allergens = allergens;
           filtersByMenu[selectedMenuIndex].diets = diets;
-          filtersByMenu[selectedMenuIndex].searchDishes = searchDishes;
           setActiveFiltersByMenu(filtersByMenu);
           const menusCopy = [...menus];
           const menu = menusCopy[selectedMenuIndex];
-          const dishes = menu.dishes;
-          let { included, excluded, hasRemovables } = filterMenu(
-            { ...menu.dishesByFilters, bySearchValue: searchDishes },
-            {
-              allergens,
-              diets,
-              dishes,
-            }
-          );
+          let {
+            included,
+            excluded,
+            hasRemovables,
+          } = filterMenu(menu.dishesByFilters, { allergens, diets });
           menu.hasRemovables = hasRemovables;
           setMenus(menusCopy);
 
