@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import RestaurantContext from "../RestaurantContext";
+import Banner from "components/Banner";
 
 const DishTile = styled.div`
   font-family: "Source Serif Pro";
@@ -73,8 +74,23 @@ const OrangeDot = styled.div`
   display: inline-block;
 `;
 
+const StyledBanner = styled(Banner)`
+  border-radius: 10px 10px 0px 0px;
+  height: 200px;
+  width: 400px;
+  margin: 0 auto;
+
+  @media (max-width: 500px) {
+    height: 300px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+`;
+
 export default function (props) {
   let context = useContext(RestaurantContext);
+  const imageUrl = props.imageUrl;
+  const imageExists = imageUrl !== null && imageUrl !== undefined;
   let showRemovableNotice =
     props.dish.Tags.some(
       (tag) =>
@@ -82,9 +98,9 @@ export default function (props) {
     ) ||
     (props.dish.gfp &&
       context.activeFilters?.allergens.has(context.allergens["Gluten"]));
-
   return (
     <DishTile className={props.className} onClick={props.onClick}>
+      {imageExists && <StyledBanner src={imageUrl} removeOverlay />}
       <TileTitle>
         <Name>
           {props.dish.name}
