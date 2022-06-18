@@ -34,6 +34,7 @@ const ModalHeader = styled(Modal.Header)`
   flex-direction: row;
   align-items: center;
   padding: 0;
+  padding-right: 26px;
 `;
 
 const DishName = styled.div`
