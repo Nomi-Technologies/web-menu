@@ -5,12 +5,15 @@ import Banner from "components/Banner";
 
 const DishTile = styled.div`
   font-family: "Source Serif Pro";
-  padding: 20px;
   background-color: white;
   border-radius: 10px;
   margin: 0;
   box-shadow: 0 0 5px #e3edf2;
   cursor: pointer;
+`;
+
+const TextSection = styled.div`
+  padding: 20px;
 `;
 
 const TileTitle = styled.div`
@@ -77,14 +80,8 @@ const OrangeDot = styled.div`
 const StyledBanner = styled(Banner)`
   border-radius: 10px 10px 0px 0px;
   height: 200px;
-  width: 400px;
-  margin: 0 auto;
-
-  @media (max-width: 500px) {
-    height: 300px;
-    width: 100%;
-    box-sizing: border-box;
-  }
+  width: 100%;
+  background-position: center;
 `;
 
 export default function (props) {
@@ -101,24 +98,26 @@ export default function (props) {
   return (
     <DishTile className={props.className} onClick={props.onClick}>
       {imageExists && <StyledBanner src={imageUrl} removeOverlay />}
-      <TileTitle>
-        <Name>
-          {props.dish.name}
-          {showRemovableNotice ? <OrangeDot /> : ""}
-        </Name>
-        {props.dish.price ? (
-          <TitleTrailing>{"$" + props.dish.price}</TitleTrailing>
+      <TextSection>
+        <TileTitle>
+          <Name>
+            {props.dish.name}
+            {showRemovableNotice ? <OrangeDot /> : ""}
+          </Name>
+          {props.dish.price ? (
+            <TitleTrailing>{"$" + props.dish.price}</TitleTrailing>
+          ) : (
+            <></>
+          )}
+        </TileTitle>
+        {props.dish.description ? (
+          <TileSubtitle>
+            <Description>{props.dish.description}</Description>
+          </TileSubtitle>
         ) : (
           <></>
         )}
-      </TileTitle>
-      {props.dish.description ? (
-        <TileSubtitle>
-          <Description>{props.dish.description}</Description>
-        </TileSubtitle>
-      ) : (
-        <></>
-      )}
+      </TextSection>
     </DishTile>
   );
 }
