@@ -87,7 +87,6 @@ const StyledBanner = styled(Banner)`
 export default function (props) {
   let context = useContext(RestaurantContext);
   const imageUrl = props.imageUrl;
-  const imageExists = imageUrl !== null && imageUrl !== undefined;
   let showRemovableNotice =
     props.dish.Tags.some(
       (tag) =>
@@ -97,7 +96,7 @@ export default function (props) {
       context.activeFilters?.allergens.has(context.allergens["Gluten"]));
   return (
     <DishTile className={props.className} onClick={props.onClick}>
-      {imageExists && <StyledBanner src={imageUrl} removeOverlay />}
+      {imageUrl ? <StyledBanner src={imageUrl} removeOverlay /> : <></>}
       <TextSection>
         <TileTitle>
           <Name>

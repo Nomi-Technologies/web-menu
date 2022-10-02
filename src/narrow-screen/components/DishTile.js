@@ -10,7 +10,7 @@ const DishTile = styled(SharedDishTile)`
 
 export default function (props) {
   const [showModal, setShowModal] = React.useState(false);
-  const [dishImageUrl, setDishImageUrl] = React.useState("");
+  const [dishImageUrl, setDishImageUrl] = React.useState();
 
   useEffect(() => {
     getDishImage(props.dish.id).then((url) => setDishImageUrl(url));
