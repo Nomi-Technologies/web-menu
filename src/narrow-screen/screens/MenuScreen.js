@@ -55,7 +55,7 @@ const MenuBody = styled.div`
   width: 100%;
   display: block;
   /* 50px for header; 80px for expansion strip + 70px for nomi logo */
-  padding: 0 0 150px 0;
+  padding: 0 0 500px 0;
   margin-top: 118px; /* 58px + 60px */
 `;
 
@@ -470,7 +470,6 @@ export default () => {
       <NomiLogoBar>
         <NomiLogoText>Powered by</NomiLogoText>
         <div className="ad-class">
-          {/* {1539889712} */}
           <GoogleAds slot="1539889712" />
         </div>
       </NomiLogoBar>
