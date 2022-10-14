@@ -17,6 +17,7 @@ import { getMenuBannerImage } from "utils";
 import RemovableNotice from "components/RemovableNotice";
 import Counter from "../../components/Counter";
 import SlideUpTray from "../components/SlideUpTray";
+import GoogleAds from "../../../src/components/GoogleAds";
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -468,9 +469,10 @@ export default () => {
       </MenuBody>
       <NomiLogoBar>
         <NomiLogoText>Powered by</NomiLogoText>
-        <a href="https://www.dinewithnomi.com/">
-          <NomiLogoSVG width="70px" height="16px" fill="#8A9DB7" />
-        </a>
+        <div className="ad-class">
+          {/* {1539889712} */}
+          <GoogleAds slot="1539889712" />
+        </div>
       </NomiLogoBar>
       <SlideUpPanelWrapper>
         <SlideUpTray />
