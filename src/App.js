@@ -52,6 +52,12 @@ export default () => {
           {process.env.NODE_ENV === "production"
             ? null
             : "A list of restaurants"}
+          :{" "}
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7240049376258703"
+            crossorigin="anonymous"
+          ></script>
         </Route>
       </Switch>
     </BrowserRouter>
