@@ -1,5 +1,6 @@
 import React from "react";
 import RestaurantMenuScreen from "screens/RestaurantMenuScreen";
+import RestaurantListScreen from "screens/RestaurantListScreen";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import "index.css";
 
@@ -43,15 +44,8 @@ export default () => {
         <Route path="/:restaurant_identifier">
           <RestaurantMenuScreen />
         </Route>
-        <Route
-          path="/"
-          render={() => {
-            window.location = "https://www.dinewithnomi.com/";
-          }}
-        >
-          {process.env.NODE_ENV === "production"
-            ? null
-            : "A list of restaurants"}
+        <Route path="/">
+          <RestaurantListScreen />
         </Route>
       </Switch>
     </BrowserRouter>

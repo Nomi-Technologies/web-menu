@@ -88,7 +88,7 @@ export default function (props) {
   let context = useContext(RestaurantContext);
   const imageUrl = props.imageUrl;
   let showRemovableNotice =
-    props.dish.Tags.some(
+    props.dish.Tags?.some(
       (tag) =>
         tag.DishTag.removable && context.activeFilters?.allergens.has(tag.id)
     ) ||
