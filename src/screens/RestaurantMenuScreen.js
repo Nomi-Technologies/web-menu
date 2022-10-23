@@ -20,6 +20,25 @@ export default () => {
   const [savedDishes, setSavedDishes] = useState([]);
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   const filters = window.localStorage.getItem('activeFilters');
+  //   if (filters !== null) {
+  //     const parsedFilters = JSON.parse(filters);
+  //     const allergens = new Set(parsedFilters.allergens);
+  //     const diets = new Set(parsedFilters.diets);
+  //     const searchDishes = parsedFilters.searchDishes;
+  //     context.setFilters({allergens, diets, searchDishes});
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   window.localStorage.setItem('activeFilters', JSON.stringify({
+  //     allergens: [...context.activeFilters?.allergens],
+  //     diets: [...context.activeFilters?.diets],
+  //     searchDishes: context.activeFilters?.searchDishes
+  //   }));
+  // }, [context]);
+
   useEffect(() => {
     googleAnalyticsPageView(restaurant_identifier);
     getRestaurant(restaurant_identifier)
