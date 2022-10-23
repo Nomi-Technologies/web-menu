@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import DishTile from "./DishTile";
 import styled from "styled-components";
 import LoadingAnimation from "components/loading-animation.gif";
-import Bacari from "components/bacari-logo.png";
+import FilterSidePanel from "../components/FilterSidePanel";
 import { getRestaurantLogo } from "utils";
 
 const LOADING_QUOTES = [
@@ -15,6 +14,7 @@ const LOADING_QUOTES = [
 ];
 
 const StartButton = styled.div`
+  margin: 20px 24px 0 24px;
   height: 46px;
   text-align: center;
   line-height: 48px;
@@ -23,14 +23,14 @@ const StartButton = styled.div`
   font-weight: bold;
   color: white;
   background-color: #f06441;
-  box-shadow: 0px 10px 20px rbga(240, 100, 65, 0.2);
+  box-shadow: 0px 10px 20px rgba(240, 100, 65, 0.2);
 `;
 
-export default function (props) {
-  const { restaurantId, loading } = props;
+export default function ({ restaurantId, loading, onFinish }) {
   const [loaded, setLoaded] = useState(false);
   const [logo, setLogo] = useState(null);
   const [quote, setQuote] = useState("");
+  const [showFilterPage, setShowFilterPage] = useState(false);
 
   useEffect(() => {
     if (!loaded) {
@@ -43,10 +43,13 @@ export default function (props) {
 
   useEffect(() => {
     if (restaurantId) {
-      // getRestaurantLogo(restaurantId).then(setLogo);
-      setLogo(Bacari);
+      getRestaurantLogo(restaurantId).then(setLogo);
     }
   }, [restaurantId]);
+
+  function handleStart() {
+    setShowFilterPage(true);
+  }
 
   return (
     <div
@@ -87,11 +90,19 @@ export default function (props) {
               right: "5%",
             }}
           >
-            <div className="tray-clear-button" on>
-              START MY MENU
+            <div className="tray-clear-button" onClick={handleStart}>
+              VIEW MY MENU
             </div>
           </StartButton>
         </>
+      )}
+
+      {showFilterPage && (
+        <FilterSidePanel
+          filterOpen={showFilterPage}
+          setFilterOpen={onFinish}
+          isLoadingPage={true}
+        />
       )}
 
       <div
@@ -111,26 +122,5 @@ export default function (props) {
         {quote}
       </div>
     </div>
-    //   <DishList className={props.className} ref={props.categoryRef}>
-    //     <CategoryTitle>{props.category.name}</CategoryTitle>
-    //     {props.dishes.length > 0 ? (
-    //       <>
-    //         <CategoryDescription>
-    //           {props.category.description}
-    //         </CategoryDescription>
-    //         {props.dishes.map((dish) => (
-    //           <DishTile
-    //             key={dish.id}
-    //             dish={dish}
-    //             menuHasAllergens={props.menuHasAllergens}
-    //           />
-    //         ))}
-    //       </>
-    //     ) : (
-    //       <NoDishesMessage>
-    //         No dishes in this section. Check the applied filters.
-    //       </NoDishesMessage>
-    //     )}
-    //   </DishList>
   );
 }

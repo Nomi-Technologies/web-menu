@@ -5,6 +5,41 @@ import TagButton from "components/TagButton";
 import Counter from "components/Counter";
 import styled from "styled-components";
 
+const SlideUpPanelWrapper = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+`;
+
+const SlideUpPanel = styled.div`
+  position: relative;
+  z-index: 11;
+  background-color: white;
+  border-radius: 12px 12px 0px 0px;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0px 0px 20px rgba(136, 146, 158, 0.15);
+`;
+
+const CloseButton = styled.div`
+  position: relative;
+  margin: 20px 24px 0 24px;
+  padding: 15px 0 30px 0;
+
+  & .tray-clear-button {
+    height: 48px;
+    text-align: center;
+    line-height: 48px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #f06441;
+    box-shadow: 0px 10px 20px rgba(240, 100, 65, 0.2);
+  }
+`;
+
 const RightSidePanel = styled.div`
   transform: ${(props) => (props.open ? "translateX(0)" : "translateX(100%)")};
   top: 0;
@@ -169,7 +204,7 @@ const Subtitle = styled.div`
   line-height: 20px;
 `;
 
-export default ({ filterOpen, setFilterOpen }) => {
+export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
   const myRef = useRef();
   const context = useContext(RestaurantContext);
 
@@ -235,37 +270,57 @@ export default ({ filterOpen, setFilterOpen }) => {
               setFilterOpen(false);
             }}
           >
-            Done
+            {isLoadingPage ? (
+              <div style={{ color: "#00807F" }}>SKIP</div>
+            ) : (
+              <div>Done</div>
+            )}
           </ApplyButton>
         </PanelHeader>
       </Padded>
       <Divider />
       <Padded>
-        <Title style={{ marginTop: "24px" }}>Search</Title>
-        <InputGroup>
-          <Form.Control
+        {!isLoadingPage ? (
+          <>
+            <Title style={{ marginTop: "24px" }}>Search</Title>
+            <InputGroup>
+              <Form.Control
+                style={{
+                  marginTop: "12px",
+                  borderRadius: "50px",
+                  backgroundColor: "#ebeef5",
+                  color: "#000000",
+                  fontWeight: "bold",
+                }}
+                name="searchValue"
+                type="text"
+                placeholder="Search for dishes..."
+                value={context.activeFilters.searchDishes}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    e.target.blur();
+                  }
+                }}
+                onChange={(e) =>
+                  context.setFilters({ searchDishes: e.target.value })
+                }
+              />
+              <i class="fas fa-search" />
+            </InputGroup>
+          </>
+        ) : (
+          <div
             style={{
-              marginTop: "12px",
-              borderRadius: "50px",
-              backgroundColor: "#ebeef5",
-              color: "#000000",
-              fontWeight: "bold",
+              fontSize: 15,
+              color: "#606060",
+              textAlign: "center",
+              marginTop: 15,
             }}
-            name="searchValue"
-            type="text"
-            placeholder="Search for dishes..."
-            value={context.activeFilters.searchDishes}
-            onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                e.target.blur();
-              }
-            }}
-            onChange={(e) =>
-              context.setFilters({ searchDishes: e.target.value })
-            }
-          />
-          <i class="fas fa-search" />
-        </InputGroup>
+          >
+            Customize and filter your menu to help you find the best dish for
+            you.
+          </div>
+        )}
         {context.menu?.hasDiets && (
           <>
             <Title style={{ marginTop: "24px" }}>Diets</Title>
@@ -290,6 +345,22 @@ export default ({ filterOpen, setFilterOpen }) => {
           </>
         )}
       </Padded>
+      {isLoadingPage && (
+        <SlideUpPanelWrapper>
+          <SlideUpPanel>
+            <CloseButton>
+              <div
+                className="tray-clear-button"
+                onClick={() => {
+                  setFilterOpen(false);
+                }}
+              >
+                SAVE &amp; CONTINUE
+              </div>
+            </CloseButton>
+          </SlideUpPanel>
+        </SlideUpPanelWrapper>
+      )}
     </RightSidePanel>
   );
 };

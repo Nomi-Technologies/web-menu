@@ -13,14 +13,6 @@ const PageError = styled.div`
   font-weight: bold;
 `;
 
-const Loading = styled.div`
-  position: relative;
-  text-align: center;
-  margin-top: 5%;
-  font-size: 32px;
-  font-weight: bold;
-`;
-
 export default () => {
   const context = useContext(RestaurantContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,14 +22,11 @@ export default () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setCanFinishLoad(true); // Only allowed to finish loading after 2 seconds
-    }, 3000);
+    }, 3500);
     return () => clearTimeout(timeout);
   }, []);
 
-  console.log(canFinishLoad);
-
   useEffect(() => {
-    // console.log(context.menu);
     if (context.menu !== undefined) {
       setIsLoading(false);
     }
