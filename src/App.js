@@ -43,21 +43,8 @@ export default () => {
         <Route path="/:restaurant_identifier">
           <RestaurantMenuScreen />
         </Route>
-        <Route
-          path="/"
-          render={() => {
-            window.location = "https://www.dinewithnomi.com/";
-          }}
-        >
-          {process.env.NODE_ENV === "production"
-            ? null
-            : "A list of restaurants"}
-          :{" "}
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7240049376258703"
-            crossorigin="anonymous"
-          ></script>
+        <Route path="/">
+          <RestaurantMenuScreen />
         </Route>
       </Switch>
     </BrowserRouter>
