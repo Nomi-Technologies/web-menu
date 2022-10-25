@@ -17,7 +17,7 @@ import { getMenuBannerImage } from "utils";
 import RemovableNotice from "components/RemovableNotice";
 import Counter from "../../components/Counter";
 import SlideUpTray from "../components/SlideUpTray";
-import GoogleAds from "../../../src/components/GoogleAds";
+import GoogleAds from "../../components/GoogleAds";
 
 const CategoryTab = styled.div`
   display: inline-block;
