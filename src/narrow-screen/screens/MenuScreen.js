@@ -124,7 +124,6 @@ const StyledGoogleAds = styled(GoogleAds)`
   bottom: 75px;
   left: 0;
   right: 0;
-  height: 50px;
 `;
 
 const Header = styled.div`

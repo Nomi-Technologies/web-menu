@@ -7,13 +7,15 @@ export default function (props) {
 
   const displayAds =
     window.location.pathname === "/" ||
-    window.location.pathname === "/demo-restaurant" ||
-    window.location.pathname === "/test-restaurant";
+    window.location.pathname === "/demo-restaurant";
 
   return (
     <ins
       className={`adsbygoogle ${props.className}`}
-      style={{ display: displayAds ? "block" : "none" }}
+      style={{
+        display: "block",
+        visibility: displayAds ? "visible" : "hidden",
+      }}
       data-ad-client="ca-pub-7240049376258703"
       data-ad-slot={props.slot}
       data-ad-format="auto"
