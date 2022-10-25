@@ -7,7 +7,9 @@ import { filterMenu, googleAnalyticsPageView, FilterSet } from "../utils";
 import RestaurantContext from "../RestaurantContext";
 
 export default () => {
-  const { restaurant_identifier } = useParams();
+  let { restaurant_identifier } = useParams();
+  restaurant_identifier = restaurant_identifier ?? "demo-restaurant";
+
   const [restaurant, setRestaurant] = useState(null);
   const [activeFiltersByMenu, setActiveFiltersByMenu] = useState([]);
 

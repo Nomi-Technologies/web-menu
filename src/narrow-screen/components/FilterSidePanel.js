@@ -264,7 +264,7 @@ export default ({ filterOpen, setFilterOpen }) => {
               context.setFilters({ searchDishes: e.target.value })
             }
           />
-          <i class="fas fa-search" />
+          <i className="fas fa-search" />
         </InputGroup>
         {context.menu?.hasDiets && (
           <>

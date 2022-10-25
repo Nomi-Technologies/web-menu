@@ -10,6 +10,7 @@ import HotScrollSidePanel from "../components/HotScrollSidePanel";
 import AllergenFiltersSidePanel from "../components/AllergenFiltersSidePanel";
 import QRCodeSidePanel from "../components/QRCodeSidePanel";
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
+import GoogleAds from "../../components/GoogleAds";
 import styled from "styled-components";
 
 const ColumnStyle = styled.div`
@@ -251,6 +252,7 @@ function MainContent({ categoryToRef }) {
           <NomiLogo width="70px" height="16px" fill="#8A9DB7" />
         </NomiBottomLogoImage>
       </NomiBottomLogo>
+      <GoogleAds slot="1539889712" />
     </MainContentWrapper>
   );
 }
