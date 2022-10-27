@@ -1,5 +1,6 @@
-export const parseMenu = (data, enableFiltering) => {
+export const parseMenu = (data, id, enableFiltering) => {
   let menu = {
+    id,
     categories: [],
     dishes: [],
     dishesByCategory: {},

@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import MobileRestaurantScreen from "narrow-screen/screens/RestaurantScreen";
 import WebRestuarantScreen from "wide-screen/screens/RestaurantScreen";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getRestaurant, getDishesOfMenu, parseMenu } from "utils";
 import { filterMenu, googleAnalyticsPageView, FilterSet } from "../utils";
 import RestaurantContext from "../RestaurantContext";
 
 export default () => {
-  let { restaurant_identifier } = useParams();
-  restaurant_identifier = restaurant_identifier ?? "demo-restaurant";
+  let { restaurantId } = useParams();
+  restaurantId = restaurantId ?? "demo-restaurant";
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryMenuId = searchParams.get("menuId");
 
   const [restaurant, setRestaurant] = useState(null);
   const [activeFiltersByMenu, setActiveFiltersByMenu] = useState([]);
@@ -16,22 +18,29 @@ export default () => {
   // Init to [undefined] - undefined means include all dishes
   const [includedDishesByMenu, setIncludedDishesByMenu] = useState([]);
   const [excludedDishesByMenu, setExcludedDishesByMenu] = useState([]);
-  const [selectedMenuIndex, setSelectedMenuIndex] = useState(0);
   const [menus, setMenus] = useState([]);
   const [dishesById, setDishesById] = useState({});
   const [savedDishes, setSavedDishes] = useState([]);
   const [error, setError] = useState(null);
 
+  let selectedMenuIndex = 0;
+  for (let i = 0; i < menus.length; ++i) {
+    if (menus[i].id === queryMenuId) {
+      selectedMenuIndex = i;
+      break;
+    }
+  }
+
   useEffect(() => {
-    googleAnalyticsPageView(restaurant_identifier);
-    getRestaurant(restaurant_identifier)
+    googleAnalyticsPageView(restaurantId);
+    getRestaurant(restaurantId)
       .then((restaurant) => {
         setRestaurant(restaurant);
 
         Promise.all(
           restaurant.Menus.map(async (menu) => {
-            let rawMenu = await getDishesOfMenu(restaurant_identifier, menu.id);
-            return parseMenu(rawMenu, menu.enableFiltering);
+            let rawMenu = await getDishesOfMenu(restaurantId, menu.id);
+            return parseMenu(rawMenu, menu.id, menu.enableFiltering);
           })
         ).then((parsedMenus) => {
           setActiveFiltersByMenu(parsedMenus.map(() => new FilterSet()));
@@ -79,7 +88,7 @@ export default () => {
       .catch((err) => {
         setError(err);
       });
-  }, [restaurant_identifier]);
+  }, [restaurantId]);
 
   // create allergen dictionary
   let allergenLUT = {};
@@ -133,7 +142,8 @@ export default () => {
           excludedDishes[selectedMenuIndex] = excluded;
           setExcludedDishesByMenu(excludedDishes);
         },
-        setSelectedMenu: setSelectedMenuIndex,
+        setSelectedMenu: (index) =>
+          setSearchParams({ menuId: menus[index].id }),
         setSavedDishes: (dishes) => {
           setSavedDishes(dishes);
           const saved = JSON.parse(localStorage.getItem("savedDishes") ?? "{}");

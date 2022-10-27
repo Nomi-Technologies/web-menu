@@ -16,7 +16,7 @@
     "react-ga": "^3.3.0",
     "react-is": "^16.8",
     "react-overlays": "^3.2.0",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "^6.4.0",
     "react-scripts": "^5.0.0",
     "react-svg": "^11.0.23",
     "react-tabs": "^3.1.0",
