@@ -8,7 +8,7 @@ import RestaurantContext from "../RestaurantContext";
 
 export default () => {
   let { restaurant_identifier } = useParams();
-  restaurant_identifier = restaurant_identifier ?? "demo-restaurant";
+  restaurant_identifier = restaurant_identifier ?? "trio-palm-springs";
 
   const [restaurant, setRestaurant] = useState(null);
   const [activeFiltersByMenu, setActiveFiltersByMenu] = useState([]);
