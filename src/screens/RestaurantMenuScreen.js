@@ -7,8 +7,8 @@ import { filterMenu, googleAnalyticsPageView, FilterSet } from "../utils";
 import RestaurantContext from "../RestaurantContext";
 
 export default () => {
-  let { restaurantId } = useParams();
-  restaurantId = restaurantId ?? "demo-restaurant";
+  let { restoId } = useParams();
+  restoId = restoId ?? "demo-restaurant";
   const [searchParams, setSearchParams] = useSearchParams();
   const queryMenuId = searchParams.get("menuId");
 
@@ -32,14 +32,14 @@ export default () => {
   }
 
   useEffect(() => {
-    googleAnalyticsPageView(restaurantId);
-    getRestaurant(restaurantId)
+    googleAnalyticsPageView(restoId);
+    getRestaurant(restoId)
       .then((restaurant) => {
         setRestaurant(restaurant);
 
         Promise.all(
           restaurant.Menus.map(async (menu) => {
-            let rawMenu = await getDishesOfMenu(restaurantId, menu.id);
+            let rawMenu = await getDishesOfMenu(restoId, menu.id);
             return parseMenu(rawMenu, menu.id, menu.enableFiltering);
           })
         ).then((parsedMenus) => {
@@ -88,7 +88,7 @@ export default () => {
       .catch((err) => {
         setError(err);
       });
-  }, [restaurantId]);
+  }, [restoId]);
 
   // create allergen dictionary
   let allergenLUT = {};

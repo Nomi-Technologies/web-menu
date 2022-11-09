@@ -40,7 +40,7 @@ export default () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/:restaurantId" element={<RestaurantMenuScreen />} />
+        <Route path="/:restoId" element={<RestaurantMenuScreen />} />
         <Route path="/" element={<RestaurantMenuScreen />} />
       </Routes>
     </BrowserRouter>
