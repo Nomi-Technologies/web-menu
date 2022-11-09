@@ -1,5 +1,6 @@
-export const parseMenu = (data, enableFiltering) => {
+export const parseMenu = (data, id, enableFiltering) => {
   let menu = {
+    id,
     categories: [],
     dishes: [],
     dishesByCategory: {},
@@ -118,16 +119,16 @@ export const filterMenu = (
   };
 };
 
-export const getRestaurant = async (restaurantId) => {
+export const getRestaurant = async (restoId) => {
   const res = await fetch(
-    `${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}`
+    `${process.env.REACT_APP_API_BASE_URL}/webApi/${restoId}`
   );
   return res.json();
 };
 
-export const getDishesOfMenu = async (restaurantId, menuName) => {
+export const getDishesOfMenu = async (restoId, menuName) => {
   const res = await fetch(
-    `${process.env.REACT_APP_API_BASE_URL}/webApi/${restaurantId}/${menuName}`
+    `${process.env.REACT_APP_API_BASE_URL}/webApi/${restoId}/${menuName}`
   );
   return res.json();
 };
@@ -143,8 +144,8 @@ export const getDishImage = async (dishId) => {
   }
 };
 
-export const getRestaurantLogo = async (restaurantId) => {
-  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/restaurants/${restaurantId}`;
+export const getRestaurantLogo = async (restoId) => {
+  let url = `${process.env.REACT_APP_AWS_S3_BASE_URL}/restaurants/${restoId}`;
   const img = await fetch(url);
 
   if (img.status === 200) {

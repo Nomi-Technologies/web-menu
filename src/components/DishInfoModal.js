@@ -449,6 +449,7 @@ export default function (props) {
                       Contains{" "}
                       {dishData.Tags.map((allergen) => (
                         <TagName
+                          key={allergen.id}
                           highlight={
                             allergen.DishTag.removable &&
                             context.activeFilters.allergens.has(allergen.id)
@@ -465,7 +466,7 @@ export default function (props) {
                     <TagsWrapper>
                       <img src={CheckMark} />
                       {dishData.Diets.map((diets) => (
-                        <TagName>{diets.name}</TagName>
+                        <TagName key={diets.id}>{diets.name}</TagName>
                       ))}{" "}
                       friendly
                     </TagsWrapper>
