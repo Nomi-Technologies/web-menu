@@ -8,7 +8,7 @@ import RestaurantContext from "../RestaurantContext";
 
 export default () => {
   let { restoId } = useParams();
-  restoId = restoId ?? "demo-restaurant";
+  restoId = restoId ?? "trio-palm-springs";
   const [searchParams, setSearchParams] = useSearchParams();
   const queryMenuId = searchParams.get("menuId");
 
