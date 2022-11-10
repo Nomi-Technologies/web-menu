@@ -1,6 +1,6 @@
 import React from "react";
 import RestaurantMenuScreen from "screens/RestaurantMenuScreen";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "index.css";
 
 import ReactGA from "react-ga";
@@ -39,14 +39,10 @@ export default () => {
 
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path="/:restaurant_identifier">
-          <RestaurantMenuScreen />
-        </Route>
-        <Route path="/">
-          <RestaurantMenuScreen />
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/:restoId" element={<RestaurantMenuScreen />} />
+        <Route path="/" element={<RestaurantMenuScreen />} />
+      </Routes>
     </BrowserRouter>
   );
 };
