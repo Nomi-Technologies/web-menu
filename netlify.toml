@@ -3,12 +3,8 @@ REACT_APP_API_BASE_URL = "https://nomi-menu-service.herokuapp.com"
 REACT_APP_AWS_S3_BASE_URL = "https://nomi-menu-service.herokuapp.com/api/images"
 
 [context.deploy-preview.environment]
-REACT_APP_API_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com"
-REACT_APP_AWS_S3_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com/api/images"
-
-[context.develop.environment]
-REACT_APP_API_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com"
-REACT_APP_AWS_S3_BASE_URL = "https://nomi-menu-service-testing.herokuapp.com/api/images"
+REACT_APP_API_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com"
+REACT_APP_AWS_S3_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com/api/images"
 
 [context.staging.environment]
 REACT_APP_API_BASE_URL = "https://nomi-menu-service-staging.herokuapp.com"
