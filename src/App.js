@@ -36,16 +36,12 @@ export default () => {
       action: "Visit Menu",
     });
   }, []); // [] to trigger only on first render
-  // <Route path="/" element={<RestaurantMenuScreen />} />
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/:restoId" element={<RestaurantMenuScreen />} />
-
-        <Route
-          path="/"
-          element={window.location.replace("https://dinewithnomi.com/browse")}
-        />
+        <Route path="/" element={<RestaurantMenuScreen />} />
       </Routes>
     </BrowserRouter>
   );
