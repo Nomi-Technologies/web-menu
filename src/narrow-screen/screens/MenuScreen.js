@@ -115,8 +115,7 @@ const NomiLogoSVG = styled(NomiLogo)`
   position: relative;
   bottom: 4px;
   display: inline-block;
-  filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg)
-    brightness(78%) contrast(78%);
+  filter: opacity(50%) contrast(0%);
 `;
 
 const StyledGoogleAds = styled(GoogleAds)`
@@ -405,7 +404,7 @@ export default () => {
           {restaurantLogo ? (
             <img alt={`${context.restaurant.name} logo`} src={restaurantLogo} />
           ) : (
-            "Loading..."
+            context.restaurant.name
           )}
         </RestaurantLogo>
         {context.menu.hasAllergens || context.menu.hasDiets ? (
