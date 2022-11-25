@@ -8,7 +8,10 @@ import RestaurantContext from "../RestaurantContext";
 
 export default () => {
   let { restoId } = useParams();
-  restoId = restoId ?? "trio-palm-springs";
+
+  // Either set the RestaurantID to the desired restaurant, ELSE replace with a redirect to browse page.
+  restoId = restoId ?? window.location.replace("https://dinewithnomi.com/browse");
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryMenuId = searchParams.get("menuId");
 
