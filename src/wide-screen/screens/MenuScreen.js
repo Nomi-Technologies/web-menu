@@ -158,6 +158,7 @@ const MainContentWrapper = styled.div`
 
 const StyledBanner = styled(Banner)`
   height: 250px;
+  border-radius: 7px;
 `;
 
 const RestaurantName = styled.div`
