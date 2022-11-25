@@ -404,7 +404,7 @@ export default () => {
           {restaurantLogo ? (
             <img alt={`${context.restaurant.name} logo`} src={restaurantLogo} />
           ) : (
-            "Loading..."
+            context.restaurant.name
           )}
         </RestaurantLogo>
         {context.menu.hasAllergens || context.menu.hasDiets ? (
