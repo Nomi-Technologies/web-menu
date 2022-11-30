@@ -130,7 +130,7 @@ const CloseButton = styled.div`
     height: 48px;
     text-align: center;
     line-height: 48px;
-    border-radius: 5px;
+    border-radius: 24px;
     font-size: 14px;
     font-weight: bold;
     color: white;

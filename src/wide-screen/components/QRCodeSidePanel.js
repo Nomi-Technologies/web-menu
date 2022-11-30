@@ -5,7 +5,7 @@ import styled from "styled-components";
 import QRCodeModal from "components/QRCodeModal";
 
 const ToggleButton = styled(Button)`
-  background-color: #f3a35c;
+  background-color: #f06441;
   color: white;
   font-weight: bold;
   margin: 10px auto 10px auto;
@@ -18,7 +18,11 @@ const ToggleButton = styled(Button)`
 
   &:hover {
     opacity: 0.8;
-    background-color: #f3a35c;
+    background-color: #f06441;
+  }
+
+  &:focus {
+    background-color: #f06441;
   }
 `;
 

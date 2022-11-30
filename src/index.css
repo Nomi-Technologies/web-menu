@@ -1,12 +1,13 @@
 body {
   margin: 0;
   font-family: "HK Grotesk";
-  font-size: 18px;
+  font-weight: 500;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1; /* offseting bootstrap's 1.5 */
   color: black; /* offseting bootstrap's custom color */
-  background-color: #EBEEF5;
+  background-color: #f7f5f3;
 }
 
 #root {

@@ -108,6 +108,7 @@ const NomiLogoBar = styled.div`
 
 const NomiLogoText = styled.div`
   display: inline-block;
+  color: #d7d5d3;
   margin-right: 5px;
 `;
 
