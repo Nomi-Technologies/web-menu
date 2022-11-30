@@ -7,7 +7,7 @@ const Counter = styled.div`
   height: ${(props) => props.radius ?? "22px"};
   border-radius: ${(props) => props.radius ?? "11px"};
   background-color: ${(props) =>
-    props.active ? props.activeColor ?? "#00807F" : "#C9D2DE"};
+    props.active ? props.activeColor ?? "#00807F" : "#babbbc"};
   color: white;
   position: relative;
 `;

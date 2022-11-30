@@ -105,8 +105,8 @@ function DietGrid(props) {
 }
 
 const SaveButton = styled(Button)`
-  background-color: #628deb;
-  color: white;
+  background-color: #ffffff;
+  color: #f06441;
   font-weight: bold;
   margin: 10px auto 0 auto;
   display: block;
@@ -116,13 +116,18 @@ const SaveButton = styled(Button)`
   border: none;
 
   &:hover {
-    background-color: #a9c1f5;
-    opacity: 0.8;
+    background-color: #fbd8d0;
+    color: #f06441;
+  }
+
+  &:focus {
+    background-color: #fbd8d0;
+    border: none;
   }
 
   &:disabled {
-    background-color: #a9c1f5;
-    opacity: 0.8;
+    display: none;
+    visibility: hidden;
   }
 `;
 
@@ -198,7 +203,9 @@ export default (props) => {
           )}
           <SaveButton
             disabled={context.activeFilters.size === 0}
-            onClick={() => context.setFilters({ allergens: new Set() })}
+            onClick={() =>
+              context.setFilters({ allergens: new Set(), diets: new Set() })
+            }
           >
             Clear All
           </SaveButton>
