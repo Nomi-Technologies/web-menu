@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import RestaurantContext from "../../RestaurantContext";
 import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
-import InitialLoadingPage from "narrow-screen/components/InitialLoadingPage";
+import InitialLoadingPage from "./InitialLoadingPage";
 
 const PageError = styled.div`
   position: relative;
