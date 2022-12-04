@@ -1,6 +1,6 @@
 import React from "react";
 import RestaurantMenuScreen from "screens/RestaurantMenuScreen";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "index.css";
 
 import ReactGA from "react-ga";
@@ -37,29 +37,20 @@ export default () => {
     });
   }, []); // [] to trigger only on first render
 
+  // <Route exact index path="/" element={window.location.replace("https://dinewithnomi.com/browse")} />
+  /* <Route 
+          path="/"
+          loader={() => {
+            window.location = "https://dinewithnomi.com/browse";
+            }} 
+        />
+  */
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path="/:restaurant_identifier">
-          <RestaurantMenuScreen />
-        </Route>
-        <Route
-          path="/"
-          render={() => {
-            window.location = "https://www.dinewithnomi.com/";
-          }}
-        >
-          {process.env.NODE_ENV === "production"
-            ? null
-            : "A list of restaurants"}
-          :{" "}
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7240049376258703"
-            crossorigin="anonymous"
-          ></script>
-        </Route>
-      </Switch>
+      <Routes>
+        <Route path="/:restoId" element={<RestaurantMenuScreen />} />
+        <Route path="/" element={<RestaurantMenuScreen />} />
+      </Routes>
     </BrowserRouter>
   );
 };

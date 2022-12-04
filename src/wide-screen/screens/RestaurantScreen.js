@@ -17,7 +17,7 @@ const Header = styled.div`
   /* White */
   background: #ffffff;
   /* card-shadow-3 */
-  box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.05);
 `;
 
 const NomiLogo = styled(NomiTopBottomLogo)`
@@ -105,8 +105,7 @@ export default () => {
         <MenuScreen restaurantName={restaurant.name} menu={context.menu} />
       ) : context.error ? (
         <PageError>
-          There was an error loading this page. Please try reloading the page or
-          contact the Nomi team by filling out a form at dinewithnomi.com
+          {window.location.replace("https://dinewithnomi.com/browse")}
         </PageError>
       ) : (
         <Loading>Restaurant Menu Loading...</Loading>

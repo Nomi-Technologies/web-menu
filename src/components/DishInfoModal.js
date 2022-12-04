@@ -10,13 +10,13 @@ import CheckMark from "./CheckMarkIcon.png";
 
 const ModalContainer = styled.div`
   color: black;
-  border-radius: 6px;
+  border-radius: 10px;
   background-color: white;
   width: 400px;
   margin: 0 auto;
   overflow: auto;
   position: relative;
-  padding: 24px;
+  padding: 18px;
 
   @media (max-width: 500px) {
     width: 100%;
@@ -449,6 +449,7 @@ export default function (props) {
                       Contains{" "}
                       {dishData.Tags.map((allergen) => (
                         <TagName
+                          key={allergen.id}
                           highlight={
                             allergen.DishTag.removable &&
                             context.activeFilters.allergens.has(allergen.id)
@@ -465,7 +466,7 @@ export default function (props) {
                     <TagsWrapper>
                       <img src={CheckMark} />
                       {dishData.Diets.map((diets) => (
-                        <TagName>{diets.name}</TagName>
+                        <TagName key={diets.id}>{diets.name}</TagName>
                       ))}{" "}
                       friendly
                     </TagsWrapper>

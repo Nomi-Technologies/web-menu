@@ -10,6 +10,7 @@ import HotScrollSidePanel from "../components/HotScrollSidePanel";
 import AllergenFiltersSidePanel from "../components/AllergenFiltersSidePanel";
 import QRCodeSidePanel from "../components/QRCodeSidePanel";
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
+import GoogleAds from "../../components/GoogleAds";
 import styled from "styled-components";
 
 const ColumnStyle = styled.div`
@@ -47,8 +48,8 @@ const Panel = styled.div`
   background: #ffffff;
   /* card-shadow-3 */
 
-  box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
-  border-radius: 6px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
 
   /* Inside Auto Layout */
 
@@ -157,6 +158,7 @@ const MainContentWrapper = styled.div`
 
 const StyledBanner = styled(Banner)`
   height: 250px;
+  border-radius: 7px;
 `;
 
 const RestaurantName = styled.div`
@@ -185,6 +187,7 @@ const NomiBottomLogo = styled.div`
 
 const NomiBottomLogoText = styled.div`
   display: inline-block;
+  color: #d7d5d3;
   margin-right: 5px;
 `;
 
@@ -193,8 +196,7 @@ const NomiBottomLogoImage = styled.a`
     position: relative;
     bottom: 4px;
     display: inline-block;
-    filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg)
-      brightness(78%) contrast(78%);
+    filter: opacity(50%) contrast(0%);
   }
 `;
 
@@ -251,6 +253,7 @@ function MainContent({ categoryToRef }) {
           <NomiLogo width="70px" height="16px" fill="#8A9DB7" />
         </NomiBottomLogoImage>
       </NomiBottomLogo>
+      <GoogleAds slot="1539889712" />
     </MainContentWrapper>
   );
 }

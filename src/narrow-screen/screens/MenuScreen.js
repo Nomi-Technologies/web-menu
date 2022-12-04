@@ -17,7 +17,7 @@ import { getMenuBannerImage } from "utils";
 import RemovableNotice from "components/RemovableNotice";
 import Counter from "../../components/Counter";
 import SlideUpTray from "../components/SlideUpTray";
-import GoogleAds from "../../../src/components/GoogleAds";
+import GoogleAds from "../../components/GoogleAds";
 
 const CategoryTab = styled.div`
   display: inline-block;
@@ -54,8 +54,8 @@ const CategoryTabList = styled.div`
 const MenuBody = styled.div`
   width: 100%;
   display: block;
-  /* 50px for header; 80px for expansion strip + 70px for nomi logo */
-  padding: 0 0 500px 0;
+  /* 50px for header; 80px for expansion strip + 70px for nomi logo + 320px for ads */
+  padding: 0 0 470px 0;
   margin-top: 118px; /* 58px + 60px */
 `;
 
@@ -97,7 +97,7 @@ const NomiLogoBar = styled.div`
   height: 22px;
   position: absolute;
   display: block;
-  bottom: 105px; /* 25px from the bottom slide up panel */
+  bottom: 425px; /* 25px from the bottom slide up panel */
   left: 0;
   right: 0;
   text-align: center;
@@ -108,6 +108,7 @@ const NomiLogoBar = styled.div`
 
 const NomiLogoText = styled.div`
   display: inline-block;
+  color: #d7d5d3;
   margin-right: 5px;
 `;
 
@@ -115,8 +116,14 @@ const NomiLogoSVG = styled(NomiLogo)`
   position: relative;
   bottom: 4px;
   display: inline-block;
-  filter: invert(86%) sepia(55%) saturate(2144%) hue-rotate(177deg)
-    brightness(78%) contrast(78%);
+  filter: opacity(50%) contrast(0%);
+`;
+
+const StyledGoogleAds = styled(GoogleAds)`
+  position: absolute;
+  bottom: 75px;
+  left: 0;
+  right: 0;
 `;
 
 const Header = styled.div`
@@ -398,7 +405,7 @@ export default () => {
           {restaurantLogo ? (
             <img alt={`${context.restaurant.name} logo`} src={restaurantLogo} />
           ) : (
-            "Loading..."
+            context.restaurant.name
           )}
         </RestaurantLogo>
         {context.menu.hasAllergens || context.menu.hasDiets ? (
@@ -469,10 +476,11 @@ export default () => {
       </MenuBody>
       <NomiLogoBar>
         <NomiLogoText>Powered by</NomiLogoText>
-        <div className="ad-class">
-          <GoogleAds slot="1539889712" />
-        </div>
+        <a href="https://www.dinewithnomi.com/">
+          <NomiLogoSVG width="70px" height="16px" fill="#8A9DB7" />
+        </a>
       </NomiLogoBar>
+      <StyledGoogleAds slot="1539889712" />
       <SlideUpPanelWrapper>
         <SlideUpTray />
       </SlideUpPanelWrapper>

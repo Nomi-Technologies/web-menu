@@ -25,11 +25,12 @@ const CategoryTitle = styled.div`
 
 const CategoryDescription = styled.div`
   font-style: normal;
-  font-weight: normal;
+  font-family: "HK Grotesk";
+  font-weight: 500;
   font-size: 18px;
   line-height: 25px;
   letter-spacing: 0.02em;
-  color: #000000;
+  color: #777777;
   flex: none;
   order: 1;
   padding-bottom: 10px;

@@ -16,9 +16,10 @@ const Title = styled.div`
 `;
 
 const Description = styled.div`
-  font-size: 18px;
-  padding-top: 26px;
-  color: #000000;
+  font-size: 16px;
+  padding-top: 10px;
+  color: #777777;
+  font-family: "HK Grotesk";
   line-height: 25px;
   letter-spacing: 0.02em;
 `;

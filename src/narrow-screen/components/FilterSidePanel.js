@@ -59,7 +59,7 @@ const StyledGridTagButton = styled(TagButton)`
   font-size: 14px;
   line-height: 23px;
   letter-spacing: 0.02em;
-  background-color: #ebeef5;
+  background-color: #f7f5f3;
   text-transform: capitalize;
   ${({ selected }) =>
     selected
@@ -288,13 +288,13 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
                 style={{
                   marginTop: "12px",
                   borderRadius: "50px",
-                  backgroundColor: "#ebeef5",
+                  backgroundColor: "#F7F5F3",
                   color: "#000000",
                   fontWeight: "bold",
                 }}
                 name="searchValue"
                 type="text"
-                placeholder="Search for dishes..."
+                placeholder="i.e. 'chicken'"
                 value={context.activeFilters.searchDishes}
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
