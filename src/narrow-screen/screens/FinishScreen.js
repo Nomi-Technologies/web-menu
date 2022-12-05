@@ -15,6 +15,7 @@ const BottomPanel = styled.div`
   background: #ffffff;
   overflow-y: auto;
   text-align: center;
+  padding-top: 25vh;
 `;
 
 const Padded = styled.div`
