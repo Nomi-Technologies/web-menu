@@ -11,9 +11,9 @@ const MenuTab = styled.div`
   &.is-selected {
     color: black;
     padding-bottom: 10px;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-bottom: solid 4px #5383ec;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-bottom: solid 4px #f06441;
   }
 `;
 

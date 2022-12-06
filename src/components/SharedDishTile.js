@@ -8,12 +8,13 @@ const DishTile = styled.div`
   background-color: white;
   border-radius: 10px;
   margin: 0;
-  box-shadow: 0 0 5px #e3edf2;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.025);
   cursor: pointer;
 `;
 
 const TextSection = styled.div`
   padding: 20px;
+  font-family: "HK Grotesk";
 `;
 
 const TileTitle = styled.div`

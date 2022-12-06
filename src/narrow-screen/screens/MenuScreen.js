@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import MenuCategoryPanel from "../components/MenuCategoryPanel";
 import FilterSidePanel from "../components/FilterSidePanel";
+import FinishScreen from "./FinishScreen";
 import Banner from "components/Banner";
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
 import styled from "styled-components";
@@ -108,6 +109,7 @@ const NomiLogoBar = styled.div`
 
 const NomiLogoText = styled.div`
   display: inline-block;
+  color: #d7d5d3;
   margin-right: 5px;
 `;
 
@@ -235,6 +237,7 @@ export default () => {
   const [activeCategoryId, setActiveCategoryId] = useState();
   const [menuBanner, setMenuBanner] = useState();
   const [filterOpen, setFilterOpenHook] = useState(false);
+  const [finished, setFinished] = useState(false);
   function setFilterOpen(open) {
     setFilterOpenHook(open);
     window.setPageScrollable(!open);
@@ -357,6 +360,11 @@ export default () => {
         open={hamburgerOpen}
       />
       <FilterSidePanel filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
+      <FinishScreen
+        finishScreenOpen={finished}
+        setFilterOpen={setFilterOpen}
+        restaurantLogo={restaurantLogo}
+      />
       <Header>
         <NotificationBanner
           style={
@@ -481,7 +489,7 @@ export default () => {
       </NomiLogoBar>
       <StyledGoogleAds slot="1539889712" />
       <SlideUpPanelWrapper>
-        <SlideUpTray />
+        <SlideUpTray setFinished={setFinished} />
       </SlideUpPanelWrapper>
     </MenuScreen>
   );

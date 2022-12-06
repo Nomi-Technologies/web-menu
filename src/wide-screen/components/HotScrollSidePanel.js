@@ -10,11 +10,11 @@ const CategoryTitle = styled.div`
   display: flex;
   align-items: center;
   letter-spacing: 0.02em;
-  color: #8a9db7;
+  color: #777777;
 
   &:hover {
     color: #000000;
-    text-decoration: underline #5383ec;
+    text-decoration: underline #f06441;
     cursor: pointer;
   }
 `;
@@ -46,7 +46,7 @@ export default (props) => {
         </ExpansionArrowContainer>
       </props.StyledHeader>
       {props.expanded ? (
-        <props.StyledBody style={{ paddingLeft: "20px" }}>
+        <props.StyledBody style={{ paddingLeft: "0px" }}>
           {context.menu.categories.map((category) => (
             <CategoryTitle
               onClick={() => scrollToCategory(props.categoryToRef[category.id])}

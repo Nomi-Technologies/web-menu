@@ -122,7 +122,7 @@ const NoDishNotice = styled.div`
   text-align: center;
 `;
 
-const CloseButton = styled.div`
+const ActionButton = styled.div`
   position: relative;
   margin: 20px 24px 0 24px;
 
@@ -130,7 +130,7 @@ const CloseButton = styled.div`
     height: 48px;
     text-align: center;
     line-height: 48px;
-    border-radius: 5px;
+    border-radius: 24px;
     font-size: 14px;
     font-weight: bold;
     color: white;
@@ -146,7 +146,7 @@ const ClearButton = styled.div`
   padding: 18px 0 5px 0;
 `;
 
-function SlideUpPanelBody({ dishes, onClose }) {
+function SlideUpPanelBody({ dishes, onFinish }) {
   const { dishesById, setSavedDishes } = useContext(RestaurantContext);
   const { savedDishes } = useContext(RestaurantContext);
 
@@ -232,11 +232,11 @@ function SlideUpPanelBody({ dishes, onClose }) {
         ) : (
           <NoDishNotice>Your saved items will show up here</NoDishNotice>
         )}
-        <CloseButton>
-          <div className="tray-clear-button" onClick={onClose}>
-            Done
+        <ActionButton>
+          <div className="tray-clear-button" onClick={onFinish}>
+            Finish Meal
           </div>
-        </CloseButton>
+        </ActionButton>
         <ClearButton onClick={onClearTray}>Clear All Items</ClearButton>
       </PanelBody>
 
@@ -252,7 +252,7 @@ function SlideUpPanelBody({ dishes, onClose }) {
   );
 }
 
-export default () => {
+export default ({ setFinished }) => {
   const { savedDishes } = useContext(RestaurantContext);
   const [panelExpanded, setPanelExpanded] = useState(false);
 
@@ -270,7 +270,7 @@ export default () => {
       {panelExpanded ? (
         <SlideUpPanelBody
           dishes={savedDishes}
-          onClose={() => setPanelExpanded(false)}
+          onFinish={() => setFinished(true)}
         />
       ) : (
         <></>

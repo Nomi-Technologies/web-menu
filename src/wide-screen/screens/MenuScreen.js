@@ -48,8 +48,8 @@ const Panel = styled.div`
   background: #ffffff;
   /* card-shadow-3 */
 
-  box-shadow: 0px 8px 20px rgba(0, 20, 63, 0.05);
-  border-radius: 6px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
 
   /* Inside Auto Layout */
 
@@ -187,6 +187,7 @@ const NomiBottomLogo = styled.div`
 
 const NomiBottomLogoText = styled.div`
   display: inline-block;
+  color: #d7d5d3;
   margin-right: 5px;
 `;
 

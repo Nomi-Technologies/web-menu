@@ -10,7 +10,8 @@ export default () => {
   let { restoId } = useParams();
 
   // Either set the RestaurantID to the desired restaurant, ELSE replace with a redirect to browse page.
-  restoId = restoId ?? window.location.replace("https://dinewithnomi.com/browse");
+  restoId =
+    restoId ?? window.location.replace("https://dinewithnomi.com/browse");
 
   const [searchParams, setSearchParams] = useSearchParams();
   const queryMenuId = searchParams.get("menuId");
@@ -25,6 +26,25 @@ export default () => {
   const [dishesById, setDishesById] = useState({});
   const [savedDishes, setSavedDishes] = useState([]);
   const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   const filters = window.localStorage.getItem('activeFilters');
+  //   if (filters !== null) {
+  //     const parsedFilters = JSON.parse(filters);
+  //     const allergens = new Set(parsedFilters.allergens);
+  //     const diets = new Set(parsedFilters.diets);
+  //     const searchDishes = parsedFilters.searchDishes;
+  //     context.setFilters({allergens, diets, searchDishes});
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   window.localStorage.setItem('activeFilters', JSON.stringify({
+  //     allergens: [...context.activeFilters?.allergens],
+  //     diets: [...context.activeFilters?.diets],
+  //     searchDishes: context.activeFilters?.searchDishes
+  //   }));
+  // }, [context]);
 
   let selectedMenuIndex = 0;
   for (let i = 0; i < menus.length; ++i) {
