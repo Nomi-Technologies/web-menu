@@ -362,7 +362,6 @@ export default () => {
       <FilterSidePanel filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
       <FinishScreen
         finishScreenOpen={finished}
-        setFilterOpen={setFilterOpen}
         restaurantLogo={restaurantLogo}
       />
       <Header>
