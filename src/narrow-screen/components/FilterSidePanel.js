@@ -294,7 +294,7 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
                 }}
                 name="searchValue"
                 type="text"
-                placeholder="i.e. 'chicken'"
+                placeholder="E.g. 'chicken'"
                 value={context.activeFilters.searchDishes}
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
