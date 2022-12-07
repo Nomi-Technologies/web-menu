@@ -48,27 +48,16 @@ const RestaurantLogo = styled.a`
   }
 `;
 
-export default ({ finishScreenOpen, setFilterOpen, restaurantLogo }) => {
+export default ({ finishScreenOpen, restaurantLogo }) => {
   const myRef = useRef();
   const context = useContext(RestaurantContext);
   const thankYouText =
     "Thank you so much for joining us! Please leave us a review and follow us on social media.";
 
-  const handleClickOutside = (e) => {
-    if (!myRef.current.contains(e.target)) {
-      setFilterOpen(false);
-    }
-  };
-
   const resetState = () => {
     context.setSavedDishes([]);
     window.location.reload(false);
   };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  });
 
   return (
     <BottomPanel open={finishScreenOpen} ref={myRef}>

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import MenuCategoryPanel from "../components/MenuCategoryPanel";
 import FilterSidePanel from "../components/FilterSidePanel";
-import FinishScreen from "../screens/FinishScreen";
+import FinishScreen from "./FinishScreen";
 import Banner from "components/Banner";
 import { ReactComponent as NomiLogo } from "components/nomi-withword.svg";
 import styled from "styled-components";
@@ -362,7 +362,6 @@ export default () => {
       <FilterSidePanel filterOpen={filterOpen} setFilterOpen={setFilterOpen} />
       <FinishScreen
         finishScreenOpen={finished}
-        setFilterOpen={setFilterOpen}
         restaurantLogo={restaurantLogo}
       />
       <Header>

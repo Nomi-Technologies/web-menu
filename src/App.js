@@ -37,14 +37,7 @@ export default () => {
     });
   }, []); // [] to trigger only on first render
 
-  // <Route exact index path="/" element={window.location.replace("https://dinewithnomi.com/browse")} />
-  /* <Route 
-          path="/"
-          loader={() => {
-            window.location = "https://dinewithnomi.com/browse";
-            }} 
-        />
-  */
+
   return (
     <BrowserRouter>
       <Routes>
