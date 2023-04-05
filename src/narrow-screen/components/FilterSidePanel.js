@@ -271,7 +271,14 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
             }}
           >
             {isLoadingPage ? (
-              <div style={{ color: "#00807F" }}>SKIP</div>
+              <div
+                style={{ color: "#00807F" }}
+                onClick={() => {
+                  setFilterOpen(false);
+                }}
+              >
+                SKIP
+              </div>
             ) : (
               <div>Done</div>
             )}
@@ -311,14 +318,27 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
         ) : (
           <div
             style={{
-              fontSize: 15,
-              color: "#606060",
+              fontSize: "28px",
+              color: "Black",
               textAlign: "center",
-              marginTop: 15,
+              marginTop: "15px",
+              lineHeight: "1.5em",
+              fontWeight: "800",
             }}
           >
-            Customize and filter your menu to help you find the best dish for
-            you.
+            Do you have any diets or allergies we should know about?
+            <span
+              style={{
+                fontSize: "16px",
+                color: "#606060",
+                textAlign: "center",
+                marginTop: "15",
+                lineHeight: "1.5em",
+              }}
+            >
+              <br></br>If you do, choose filters below. Otherwise, skip this
+              step.
+            </span>
           </div>
         )}
         {context.menu?.hasDiets && (
@@ -355,7 +375,7 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
                   setFilterOpen(false);
                 }}
               >
-                SAVE &amp; CONTINUE
+                Start My Meal
               </div>
             </CloseButton>
           </SlideUpPanel>
