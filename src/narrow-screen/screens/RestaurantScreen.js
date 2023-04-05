@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import RestaurantContext from "../../RestaurantContext";
-import MenuScreen from "../screens/MenuScreen";
+import MenuScreen from "./MenuScreen";
 import styled from "styled-components";
 import InitialLoadingPage from "./InitialLoadingPage";
 
