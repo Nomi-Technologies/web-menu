@@ -191,9 +191,11 @@ const Title = styled.div`
   font-size: 16px;
   height: 24px;
   line-height: 24px;
-
+  display: table;
   letter-spacing: 0.02em;
   color: #000000;
+  text-align: center;
+  margin-top: 10px;
 `;
 
 const Subtitle = styled.div`
@@ -202,6 +204,9 @@ const Subtitle = styled.div`
   margin-top: 8px;
   height: 20px;
   line-height: 20px;
+  display: table;
+  text-align: center;
+  margin-bottom: 10px;
 `;
 
 export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
@@ -316,30 +321,14 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
             </InputGroup>
           </>
         ) : (
-          <div
-            style={{
-              fontSize: "28px",
-              color: "Black",
-              textAlign: "center",
-              marginTop: "15px",
-              lineHeight: "1.5em",
-              fontWeight: "800",
-            }}
-          >
+          <Title style={{ width: "100%" }}>
             Do you have any diets or allergies we should know about?
-            <span
-              style={{
-                fontSize: "16px",
-                color: "#606060",
-                textAlign: "center",
-                marginTop: "15",
-                lineHeight: "1.5em",
-              }}
-            >
-              <br></br>If you do, choose filters below. Otherwise, skip this
-              step.
-            </span>
-          </div>
+          </Title>
+        )}
+        {isLoadingPage && (
+          <Subtitle style={{ width: "100%" }}>
+            If you do, choose filters below. If not, skip this step.
+          </Subtitle>
         )}
         {context.menu?.hasDiets && (
           <>
