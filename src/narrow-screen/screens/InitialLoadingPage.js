@@ -74,6 +74,7 @@ export default function ({ restaurantId, loading, onFinish }) {
           {logo && (
             <img
               src={logo}
+              alt={"Restaurant Logo"}
               style={{
                 width: 200,
                 position: "absolute",
@@ -91,7 +92,7 @@ export default function ({ restaurantId, loading, onFinish }) {
             }}
           >
             <div className="tray-clear-button" onClick={handleStart}>
-              VIEW MY MENU
+              Next
             </div>
           </StartButton>
         </>
