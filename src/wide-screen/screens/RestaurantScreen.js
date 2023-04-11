@@ -105,7 +105,7 @@ export default () => {
         <MenuScreen restaurantName={restaurant.name} menu={context.menu} />
       ) : context.error ? (
         <PageError>
-          {window.location.replace("https://dinewithnomi.com/browse")}
+          {window.location.replace("https://dinewithnomi.com")}
         </PageError>
       ) : (
         <Loading>Restaurant Menu Loading...</Loading>
