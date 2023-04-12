@@ -191,9 +191,11 @@ const Title = styled.div`
   font-size: 16px;
   height: 24px;
   line-height: 24px;
-
+  display: table;
   letter-spacing: 0.02em;
   color: #000000;
+  text-align: center;
+  margin-top: 10px;
 `;
 
 const Subtitle = styled.div`
@@ -202,6 +204,9 @@ const Subtitle = styled.div`
   margin-top: 8px;
   height: 20px;
   line-height: 20px;
+  display: table;
+  text-align: center;
+  margin-bottom: 10px;
 `;
 
 export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
@@ -271,7 +276,14 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
             }}
           >
             {isLoadingPage ? (
-              <div style={{ color: "#00807F" }}>SKIP</div>
+              <div
+                style={{ color: "#00807F" }}
+                onClick={() => {
+                  setFilterOpen(false);
+                }}
+              >
+                SKIP
+              </div>
             ) : (
               <div>Done</div>
             )}
@@ -309,17 +321,14 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
             </InputGroup>
           </>
         ) : (
-          <div
-            style={{
-              fontSize: 15,
-              color: "#606060",
-              textAlign: "center",
-              marginTop: 15,
-            }}
-          >
-            Customize and filter your menu to help you find the best dish for
-            you.
-          </div>
+          <Title style={{ width: "100%" }}>
+            Do you have any diets or allergies we should know about?
+          </Title>
+        )}
+        {isLoadingPage && (
+          <Subtitle style={{ width: "100%" }}>
+            If you do, choose filters below. If not, skip this step.
+          </Subtitle>
         )}
         {context.menu?.hasDiets && (
           <>
@@ -355,7 +364,7 @@ export default ({ filterOpen, setFilterOpen, isLoadingPage }) => {
                   setFilterOpen(false);
                 }}
               >
-                SAVE &amp; CONTINUE
+                Start My Meal
               </div>
             </CloseButton>
           </SlideUpPanel>
