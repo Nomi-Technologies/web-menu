@@ -91,20 +91,20 @@ export default function ({ restaurantId, loading, onFinish }) {
               right: "5%",
             }}
           >
-            <div className="tray-clear-button" onClick={handleStart}>
-              Next
+            <div className="tray-clear-button" onClick={onFinish}>
+              Start My Meal
             </div>
           </StartButton>
         </>
       )}
 
-      {showFilterPage && (
+      {/* {showFilterPage && (
         <FilterSidePanel
           filterOpen={showFilterPage}
           setFilterOpen={onFinish}
           isLoadingPage={true}
         />
-      )}
+      )} */}
 
       <div
         style={{
